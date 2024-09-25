@@ -1,0 +1,8 @@
+#
+# All the static HORIZONS and ZONES definitions to be accessed via YAML/Python
+#
+
+ZONE_RES: &mainzns
+  - Valysar
+  - Therys
+  - Volon

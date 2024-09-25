@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<APSModel version="1.0">
+  <RMSProjectName> drogon.rms12.0.1 </RMSProjectName>
+  <GridModelName> Geogrid_Volon </GridModelName>
+  <ZoneParamName> Zone </ZoneParamName>
+  <ResultFaciesParamName> facies_aps </ResultFaciesParamName>
+  <PrintInfo> 0 </PrintInfo>
+  <SeedFile> seed.dat </SeedFile>
+  <TransformationType> 0 </TransformationType>
+  <WriteSeeds> no </WriteSeeds>
+  <MainFaciesTable blockedWell="BW" blockedWellLog="Facies">
+    <Facies name="Floodplain">
+      <Code> 0 </Code>
+    </Facies>
+    <Facies name="Channel">
+      <Code> 1 </Code>
+    </Facies>
+    <Facies name="Crevasse">
+      <Code> 2 </Code>
+    </Facies>
+    <Facies name="Coal">
+      <Code> 5 </Code>
+    </Facies>
+    <Facies name="Calcite">
+      <Code> 6 </Code>
+    </Facies>
+    <Facies name="Offshore">
+      <Code> 10 </Code>
+    </Facies>
+    <Facies name="Lowershoreface">
+      <Code> 11 </Code>
+    </Facies>
+    <Facies name="Uppershoreface">
+      <Code> 12 </Code>
+    </Facies>
+  </MainFaciesTable>
+  <ZoneModels>
+    <Zone number="1">
+      <GridLayout>Proportional</GridLayout>
+      <UseConstProb> 0 </UseConstProb>
+      <SimBoxThickness> 14.798961417022841 </SimBoxThickness>
+      <FaciesProbForModel>
+        <Facies name="Calcite">
+          <ProbCube> apstrend_aps_Calcite </ProbCube>
+        </Facies>
+        <Facies name="Floodplain">
+          <ProbCube> apstrend_aps_Floodplain </ProbCube>
+        </Facies>
+        <Facies name="Channel">
+          <ProbCube> apstrend_aps_Channel </ProbCube>
+        </Facies>
+      </FaciesProbForModel>
+      <GaussField name="GRF1">
+        <Vario name="GENERAL_EXPONENTIAL">
+          <MainRange kw="APS_1_0_GF_GRF1_RESIDUAL_MAINRANGE"> 900.0 </MainRange>
+          <PerpRange kw="APS_1_0_GF_GRF1_RESIDUAL_PERPRANGE"> 200.0 </PerpRange>
+          <VertRange kw="APS_1_0_GF_GRF1_RESIDUAL_VERTRANGE"> 5.0 </VertRange>
+          <AzimuthAngle kw="APS_1_0_GF_GRF1_RESIDUAL_AZIMUTHANGLE"> 5.0 </AzimuthAngle>
+          <DipAngle> 0.0 </DipAngle>
+          <Power> 1.5 </Power>
+        </Vario>
+        <SeedForPreview> 14489756294157950000 </SeedForPreview>
+      </GaussField>
+      <GaussField name="GRF2">
+        <Vario name="SPHERICAL">
+          <MainRange kw="APS_1_0_GF_GRF2_RESIDUAL_MAINRANGE"> 1000.0 </MainRange>
+          <PerpRange kw="APS_1_0_GF_GRF2_RESIDUAL_PERPRANGE"> 1000.0 </PerpRange>
+          <VertRange kw="APS_1_0_GF_GRF2_RESIDUAL_VERTRANGE"> 5.0 </VertRange>
+          <AzimuthAngle kw="APS_1_0_GF_GRF2_RESIDUAL_AZIMUTHANGLE"> 0.0 </AzimuthAngle>
+          <DipAngle> 0.0 </DipAngle>
+        </Vario>
+        <SeedForPreview> 11448323976724226000 </SeedForPreview>
+      </GaussField>
+      <GaussField name="GRF3">
+        <Vario name="EXPONENTIAL">
+          <MainRange kw="APS_1_0_GF_GRF3_RESIDUAL_MAINRANGE"> 800.0 </MainRange>
+          <PerpRange kw="APS_1_0_GF_GRF3_RESIDUAL_PERPRANGE"> 800.0 </PerpRange>
+          <VertRange kw="APS_1_0_GF_GRF3_RESIDUAL_VERTRANGE"> 1.0 </VertRange>
+          <AzimuthAngle kw="APS_1_0_GF_GRF3_RESIDUAL_AZIMUTHANGLE"> 0.0 </AzimuthAngle>
+          <DipAngle> 0.0 </DipAngle>
+        </Vario>
+        <SeedForPreview> 3094816939190141000 </SeedForPreview>
+      </GaussField>
+      <TruncationRule>
+        <Trunc2D_Cubic nGFields="3">
+          <BackGroundModel>
+            <AlphaFields> GRF1 GRF2 </AlphaFields>
+            <L1 direction="V">
+              <ProbFrac name="Floodplain"> 1.0 </ProbFrac>
+              <ProbFrac name="Channel"> 1.0 </ProbFrac>
+            </L1>
+          </BackGroundModel>
+          <OverLayModel>
+            <Group>
+              <AlphaField name="GRF3">
+                <TruncIntervalCenter> 0.0 </TruncIntervalCenter>
+                <ProbFrac name="Calcite"> 1.0 </ProbFrac>
+              </AlphaField>
+              <BackGround> Floodplain </BackGround>
+              <BackGround> Channel </BackGround>
+            </Group>
+          </OverLayModel>
+        </Trunc2D_Cubic>
+      </TruncationRule>
+    </Zone>
+  </ZoneModels>
+</APSModel>

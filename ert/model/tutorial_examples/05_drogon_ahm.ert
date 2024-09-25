@@ -1,0 +1,215 @@
+-- ==============================================================================
+--
+-- ERT CONFIGURATION FILE   ----   DROGON RESERVOIR MODEL
+--                                 "Assisted History Match set-up" - no localization
+-- Documentation:
+--
+-- References:
+--  FMU wiki portal:           https://wiki.equinor.com/wiki/index.php/FMU_portal_home
+--  FMU related documentation: https://fmu-docs.equinor.com/
+--  ERT technical description: https://fmu-docs.equinor.com/docs/ert/index.html
+--
+-- ==============================================================================
+
+
+-----------------------------------------------------
+-- Internal variables
+-----------------------------------------------------
+DEFINE <USER>              $USER
+DEFINE <SCRATCH>           /scratch/fmu
+DEFINE <CASE_DIR>          05_drogon_ahm
+DEFINE <ECLIPSE_NAME>      DROGON
+--
+DEFINE <RMS_NAME>          drogon.rms14.2.2
+DEFINE <RMS_VERSION>       14.2.2
+DEFINE <RMS_WF_NAME>       MAIN
+--
+DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
+
+
+-----------------------------------------------------
+-- Observations
+-----------------------------------------------------
+
+DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_rft_wct_gor_tracer_4d_plt.obs
+OBS_CONFIG  <OBS_FILE>
+
+
+-- preprocess correlated seismic observations in ahm update step
+ANALYSIS_SET_VAR OBSERVATIONS AUTO_SCALE AMP*
+
+
+-----------------------------------------------------
+-- Runpath folder
+-----------------------------------------------------
+
+-- Runpath folder from where all realizations are run
+RUNPATH  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/iter-<ITER>/
+
+
+-----------------------------------------------------
+-- Eclipse settings
+-----------------------------------------------------
+
+DEFINE  <TEMPLATE_DATA_FILE> ../../eclipse/model/DROGON_HIST.DATA  -- Template DATA file
+
+ECLBASE  eclipse/model/<ECLIPSE_NAME>-<IENS>  -- Name used for the ECLIPSE simulations in runpath
+
+RUN_TEMPLATE  <TEMPLATE_DATA_FILE>  <ECLBASE>.DATA  -- Copy template DATA file to runpath
+
+
+-----------------------------------------------------
+-- ert storage settings
+-----------------------------------------------------
+
+ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+
+RANDOM_SEED  123456  -- ERT seed value
+
+
+-----------------------------------------------------
+-- LSF settings
+-----------------------------------------------------
+
+NUM_CPU             1
+NUM_REALIZATIONS    100            -- Set number of realizations to run
+MAX_RUNTIME         18000          -- Set the maximum allowed run time (in seconds)
+MIN_REALIZATIONS    1              -- Success criteria
+MAX_SUBMIT          1              -- How many times should the queue system retry a simulation.
+QUEUE_OPTION  LSF MAX_RUNNING 100  -- Choke the number of simultaneous run
+
+QUEUE_OPTION LSF LSF_QUEUE  mr8     -- Assign LSF cluster queue
+-- QUEUE_SYSTEM LOCAL                 -- OR activate this to run simulations locally
+
+
+-------------------------------------------------------
+--Install custom jobs and workflows
+-------------------------------------------------------
+
+INCLUDE  ../input/config/install_custom_jobs.ert
+
+
+-----------------------------------------------------
+-- Hook workflows
+-----------------------------------------------------
+
+HOOK_WORKFLOW   echo_config_file  PRE_SIMULATION  -- Write config file run information to scratch
+HOOK_WORKFLOW   run_fmuconfig     PRE_SIMULATION  -- Create global_variables.yml and global_variables.yml.tmpl files
+HOOK_WORKFLOW   wf_fmuobs         PRE_SIMULATION  -- Create yaml version of ERT observations for use with Webviz
+HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio
+
+
+-----------------------------------------------------
+-- Forward models
+-----------------------------------------------------
+
+INCLUDE  ../input/config/make_folders.ert  -- Make general folder structure
+
+
+-----------------------------------------------------
+---- Copy rms folders/files
+-----------------------------------------------------
+
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/bin,                  <TO>=<RUNPATH>/rms)
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/input/well_modelling, <TO>=<RUNPATH>/rms/input)
+
+--Copy seed file to the rms/model folder --> forces rms to use seed values from the file (target file must be named "random.seeds")
+FORWARD_MODEL COPY_FILE(<FROM>=<RMS_SEED_FILE>,  <TO>=rms/model/random.seeds)
+
+
+-----------------------------------------------------
+---- Copy eclipse folders/files
+-----------------------------------------------------
+
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/props/drogon.pvt,       <TO>=eclipse/include/props/drogon.pvt)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/solution/drogon.rxvd,   <TO>=eclipse/include/solution/drogon.rxvd)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/summary/drogon.summary, <TO>=eclipse/include/summary/drogon.summary)
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../eclipse/include/schedule/vfp,      <TO>=<RUNPATH>/eclipse/include/schedule)
+
+
+-----------------------------------------------------
+-- Uncertainty parameters
+-----------------------------------------------------
+
+---- Scalar parameters ----
+
+-- Draw values from ERT distributions (values are saved to parameters.txt file in runpath)
+GEN_KW  SWITCHES  ../input/distributions/global_variables_switches.dist
+GEN_KW  GLOBVAR   ../input/distributions/global_variables.dist
+GEN_KW  MULTREGT  ../input/distributions/multregt.dist
+GEN_KW  RATE      ../input/distributions/rate_scaling.dist
+
+-- Special case: get APS prior uncertainty variables from design matrix (instead of GEN_KW) and append to parameters.txt file
+DEFINE  <DESIGN_MATRIX>    ../input/distributions/design_matrix_ahm.xlsx
+DEFINE  <DESIGN_SHEET>     DesignSheet01
+FORWARD_MODEL  DESIGN2PARAMS(<xls_filename>=<CONFIG_PATH>/<DESIGN_MATRIX>, <designsheet>=<DESIGN_SHEET>, <defaultssheet>=DefaultValues)
+
+---- 2d parameters ----
+INCLUDE  ../input/config/ahm_surface.ert    -- update horizons
+
+---- 3d parameters ----
+INCLUDE  ../input/config/ahm_field_aps.ert  -- update aps grid parameters
+
+
+-----------------------------------------------------
+-- Populate template files with their scalar uncertainty parameter values
+-----------------------------------------------------
+
+-- DESIGN_KW will fetch the variable values from the parameters.txt file
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/global_variables.yml)
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../ert/input/templates/multregt.tmpl,  <result_file>=<RUNPATH>/eclipse/include/grid/drogon.multregt)
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl,  <result_file>=fmuconfig/output/rate_scaling.yml)
+
+
+-----------------------------------------------------
+---- RMS
+-----------------------------------------------------
+
+FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CONFIG_PATH>/../../rms/model/<RMS_NAME>, <RMS_WORKFLOW>=<RMS_WF_NAME>, <RMS_TARGET_FILE>=RMS_TARGET_MAIN)
+
+
+-----------------------------------------------------
+---- Eclipse/Flow
+-----------------------------------------------------
+
+FORWARD_MODEL ECLCOMPRESS  -- Compress eclipse include files
+
+-- FORWARD_MODEL INSERT_NOSIM
+-- FORWARD_MODEL ECLIPSE100(<VERSION>=2022.2)
+
+FORWARD_MODEL OPM_FLOW  -- flowrc23
+
+
+-- make symlinks with generic name
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/<ECLBASE>.EGRID, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE.EGRID)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/<ECLBASE>.INIT,  <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE.INIT)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/<ECLBASE>.UNRST, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE.UNRST)
+
+
+-----------------------------------------------------
+---- Export data for visualisation (webviz,RMS covisualization)
+---- Prepare model response data for use in AHM
+-----------------------------------------------------
+
+INCLUDE ../input/config/export_tables.ert    -- sim model data to csv and arrow format, for visualization
+INCLUDE ../input/config/export_maps.ert      -- simgrid and geogrid maps, for visualization
+INCLUDE ../input/config/export_ecl_roff.ert  -- sim model restart and init parameters, for visualization
+
+
+INCLUDE  ../input/config/gen_data_rft_wells.ert -- RFT data used in conditioning/ahm, incl export for visualization
+INCLUDE  ../input/config/gen_data_tracer.ert    -- Tracer data used in conditioning/ahm
+INCLUDE  ../input/config/sim2seis.ert           -- SIM2SEIS, used in conditioning/ahm, incl export for visualization
+INCLUDE  ../input/config/geoseis.ert            -- GEOSEIS, export for visualization
+
+
+----------------------------------------------------
+-- ERT plotting
+-----------------------------------------------------
+INCLUDE  ../input/config/ert_summary_plotting.ert
+
+
+-----------------------------------------------------
+-- SUMO (experimental)
+-- INCLUDE  ../input/config/case_metadata_and_preprocessed_data_sumo.ert

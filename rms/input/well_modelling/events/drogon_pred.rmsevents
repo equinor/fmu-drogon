@@ -1,0 +1,232 @@
+RMSEVENTS RMS13
+
+UNITSET 'Metric'
+
+DATEFORMAT 'dd.MM.yyyy'
+
+OWNERFORMAT GROUP
+
+EVENTSBEGIN
+
+# This rmsevents contains prediction set-up for case with OP5 mlw
+# Used with the rms workflow "WELL_PLANNING"
+
+
+######################################################
+## End of prediction
+######################################################
+
+'Simulator'
+01.01.2025       USER       TEXT="--------------
+END
+--------------"    LOC='After'    KEYWORD='DATES'    ORDER=1
+
+######################################################
+## Reporting
+######################################################
+
+'Simulator'
+31.12.2020 IORESTART  FREQMODE='Report' FREQUENCY=1   KEEP='All'    MNEMONIC='NORST=1'
+01.01.2021 IORESTART  FREQMODE='Off'    MNEMONIC='*RESET*'
+31.12.2022 IORESTART  FREQMODE='Report' FREQUENCY=1   KEEP='All'    MNEMONIC='NORST=1'
+01.01.2023 IORESTART  FREQMODE='Off'    MNEMONIC='*RESET*'
+31.12.2024 IORESTART  FREQMODE='Report' FREQUENCY=1   KEEP='All'    MNEMONIC='NORST=1'
+01.01.2025 IORESTART  FREQMODE='Off'    MNEMONIC='*RESET*'
+
+######################################################
+# Prediction restart time (for truncation of exported data)
+#   --> any events defined at earlier dates will be truncated at export
+######################################################
+
+'Simulator'
+01.07.2020  RESTART
+
+######################################################
+## Well completions historical wells
+##   --> included for rms to be able to export wconprod in prediction period
+## perf data for historical wells can be dummy, however it is then IMPORTANT that
+##   --> perf date is set earlier than the RESTART date (we use 01.01.1900)
+######################################################
+
+# dummy perf data for historical wells (used in combination with RESTART keyword)
+'55_33-A-1'.'55_33-A-1'.'Drilled trajectory'
+01.01.1900 PERF       MDSTART=0     MDEND=10000     RADIUS=0.10795 SKIN=5
+'55_33-A-2'.'55_33-A-2'.'Drilled trajectory'
+01.01.1900 PERF       MDSTART=0     MDEND=10000     RADIUS=0.10795 SKIN=5
+'55_33-A-3'.'55_33-A-3'.'Drilled trajectory'
+01.01.1900 PERF       MDSTART=0     MDEND=10000     RADIUS=0.10795 SKIN=5
+'55_33-A-4'.'55_33-A-4'.'Drilled trajectory'
+01.01.1900 PERF       MDSTART=0     MDEND=10000     RADIUS=0.10795 SKIN=5
+'55_33-A-5'.'55_33-A-5'.'Drilled trajectory'
+01.01.1900 PERF       MDSTART=0     MDEND=10000     RADIUS=0.10795 SKIN=5
+'55_33-A-6'.'55_33-A-6'.'Drilled trajectory'
+01.01.1900 PERF       MDSTART=0     MDEND=10000     RADIUS=0.10795 SKIN=5
+
+
+######################################################
+## Tuning
+######################################################
+
+'Simulator'
+01.07.2020 NUMLINEAR    ITERMAX=50     ITERMIN=1
+01.07.2020 NUMNONLINEAR ITERMAX=12     ITERMIN=1
+01.07.2020 NUMWELL      ITERMAX=50     ITERBHPMAX=50
+01.07.2020 TIMESTEP     MAX=10         NEXT=1         WELLMAX=1
+
+
+######################################################
+## Well completions planned well
+######################################################
+
+
+'MLW_OP5_Y1'.'MLW_OP5_Y1'.'Planned'
+01.07.2020 PERF       MDSTART=3800     MDEND=5100    RADIUS=0.10795   SKIN=5
+01.07.2020 TUBING     MDSTART=3350     MDEND=3600    RADIUSI=0.0795   ROUGH=0.00065
+01.07.2020 TUBING     MDSTART=3600     MDEND=3610    RADIUSI=0.0700   ROUGH=0.00065
+01.07.2020 TUBING     MDSTART=3610     MDEND=10000   RADIUSI=0.0795   ROUGH=0.00065
+01.07.2020 WSEGMOD    TYPE='Staggered' MDSTART=3350  MDEND=5100   GRAV=true  FRIC=true   ACCEL=false   MULTMOD='Homogeneous'  CONDMOD='None'
+01.07.2020 WICDNOZZLE TYPE='nozzle'    MDSTART=3800  MDEND=5100   OPEN=True  LENGTH=12   ICDPROP=1.0   AREAC=0.00004  FLOWCOEFF=0.87   LENGTHS=0.1
+01.07.2020 WFVALVE    MDSTART=3605     MDEND=3605    OPEN=True    TYPE='xxx' NAME='yyy'  AREAC=0.004   FLOWCOEFF=0.6
+01.01.2022 WFVALVE    MDSTART=3605     MDEND=3605    OPEN=False   TYPE='xxx' NAME='yyy'  AREAC=0.004   FLOWCOEFF=0.6
+01.01.2023 WFVALVE    MDSTART=3605     MDEND=3605    OPEN=True    TYPE='xxx' NAME='yyy'  AREAC=0.004   FLOWCOEFF=0.6
+
+'MLW_OP5_Y1'.'MLW_OP5_Y2'.'Planned'
+01.07.2020 PERF       MDSTART=3800     MDEND=5000    RADIUS=0.10795   SKIN=5
+01.07.2020 TUBING     MDSTART=3400     MDEND=3600    RADIUSI=0.0795   ROUGH=0.00065
+01.07.2020 TUBING     MDSTART=3600     MDEND=3610    RADIUSI=0.0700   ROUGH=0.00065
+01.07.2020 TUBING     MDSTART=3610     MDEND=10000   RADIUSI=0.0795   ROUGH=0.00065
+01.07.2020 WSEGMOD    TYPE='Staggered' MDSTART=3400  MDEND=5000   GRAV=true  FRIC=true   ACCEL=false   MULTMOD='Homogeneous'  CONDMOD='None'
+01.07.2020 WICDNOZZLE TYPE='nozzle'    MDSTART=3800  MDEND=5000   OPEN=True  LENGTH=12   ICDPROP=1.0   AREAC=0.00004  FLOWCOEFF=0.87   LENGTHS=0.1
+01.07.2020 WFVALVE    MDSTART=3605     MDEND=3605    OPEN=False   TYPE='xxx' NAME='yyy'  AREAC=0.004   FLOWCOEFF=0.6
+01.01.2022 WFVALVE    MDSTART=3605     MDEND=3605    OPEN=True    TYPE='xxx' NAME='yyy'  AREAC=0.004   FLOWCOEFF=0.6
+
+######################################################
+## Production constraints for planned well
+######################################################
+
+'MLW_OP5_Y1'
+01.07.2020 WSTATE     STATE='Open'
+01.07.2020 WCROSSFL   ON=false
+01.07.2020 WTYPE      TYPE='Producer'      PHASE='Oil'
+01.07.2020 WCONTROL   MODE='Surface rate'  PHASE='Liquid'   FREE=true
+01.07.2020 WLIMPRES   TYPEW='Production'   ACTION='Target'  BHP=150  ON=true
+01.07.2020 WLIMRATE   TYPEW='Production'   ACTION='Target'  SRATEO=3000  SRATEW=3000  SRATEL=3000  ON=true
+
+
+######################################################
+# For historical wells use WTYPE with old date (earlier than date in RESTART keyword)
+#   --> this will avoid writing welspecs
+#   --> do not comment out WTYPE, wconprod/wconinje will then not be exported
+######################################################
+'55_33-A-1'
+01.01.1900 WTYPE      TYPE='Producer'      PHASE='Oil'
+01.07.2020 WSTATE     STATE='Open'
+01.07.2020 WCONTROL   MODE='Surface rate'  PHASE='Liquid'   FREE=true
+01.07.2020 WLIMPRES   TYPEW='Production'   ACTION='Target'  BHP=150  ON=true
+#01.07.2020 WLIMRATE   TYPEW='Production'   ACTION='Target'  SRATEO=4000  SRATEW=4000  SRATEL=4000  ON=true
+01.07.2020 WLIMRATE   TYPEW='Production'   ACTION='Target'  SRATEO=3000  SRATEW=3000  SRATEL=3000  ON=true
+
+'55_33-A-2'
+01.01.1900 WTYPE      TYPE='Producer'      PHASE='Oil'
+01.07.2020 WSTATE     STATE='Open'
+01.07.2020 WCONTROL   MODE='Surface rate'  PHASE='Liquid'   FREE=true
+01.07.2020 WLIMPRES   TYPEW='Production'   ACTION='Target'  BHP=150  ON=true
+01.07.2020 WLIMRATE   TYPEW='Production'   ACTION='Target'  SRATEO=4000  SRATEW=4000  SRATEL=4000  ON=true
+
+'55_33-A-3'
+01.01.1900 WTYPE      TYPE='Producer'      PHASE='Oil'
+01.07.2020 WSTATE     STATE='Open'
+01.07.2020 WCONTROL   MODE='Surface rate'  PHASE='Liquid'   FREE=true
+01.07.2020 WLIMPRES   TYPEW='Production'   ACTION='Target'  BHP=150  ON=true
+01.07.2020 WLIMRATE   TYPEW='Production'   ACTION='Target'  SRATEO=4000  SRATEW=4000  SRATEL=4000  ON=true
+
+'55_33-A-4'
+01.01.1900 WTYPE      TYPE='Producer'      PHASE='Oil'
+01.07.2020 WSTATE     STATE='Open'
+01.07.2020 WCONTROL   MODE='Surface rate'  PHASE='Liquid'   FREE=true
+01.07.2020 WLIMPRES   TYPEW='Production'   ACTION='Target'  BHP=150  ON=true
+01.07.2020 WLIMRATE   TYPEW='Production'   ACTION='Target'  SRATEO=4000  SRATEW=4000  SRATEL=4000  ON=true
+
+'55_33-A-5'
+01.01.1900 WTYPE      TYPE='Injector'      PHASE='Water'
+01.07.2020 WSTATE     STATE='Open'
+01.07.2020 WCONTROL   MODE='Surface rate'  PHASE='Water'    FREE=true
+01.07.2020 WLIMPRES   TYPEW='Injection'    ACTION='Target'  BHP=500  ON=true
+01.07.2020 WLIMRATE   TYPEW='Injection'    ACTION='Target'  SRATEW=6500  ON=true
+
+'55_33-A-6'
+01.01.1900 WTYPE      TYPE='Injector'      PHASE='Water'
+01.07.2020 WSTATE     STATE='Open'
+01.07.2020 WCONTROL   MODE='Surface rate'  PHASE='Water'    FREE=true
+01.07.2020 WLIMPRES   TYPEW='Injection'    ACTION='Target'  BHP=500  ON=true
+01.07.2020 WLIMRATE   TYPEW='Injection'    ACTION='Target'  SRATEW=6500  ON=true
+
+
+######################################################
+## Group constraints
+######################################################
+
+# GEFAC, GCONPROD and GCONINJE
+'OP'
+01.07.2020 GEFFICIENCY TYPE='Production' FACTOR=1.0
+01.07.2020 GLIMRATE    TYPE='Production' MAX=True  ACTION='Target' SRATEO=20000  SRATEW=20000  SRATEL=20000  ON=True
+01.07.2020 GCONTROL    TYPE='Production' MODE='Rate control' RATETYPE='Surface rate' PHASE='Oil' FREE=True
+'WI'
+01.07.2020 GLIMRATE    TYPE='Injection'  MAX=True       ACTION='Target'     SRATEW=16000   ON=True
+01.07.2020 GCONTROL    TYPE='Injection'  PHASE='Water'  MODE='Rate control' RATETYPE='Surface rate' FREE=True
+
+
+######################################################
+## Group members
+######################################################
+
+'OP'
+01.07.2020 GMEMBER    MEMBER='MLW_OP5_Y1'
+
+######################################################
+## Date inserts
+######################################################
+'Simulator'
+# general dates
+01.07.2020  DATE
+02.07.2020  DATE
+01.08.2020  DATE
+01.09.2020  DATE
+01.10.2020  DATE
+01.11.2020  DATE
+01.12.2020  DATE
+01.01.2021  DATE
+01.02.2021  DATE
+01.03.2021  DATE
+01.04.2021  DATE
+01.05.2021  DATE
+01.06.2021  DATE
+01.07.2021  DATE
+01.08.2021  DATE
+01.09.2021  DATE
+01.10.2021  DATE
+01.11.2021  DATE
+01.12.2021  DATE
+01.01.2022  DATE
+01.02.2022  DATE
+01.03.2022  DATE
+01.04.2022  DATE
+01.05.2022  DATE
+01.06.2022  DATE
+01.07.2022  DATE
+01.08.2022  DATE
+01.09.2022  DATE
+01.10.2022  DATE
+01.11.2022  DATE
+01.12.2022  DATE
+01.01.2023  DATE
+01.04.2023  DATE
+01.07.2023  DATE
+01.10.2023  DATE
+01.01.2024  DATE
+01.04.2024  DATE
+01.07.2024  DATE
+01.10.2024  DATE
+01.01.2025  DATE
+
+EVENTSEND

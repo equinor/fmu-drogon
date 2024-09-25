@@ -1,0 +1,195 @@
+title: FMU course - Webviz example
+
+#---------------------------------------------------------
+# Webviz demo project: https://webviz-subsurface-example.azurewebsites.net/
+# https://equinor.github.io/webviz-subsurface/
+# > webviz docs
+#---------------------------------------------------------
+
+shared_settings:
+  scratch_ensembles:
+    iter-0_aps: /scratch/fmu/course/01_drogon_ahm/realization-*/iter-0
+    iter-3_aps: /scratch/fmu/course/01_drogon_ahm/realization-*/iter-3
+    iter-0_basic: /scratch/fmu/course/03_drogon_ahm/realization-*/iter-0
+    iter-3_basic: /scratch/fmu/course/03_drogon_ahm/realization-*/iter-3
+#    pred_op5: /scratch/fmu/course/01_drogon_ahm/realization-*/pre_op5
+# --- User defined settings/aliases ---
+
+hm_ensembles: &hm_ensembles  # Ensembes used for history matching analysis
+  - iter-0_aps
+  - iter-3_aps
+  - iter-0_basic
+  - iter-3_basic
+  
+#pred_ensembles: &pred_ensembles # Ensembes used for prediction runs
+#  - pred_op5
+  
+# Shared settings
+obsfile: &obsfile /scratch/fmu/course/01_drogon_ahm/share/observations/tables/ert_observations.yml
+fipfile: &fipfile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/tables/fip.yml
+formationfile: &formationfile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/tables/formations.csv
+#faultlinefile: &faultlinefile /scratch/fmu/course_old/01_drogon_ahm/realization-0/iter-0/share/results/polygons/toptherys--gl_faultlines_extract_postprocess.csv
+faultlinefile: &faultlinefile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/polygons/toptherys--gl_faultlines_extract_postprocess.csv  
+wellfolder: &wellfolder /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/wells
+
+
+# ------------------------------
+options:
+  menu:
+    show_logo: true
+    bar_position: left
+    drawer_position: left
+    initially_pinned: true
+    initially_collapsed: true
+
+# ------------------------------
+layout:
+  - section: Webviz Intro
+    content:
+      - page: Front page
+        icon: home
+        content:
+          - BannerImage:
+              image: ./content/drogon_banner_image.png
+              height: 350
+          - This is a setup for Webviz in FMU aps course
+
+
+      # ------------------------------
+      - group: Information
+        icon: info_circle
+        content:
+          - page: How was this made (yaml config file)
+            content:
+              - |
+                ##### The yaml configuration file
+
+                * This page shows the yaml configuration file that was used to build
+                  this webviz demo app.
+
+                * The first part includes **shared_settings** (which ensembles to
+                use), but also other optional shared data.  The optional shared data
+                comes in handy when several plugins uses the same data, or simply for
+                a better overview of various input data.
+
+                * The second part (from options/layout) contains the plugins to be
+                loaded. To get started on your own webviz set-up you can copy/paste
+                from this config file.
+                ---
+
+              - SyntaxHighlighter:
+                  filename: ./aps_drogon_config.yml
+
+
+  # ------------------------------
+  - section: Webviz Analysis
+    content:
+
+      # -------------------------------
+      - group: Model general
+        icon: timeline
+        content:
+          
+          #------  
+          - page: Map Viewer
+            content:
+              - MapViewerFMU:
+                  ensembles: *hm_ensembles
+                  map_surface_names_to_fault_polygons:
+                    all: toptherys
+                    therys: toptherys
+                    valysar: topvolantis
+                    volon: topvolon
+                  well_pick_file: ../../share/results/tables/well_picks.csv
+                  map_surface_names_to_well_pick_names:
+                    toptherys: TopTherys
+                    topvolantis: TopVolantis
+                    topvolon: TopVolon
+                    basevolantis: BaseVolantis
+                    therys: TopTherys
+                    valysar: TopVolantis
+                    volon: TopVolon
+                    
+          #------
+          - page: Volumetrics
+            content:
+              - VolumetricAnalysis:
+                  ensembles: *hm_ensembles
+                  fipfile: *fipfile
+                  volfiles:
+                    geogrid: geogrid--vol.csv
+                    simgrid: simgrid--vol.csv
+                    eclipse: eclipse--vol.csv
+
+          # #------
+          # - page: Grid property statistics
+          #   content:
+          #     - PropertyStatistics:
+          #         ensembles: *hm_ensembles
+          #         rel_file_pattern: share/results/tables/ecl_summary/DROGON-*.arrow
+          #         statistics_file: share/results/tables/grid_property_statistics_geogrid.csv
+
+      - group: HM and parameters
+        icon: repeat
+        content:
+          - page: Parameter analysis
+            content:
+              - ParameterAnalysis:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/DROGON-*.arrow
+                  time_index: "monthly"
+                  drop_constants: true
+
+
+
+          - page: Simulation time series
+            content:
+              - SimulationTimeSeries:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+                  obsfile: *obsfile
+                  options:
+                    vectors:
+                      - FOPR
+                      - FWPR
+                   # predefined_expressions: timeseries_expressions
+
+          - page: Prod misfit
+            content:
+              - ProdMisfit:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+                  sampling: yearly  # daily, weekly, monthly, yearly
+                  # well_attributes_file: rms/output/wells/well_attributes.json
+                  excl_name_startswith: [R_]  # input as list
+                  phase_weights:
+                    "Oil": 1.0
+                    "Water": 1.0
+                    "Gas": 300.0
+
+
+          # - page: 3D Seismic misfit
+          #   content:
+          #     - SeismicMisfit:
+          #         ensembles: *hm_ensembles
+          #         attributes:
+          #           - basevolantis_amplitude_near_mean_20180101_1.txt
+          #           - basevolantis_amplitude_far_mean_20180101_1.txt
+          #           - topvolantis_amplitude_near_mean_20180101_1.txt
+          #           - topvolantis_amplitude_far_mean_20180101_1.txt
+          #           - toptherys_amplitude_near_mean_20180101_1.txt
+          #           - toptherys_amplitude_far_mean_20180101_1.txt
+          #           - topvolon_amplitude_near_mean_20180101_1.txt
+          #           - topvolon_amplitude_far_mean_20180101_1.txt
+          #           - valysar_amplitude_near_rms_20180101_1.txt
+          #           - valysar_amplitude_far_rms_20180101_1.txt
+          #           - valysar_amplitude_near_mean_20180101_1.txt
+          #           - valysar_amplitude_far_mean_20180101_1.txt
+          #         attribute_sim_path: share/results/points/ # relative to <runpath>
+          #         attribute_obs_path: ../../share/observations/seismic/ # relative to <runpath>
+          #         obs_mult: 1.0
+          #         sim_mult: 1.0
+          #         polygon: share/results/polygons/ # relative to <runpath>
+          #         #realrange:  # exclude realizations outside range
+          #         #  - [0,0]
+          #         #  - [0,0]

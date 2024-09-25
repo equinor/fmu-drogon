@@ -1,0 +1,165 @@
+-- ==============================================================================
+--
+-- ERT CONFIGURATION FILE   ----   DROGON RESERVOIR MODEL
+--                                 "Prediction case - simple"
+--
+-- ==============================================================================
+
+
+-----------------------------------------------------
+-- Internal variables
+-----------------------------------------------------
+DEFINE <USER>             $USER
+DEFINE <SCRATCH>          /scratch/fmu
+DEFINE <CASE_DIR>         04_drogon_ahm
+DEFINE <ECLIPSE_NAME>     DROGON
+--
+DEFINE <PRED_DIR_NAME>    pred_ref     -- name of the prediction folder (runpath)
+--
+DEFINE <RESTART_DIR>      iter-3       -- name of the history folder to restart from
+DEFINE <RESTART_CASE>     ../../../<RESTART_DIR>/eclipse/model/<ECLIPSE_NAME>-<IENS>   -- path is relative to eclipse/model
+DEFINE <RESTART_REPORT>   82
+
+-- Point to runpath where it restart from, relative to current case runpath
+-- Used by fmu-dataio to set value: fmu\iteration\restart_from
+SETENV RESTART_FROM_PATH  ../<RESTART_DIR>/
+
+
+-----------------------------------------------------
+-- Runpath folder
+-----------------------------------------------------
+
+-- Runpath from where all realizations are run
+RUNPATH	  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/<PRED_DIR_NAME>
+
+
+-----------------------------------------------------
+-- Eclipse settings
+-----------------------------------------------------
+
+DEFINE  <TEMPLATE_DATA_FILE> ../../eclipse/model/DROGON_PRED.DATA  -- Template DATA file
+
+ECLBASE  eclipse/model/<ECLIPSE_NAME>-<IENS>  -- Name used for the ECLIPSE simulations in runpath
+
+-- Copy template DATA file to runpath + do variable substitution
+RUN_TEMPLATE  <TEMPLATE_DATA_FILE>  <ECLBASE>.DATA
+
+
+-----------------------------------------------------
+-- ert storage settings
+-----------------------------------------------------
+
+ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+
+RANDOM_SEED  123456  -- ERT seed value
+
+
+-----------------------------------------------------
+-- LSF settings
+-----------------------------------------------------
+
+NUM_CPU             1
+NUM_REALIZATIONS    100            -- Set number of realizations to run
+MAX_RUNTIME         10000           -- Set the maximum allowed run time (in seconds)
+MIN_REALIZATIONS    1              -- Success criteria
+MAX_SUBMIT          1              -- How many times should the queue system retry a simulation.
+QUEUE_OPTION  LSF MAX_RUNNING 100  -- Choke the number of simultaneous run
+
+QUEUE_OPTION LSF LSF_QUEUE  mr8     -- Assign LSF cluster queue
+-- QUEUE_SYSTEM LOCAL                 -- OR activate this to run simulations locally
+
+
+-------------------------------------------------------
+--Install custom jobs and workflows
+-------------------------------------------------------
+
+INCLUDE  ../input/config/install_custom_jobs.ert
+
+
+-----------------------------------------------------
+-- Hook workflows
+-----------------------------------------------------
+
+HOOK_WORKFLOW   echo_config_file    PRE_SIMULATION  -- Write config file run information to scratch
+HOOK_WORKFLOW   run_fmuconfig_pred  PRE_SIMULATION  -- create global_variables_pred  files
+
+
+-----------------------------------------------------
+-- Forward Models
+-----------------------------------------------------
+
+-- fmuconfig - copy global_variables_pred.yml file
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/fmuconfig/output)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../fmuconfig/output/global_variables_pred.yml, <TO>=<RUNPATH>/fmuconfig/output/global_variables_pred.yml)
+
+-- Make symbolic link to eclipse restart case
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../<RESTART_DIR>/eclipse/include, <LINKNAME>=<RUNPATH>/eclipse/include)
+
+-- Make separate folder for sch pred files (avoid writing to symlinked folder)
+FORWARD_MODEL MAKE_DIRECTORY( <DIRECTORY> = <RUNPATH>/eclipse/include_pred/schedule)
+
+-- Copy the eclipse schedule file to be used for refcase
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include_pred/schedule/drogon_pred_ref.sch, <TO>=<RUNPATH>/eclipse/include_pred/schedule/drogon_pred.sch)
+
+
+----------------------------------------------------
+-- Merge parameters.txt from hist run (combine hist and pred parameters in same file)
+FORWARD_MODEL FM_MERGE_PARAMETERS(<PATH_BASE>=<RUNPATH>, <PATH_PREPEND>=<RUNPATH>/../<RESTART_DIR>)
+
+
+----------------------------------------------------
+-- Eclipse/Flow
+----------------------------------------------------
+
+-- FORWARD_MODEL INSERT_NOSIM
+-- FORWARD_MODEL ECLIPSE100(<VERSION>=2022.2)
+
+FORWARD_MODEL OPM_FLOW  -- flowrc23
+
+-- Merge hist and pred UNRST files (merged file can be deleted after post-processing)
+FORWARD_MODEL MERGE_UNRST_FILES(<UNRST1>=../<RESTART_DIR>/<ECLBASE>.UNRST, <UNRST2>=<ECLBASE>.UNRST, <OUTPUT>=eclipse/model/ECLIPSE_MERGED.UNRST)
+-- Symlink the corresponding egrid and init files (note:target is defined relative to linkname)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=../../<ECLBASE>.EGRID, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE_MERGED.EGRID)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=../../<ECLBASE>.INIT, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE_MERGED.INIT)
+
+
+----------------------------------------------------
+--create share/results folders
+----------------------------------------------------
+FORWARD_MODEL MAKE_DIRECTORY( <DIRECTORY> = <RUNPATH>/share/results/maps )
+FORWARD_MODEL MAKE_DIRECTORY( <DIRECTORY> = <RUNPATH>/share/results/tables/ecl_summary )
+
+
+----------------------------------------------------
+-- Create arrow file with summary vectors
+----------------------------------------------------
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=summary, <ECLBASE>=<ECLBASE>, <OUTPUT>="share/results/tables/ecl_summary/<ECLIPSE_NAME>-<IENS>.arrow", <XARG1>="--time_index", <XARG2>=raw, <XARG3>="--arrow")
+
+
+----------------------------------------------------
+-- create maps for visualization
+----------------------------------------------------
+
+-- Create oil/gas thickness maps from Eclipse prediction. Use the merged UNRST file (root name ECLIPSE)
+FORWARD_MODEL GRID3D_HC_THICKNESS(<ECLROOT>=eclipse/model/ECLIPSE_MERGED, <CONFIG_HCMAP>=<CONFIG_PATH>/../input/config/ecl_hc_thickness_pred.yml)
+
+
+----------------------------------------------------
+-- eCalc
+----------------------------------------------------
+INCLUDE  ../input/config/run_ecalc.ert  -- ecalc setup
+
+
+----------------------------------------------------
+-- ERT plotting
+-----------------------------------------------------
+INCLUDE  ../input/config/ert_summary_plotting_pred.ert  -- summary vectors
+
+
+----------------------------------------------------------------------
+-- Delete files
+----------------------------------------------------------------------
+
+-- FORWARD_MODEL DELETE_FILE(<FILES>=eclipse/model/ECLIPSE_MERGED.UNRST)  -- delete the merged UNRST file

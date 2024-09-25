@@ -1,0 +1,5 @@
+GENERAL_OBSERVATION DPDT_OBS{
+   DATA = DPDT_SIM;
+   RESTART = 2;
+   OBS_FILE = ./dst/55_33-1_dpdt_bu2_obs.txt;
+};

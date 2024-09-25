@@ -1,0 +1,31 @@
+-- Copy preprocessed data and upload to sumo
+
+---------------------------  ert_caseroot                  ert_configpath   inpath
+WF_COPY_PREPROCESSED_DATAIO  <SCRATCH>/<USER>/<CASE_DIR>   <CONFIG_PATH>    ../../share/preprocessed/maps "--verbosity" WARNING
+
+--activate this line for uploading to sumo:
+SUMO_UPLOAD <SCRATCH>/<USER>/<CASE_DIR>   "<SCRATCH>/<USER>/<CASE_DIR>/share/observations/maps/*.gri"  <SUMO_ENV>
+
+
+
+-- This workflow is intended to be run as a HOOK workflow.
+-- This workflow job is locally installed, from ert/bin/jobs.
+
+-- Arguments:
+-- ert_caseroot (Path): The absolute path to the root of the case on /scratch
+-- ert_configpath (Path): The absolute path to the ERT config ies project disk revision
+-- inpath (str): Folder relative to ert_configpath, e.g. ../../share/preprocessed
+
+-- Optional arguments:
+-- --verbosity (str): Python logging level to use
+-- --global_variables_path(str): Rel. path to global variables (may also be an ENV?)
+--
+-- NOTE! If using optional arguments, note that the "--" annotation will be interpreted
+-- as comments by ERT if not wrapped in quotes. This is the syntax to use:
+-- (existing arguments) "--verbosity" DEBUG
+
+-- The workflow name is prefixed "xhook" to signal that even if it appears in the ERT
+-- workflow dropdown, it is not supposed to be ran by the user. Also, the "x" in front
+-- makes it go to the bottom of the drop-down. When having many HOOK workflows, it is
+-- annoying that they take up a lot of space in the ERT dropdown. This is NOT the case
+-- in Drogon, with very few workflows, but the routine is useful for setups in the wild.

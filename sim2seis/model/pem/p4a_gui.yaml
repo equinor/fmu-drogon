@@ -1,0 +1,16 @@
+title: P4A - PEM FOR ALL
+
+pages:
+
+  - title: Front page
+    content:
+      - Welcome to the PEM 4 All (P4A) webviz plugin
+
+  - title: PEM Inputs & Parameters
+    content:
+      - P4aInputs:
+          export_path: ./
+#  - title: PEM QC Plots
+#    content:
+#      - P4aQcPlots:
+#          plot_config: ./pem_plotting.yaml

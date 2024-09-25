@@ -1,0 +1,175 @@
+title: FMU course - Webviz example
+
+#---------------------------------------------------------
+# Webviz demo project: https://webviz-subsurface-example.azurewebsites.net/
+# https://equinor.github.io/webviz-subsurface/
+# > webviz docs
+#---------------------------------------------------------
+
+shared_settings:
+  scratch_ensembles:
+    iter-0: /scratch/fmu/course/01_drogon_ahm/realization-*/iter-0
+    iter-3: /scratch/fmu/course/01_drogon_ahm/realization-*/iter-3
+
+
+# --- User defined settings/aliases ---
+
+hm_ensembles: &hm_ensembles  # Ensembes used for history matching analysis
+  - iter-0
+  - iter-3
+
+
+# Shared settings
+obsfile: &obsfile /scratch/fmu/course/01_drogon_ahm/share/observations/tables/ert_observations.yml
+fipfile: &fipfile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/tables/fip.yml
+formationfile: &formationfile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/tables/formations.csv
+faultlinefile: &faultlinefile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/polygons/toptherys--gl_faultlines_extract_postprocess.csv
+wellfolder: &wellfolder /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/wells
+
+
+# ------------------------------
+options:
+  menu:
+    show_logo: true
+    bar_position: left
+    drawer_position: left
+    initially_pinned: true
+    initially_collapsed: true
+
+# ------------------------------
+layout:
+
+  # ------------------------------
+  - section: Webviz Analysis
+    content:
+
+      # -------------------------------
+      - group: Model general
+        icon: timeline
+        content:
+
+          - page: Volumetrics
+            content:
+              - VolumetricAnalysis:
+                  ensembles: *hm_ensembles
+                  fipfile: *fipfile
+                  volfiles:
+                    geogrid: geogrid--vol.csv
+                    simgrid: simgrid--vol.csv
+                    eclipse: eclipse--vol.csv
+
+
+          - page: Structural uncertainty
+            content:
+              - StructuralUncertainty:
+                  ensembles:
+                    - iter-0
+                    - iter-3
+                  surface_attributes:
+                    - ds_extract_postprocess
+                  surface_name_filter:
+                    - topvolantis
+                    - toptherys
+                    - topvolon
+                    - basevolantis
+                  # Everything below is optional
+                  wellfolder: *wellfolder
+                  wellsuffix: .rmswell
+                  zonelog: Zone
+                  well_downsample_interval: 100
+                  initial_settings:
+                    intersection_data:
+                      surface_names:
+                        - topvolantis
+                        - topvolon
+                        - basevolantis
+                      surface_attribute: ds_extract_postprocess
+                      ensembles:
+                        - iter-0
+                        - iter-3
+                      calculation:
+                        - Mean
+                        # - Min
+                        # - Max
+                      well: 55_33-A-4
+                      realizations: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    colors:
+                      topvolantis:
+                        iter-0: '#A911A1'
+                        iter-3: '#7D93C1'
+                      topvolon:
+                        iter-0: '#2C82C9'
+                        iter-3: '#2CC990'
+                      basevolantis:
+                        iter-0: '#EEE657'
+                        iter-3: '#FC6042'
+                    intersection_layout:
+                      yaxis:
+                        range: [1700, 1550]
+                        title: True vertical depth [m]
+                      xaxis:
+                        title: Lateral distance [m]
+
+
+          - page: Simulation time series
+            content:
+              - SimulationTimeSeries:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+                  obsfile: *obsfile
+                  options:
+                    vectors:
+                      - FOPR
+                      - FWPR
+                   # predefined_expressions: timeseries_expressions
+
+
+      # -------------------------------
+      - group: Correlations
+        icon: bar_chart
+        content:
+
+          - page: Parameters vs inplace volumes
+            content:
+              - ParameterResponseCorrelation:
+                  ensembles: *hm_ensembles
+                  response_file: share/results/volumes/geogrid--vol.csv
+                  response_filters:
+                    ZONE: multi
+                    REGION: multi
+
+          - page: Parameters vs time series
+            content:
+              - ParameterResponseCorrelation:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+                  sampling: monthly
+                  response_filters:
+                    DATE: single
+
+
+      # -------------------------------
+      - group: HM and parameters
+        icon: repeat
+        content:
+
+          - page: RFT plotter
+            content:
+              - RftPlotter:
+                  ensembles: *hm_ensembles
+                  formations: *formationfile
+                  faultlines: *faultlinefile
+
+
+          - page: Prod misfit
+            content:
+              - ProdMisfit:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+                  sampling: yearly  # daily, weekly, monthly, yearly
+                  # well_attributes_file: rms/output/wells/well_attributes.json
+                  excl_name_startswith: [R_]  # input as list
+                  phase_weights:
+                    "Oil": 1.0
+                    "Water": 1.0
+                    "Gas": 300.0

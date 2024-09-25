@@ -1,0 +1,2 @@
+MAKE_DIRECTORY <SCRATCH>/<USER>/<CASE_DIR>/share/observations
+COPY_DIRECTORY <CONFIG_PATH>/../../ert/input/observations/seismic  <SCRATCH>/<USER>/<CASE_DIR>/share/observations/

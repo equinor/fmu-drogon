@@ -1,0 +1,88 @@
+title: FMU course - Webviz example
+
+#---------------------------------------------------------
+# Webviz demo project: https://webviz-subsurface-example.azurewebsites.net/
+# https://equinor.github.io/webviz-subsurface/
+# > webviz docs
+#---------------------------------------------------------
+
+shared_settings:
+  scratch_ensembles:
+
+    iter-0_seis: /scratch/fmu/course/01_drogon_ahm/realization-*/iter-0
+    iter-3_seis: /scratch/fmu/course/01_drogon_ahm/realization-*/iter-3
+    pred_ref_seis: /scratch/fmu/course/01_drogon_ahm/realization-*/pred_ref
+    pred_op5_seis: /scratch/fmu/course/01_drogon_ahm/realization-*/pred_op5
+    iter-0_noseis: /scratch/fmu/course/02_drogon_ahm/realization-*/iter-0
+    iter-3_noseis: /scratch/fmu/course/02_drogon_ahm/realization-*/iter-3
+    pred_ref_noseis: /scratch/fmu/course/02_drogon_ahm/realization-*/pred_ref
+    pred_op5_noseis: /scratch/fmu/course/02_drogon_ahm/realization-*/pred_op5
+
+# --- User defined settings/aliases ---
+
+vol_ensembles: &vol_ensembles  # Ensembes used for history matching analysis
+  - iter-0_seis
+  - iter-3_seis
+  - iter-0_noseis
+  - iter-3_noseis
+
+hm_ensembles: &hm_ensembles  # Ensembes used for history matching analysis
+  - iter-3_seis
+  - iter-3_noseis
+  - pred_ref_seis
+  - pred_op5_seis
+  - pred_ref_noseis
+  - pred_op5_noseis
+  
+# Shared settings
+obsfile: &obsfile /scratch/fmu/course/01_drogon_ahm/share/observations/tables/ert_observations.yml
+fipfile: &fipfile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/tables/fip.yml
+formationfile: &formationfile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/tables/formations.csv
+faultlinefile: &faultlinefile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/polygons/toptherys--gl_faultlines_extract_postprocess.csv
+wellfolder: &wellfolder /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/wells
+
+
+# ------------------------------
+options:
+  menu:
+    show_logo: true
+    bar_position: left
+    drawer_position: left
+    initially_pinned: true
+    initially_collapsed: true
+
+# ------------------------------
+layout:
+
+  # ------------------------------
+  - section: Webviz Analysis
+    content:
+
+      # -------------------------------
+      - group: Model general
+        icon: timeline
+        content:
+
+          - page: Volumetrics
+            content:
+              - VolumetricAnalysis:
+                  ensembles: *vol_ensembles
+                  fipfile: *fipfile
+                  volfiles:
+                    geogrid: geogrid--vol.csv
+                    simgrid: simgrid--vol.csv
+                    eclipse: eclipse--vol.csv
+
+
+
+          - page: Simulation time series
+            content:
+              - SimulationTimeSeries:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/DROGON-*.arrow
+                  obsfile: *obsfile
+                  options:
+                    vectors:
+                      - FOPR
+                      - FWPR
+                    # predefined_expressions: timeseries_expressions

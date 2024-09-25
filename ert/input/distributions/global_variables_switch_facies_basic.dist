@@ -1,0 +1,6 @@
+DCONV_ALTERNATIVE        CONST 2  -- 1: contant V in overburden  2: V = a*Tmap + b in overburden
+HUM_MODEL_MODE           CONST 1  -- 0: prediction  1: simulation
+PETROMODEL_ALTERNATIVE   CONST 1  -- 0: simple constant value per facies  1: standard multivariate analysis
+FACIESMODEL_ALTERNATIVE  CONST 0  -- 0: RMS algorithms  1: APS in all zones
+FACIES_VALYSAR_SEISCOND  CONST 1  -- 0: don't condition on seismic  1: condition on seismic
+FACIES_THERYS_ALT2       CONST 1  -- 0: Indicators  1: Belts  | only applies when FACIESMODEL_ALTERNATIVE=0

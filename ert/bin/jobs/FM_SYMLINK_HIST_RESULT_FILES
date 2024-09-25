@@ -1,0 +1,6 @@
+STDERR  symnlink_hist_result_files.stderr
+STDOUT  symnlink_hist_result_files.stdout
+
+EXECUTABLE    ../scripts/fm_symlink_hist_result_files.sh
+
+ARGLIST      <DIR_FROM>   <DIR_TO>

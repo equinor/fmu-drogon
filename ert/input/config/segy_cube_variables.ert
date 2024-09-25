@@ -1,0 +1,12 @@
+
+--Name of observed seismic segy cubes
+DEFINE <SEIS3D>            "seismic--3d_depth--20200101"
+DEFINE <SEIS4D1>           "seismic--4d_depth--20210601_20200101"
+DEFINE <SEIS4D2>           "seismic--4d_depth--20220101_20200101"
+DEFINE <SEIS4D3>           "seismic--4d_depth--20220101_20210601"
+
+--Name of final similarity segy cubes:
+DEFINE <SIMILARITY3D>     "seismic--similarity_3d_depth--20200101"
+DEFINE <SIMILARITY4D1>    "seismic--similarity_4d_depth--20210601_20200101"
+DEFINE <SIMILARITY4D2>    "seismic--similarity_4d_depth--20220101_20200101"
+DEFINE <SIMILARITY4D3>    "seismic--similarity_4d_depth--20220101_20210601"

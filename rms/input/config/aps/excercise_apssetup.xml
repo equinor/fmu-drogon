@@ -1,0 +1,118 @@
+<?xml version="1.0" ?>
+<APSModel version="1.0">
+  <RMSProjectName> drogon.rms14.2.1 </RMSProjectName>
+  <GridModelName> Geogrid_Valysar </GridModelName>
+  <ZoneParamName> Zone </ZoneParamName>
+  <ResultFaciesParamName> aps_test </ResultFaciesParamName>
+  <PrintInfo> 0 </PrintInfo>
+  <SeedFile> seed.dat </SeedFile>
+  <TransformationType> 0 </TransformationType>
+  <WriteSeeds> no </WriteSeeds>
+  <MainFaciesTable blockedWell="BW" blockedWellLog="Facies">
+    <Facies name="Floodplain">
+      <Code> 0 </Code>
+    </Facies>
+    <Facies name="Channel">
+      <Code> 1 </Code>
+    </Facies>
+    <Facies name="Crevasse">
+      <Code> 2 </Code>
+    </Facies>
+    <Facies name="Coal">
+      <Code> 5 </Code>
+    </Facies>
+    <Facies name="Calcite">
+      <Code> 6 </Code>
+    </Facies>
+    <Facies name="Offshore">
+      <Code> 10 </Code>
+    </Facies>
+    <Facies name="Lowershoreface">
+      <Code> 11 </Code>
+    </Facies>
+    <Facies name="Uppershoreface">
+      <Code> 12 </Code>
+    </Facies>
+  </MainFaciesTable>
+  <ZoneModels>
+    <Zone number="1">
+      <GridLayout>Proportional</GridLayout>
+      <UseConstProb> 0 </UseConstProb>
+      <SimBoxThickness> 16.826007877077377 </SimBoxThickness>
+      <FaciesProbForModel>
+        <Facies name="Channel">
+          <ProbCube> apstrend_aps_Channel </ProbCube>
+        </Facies>
+        <Facies name="Coal">
+          <ProbCube> apstrend_aps_Coal </ProbCube>
+        </Facies>
+        <Facies name="Crevasse">
+          <ProbCube> apstrend_aps_Crevasse </ProbCube>
+        </Facies>
+        <Facies name="Floodplain">
+          <ProbCube> apstrend_aps_Floodplain </ProbCube>
+        </Facies>
+      </FaciesProbForModel>
+      <GaussField name="GRF1">
+        <Vario name="GAUSSIAN">
+          <MainRange> 2000.0 </MainRange>
+          <PerpRange> 400.0 </PerpRange>
+          <VertRange> 5.0 </VertRange>
+          <AzimuthAngle> 70.0 </AzimuthAngle>
+          <DipAngle> 0.0 </DipAngle>
+        </Vario>
+        <SeedForPreview> 7835470046840304000 </SeedForPreview>
+      </GaussField>
+      <GaussField name="GRF2">
+        <Vario name="GENERAL_EXPONENTIAL">
+          <MainRange> 1000.0 </MainRange>
+          <PerpRange> 1000.0 </PerpRange>
+          <VertRange> 5.0 </VertRange>
+          <AzimuthAngle> 70.0 </AzimuthAngle>
+          <DipAngle> 0.0 </DipAngle>
+          <Power> 1.5 </Power>
+        </Vario>
+        <SeedForPreview> 12834213972662428000 </SeedForPreview>
+      </GaussField>
+      <GaussField name="GRF3">
+        <Vario name="SPHERICAL">
+          <MainRange> 1000.0 </MainRange>
+          <PerpRange> 1000.0 </PerpRange>
+          <VertRange> 5.0 </VertRange>
+          <AzimuthAngle> 0.0 </AzimuthAngle>
+          <DipAngle> 0.0 </DipAngle>
+        </Vario>
+        <SeedForPreview> 3896004607108096000 </SeedForPreview>
+      </GaussField>
+      <TruncationRule>
+        <Trunc2D_Angle nGFields="3">
+          <BackGroundModel>
+            <AlphaFields> GRF1 GRF2 </AlphaFields>
+            <UseConstTruncParam> 1 </UseConstTruncParam>
+            <Facies name="Floodplain">
+              <Angle> 40.0 </Angle>
+              <ProbFrac> 1.0 </ProbFrac>
+            </Facies>
+            <Facies name="Crevasse">
+              <Angle> 5.0 </Angle>
+              <ProbFrac> 1.0 </ProbFrac>
+            </Facies>
+            <Facies name="Channel">
+              <Angle> 20.0 </Angle>
+              <ProbFrac> 1.0 </ProbFrac>
+            </Facies>
+          </BackGroundModel>
+          <OverLayModel>
+            <Group>
+              <AlphaField name="GRF3">
+                <TruncIntervalCenter> 0.0 </TruncIntervalCenter>
+                <ProbFrac name="Coal"> 1.0 </ProbFrac>
+              </AlphaField>
+              <BackGround> Floodplain </BackGround>
+            </Group>
+          </OverLayModel>
+        </Trunc2D_Angle>
+      </TruncationRule>
+    </Zone>
+  </ZoneModels>
+</APSModel>

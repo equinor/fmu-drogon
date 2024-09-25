@@ -1,0 +1,68 @@
+# This is stratigraphy metadata helper setup
+# The key names are the modelling names used in RMS project (e.g. TopVolantis) while the "name"
+# shall be the official SMDA name!
+
+#=========================================================================================
+# tops
+
+MSL:
+  stratigraphic: False
+  name: MSL
+
+Seabase:
+  stratigraphic: False
+  name: Seabase
+
+TopVolantis:
+  stratigraphic: True
+  name: VOLANTIS GP. Top  # this is the official DB name
+  # additional names, given for demo purpose:
+  alias:
+    - TopVOLANTIS
+    - TOP_VOLANTIS
+  stratigraphic_alias:
+    - TopValysar
+    - Valysar Fm. Top
+
+TopTherys:
+  stratigraphic: True
+  name: Therys Fm. Top
+
+TopVolon:
+  stratigraphic: True
+  name: Volon Fm. Top
+
+BaseVolon:
+  stratigraphic: True
+  name: Volon Fm. Base
+
+BaseVolantis:
+  stratigraphic: True
+  name: VOLANTIS GP. Base
+
+BaseVelmodel:
+  stratigraphic: False
+  name: BaseVelmodel
+
+#=========================================================================================
+# zones/intervals
+
+Above:
+  stratigraphic: False
+  name: Above
+
+Valysar:
+  stratigraphic: True
+  name: Valysar Fm.
+
+Therys:
+  stratigraphic: True
+  name: Therys Fm.
+
+Volon:
+  stratigraphic: True
+  name: Volon Fm.
+
+Below:
+  stratigraphic: False
+  name: Below

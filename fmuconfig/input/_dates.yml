@@ -1,0 +1,16 @@
+  SEISMIC_HIST_DATES: &4d_dates
+    - 2018-01-01
+    - 2018-07-01
+    - 2019-07-01
+    - 2020-07-01
+
+  SEISMIC_HIST_DIFFDATES: &4d_diffdates
+    - [2018-07-01, 2018-01-01]
+    - [2019-07-01, 2018-01-01]
+    - [2020-07-01, 2018-01-01]
+
+    
+  # eclipse dates should be aligned with rmsevents IORESTART keyword (restart reporting)
+  ECLIPSE_INIT_DATE: 2018-01-01
+  ECLIPSE_HIST_DATES: *4d_dates  # same dates as in SEISMIC_HIST_DATES
+  ECLIPSE_HIST_DIFFDATES: *4d_diffdates  # same dates as in SEISMIC_HIST_DIFFDATES

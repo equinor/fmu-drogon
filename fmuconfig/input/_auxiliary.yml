@@ -1,0 +1,79 @@
+# This is auxiliary metadata that contains helper setup for mostly for SUMO
+# * aliases
+# * display settings
+
+# The key names are the modelling names used in RMS project (e.g. TopVolantis) while the "name"
+# shall be the official SMDA name
+
+MSL:
+  stratigraphic: False
+  name: MSL
+  display_name: MSL
+
+Seabase:
+  stratigraphic: False
+  name: Seabase
+  display_name: Seabase
+
+TopVolantis:
+  stratigraphic: True
+  name: VOLANTIS GP. Top  # this is the official DB name
+  display_name: Top Volantis
+  # additional names, given for demo purpose:
+  alias:
+    - TopVOLANTIS
+    - TOP_VOLANTIS
+  straigraphic_alias:
+    - TopValysar
+    - Valysar Fm. Top
+
+TopTherys:
+  stratigraphic: True
+  name: Therys Fm. Top
+  display_name: Top Therys
+
+TopVolon:
+  stratigraphic: True
+  name: Volon Fm. Top
+  display_name: Top Volon
+
+BaseVolon:
+  stratigraphic: True
+  name: Volon Fm. Base
+  display_name: Base Volon
+
+BaseVolantis:
+  stratigraphic: True
+  name: VOLANTIS GP. Base
+  display_name: Base Volantis
+
+BaseVelmodel:
+  stratigraphic: False
+  name: BaseVelmodel
+
+#=========================================================================================
+# zones
+Above:
+  stratigraphic: False
+  name: Above
+  display_name: Above Reservoir
+
+Valysar:
+  stratigraphic: True
+  name: Valysar Fm.
+  display_name: Valysar
+
+Therys:
+  stratigraphic: True
+  name: Therys Fm.
+  display_name: Therys
+
+Volon:
+  stratigraphic: True
+  name: Volon Fm.
+  display_name: Volon
+
+Below:
+  stratigraphic: False
+  name: Below
+  display_name: Below Reservoir

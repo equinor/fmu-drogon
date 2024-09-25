@@ -1,0 +1,97 @@
+-- ==============================================================================
+--
+-- ERT CONFIGURATION FILE   ----   DROGON RESERVOIR MODEL
+--                                 "Exercise file running RMS"
+-- Documentation:
+--
+-- References:
+--  FMU wiki portal:           https://wiki.equinor.com/wiki/index.php/FMU_portal_home
+--  FMU related documentation: https://fmu-docs.equinor.com/
+--  ERT technical description: https://fmu-docs.equinor.com/docs/ert/index.html
+--
+-- ==============================================================================
+
+
+-----------------------------------------------------
+-- Internal variables
+-----------------------------------------------------
+
+DEFINE <USER>              $USER
+DEFINE <SCRATCH>           /scratch/fmu
+DEFINE <CASE_DIR>          drogon_exercise_02a
+--
+DEFINE <RMS_NAME>          drogon.rms14.2.2
+DEFINE <RMS_VERSION>       14.2.2
+DEFINE <RMS_WF_NAME1>      MAIN
+--
+DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
+
+
+-----------------------------------------------------
+-- Eclipse and runpath settings
+-----------------------------------------------------
+
+-- Runpath from where all realizations are run
+RUNPATH     <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/iter-<ITER>/
+
+
+-----------------------------------------------------
+-- ert storage settings
+-----------------------------------------------------
+
+ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+
+-----------------------------------------------------
+-- LSF settings
+-----------------------------------------------------
+
+NUM_REALIZATIONS    5       -- Set number of realizations to run
+
+-------------------------------------------------------
+--Install custom jobs and workflows
+-------------------------------------------------------
+
+INCLUDE  ../input/config/install_custom_jobs.ert
+
+
+-----------------------------------------------------
+-- Forward Models
+-----------------------------------------------------
+
+-----------------------------------------------------
+-- make folder structure
+-----------------------------------------------------
+
+INCLUDE  ../input/config/make_folders.ert
+
+-----------------------------------------------------
+---- copy rms folders/files
+-----------------------------------------------------
+
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/bin,                  <TO>=<RUNPATH>/rms)
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/input/well_modelling, <TO>=<RUNPATH>/rms/input)
+
+--Copy seed file to the rms/model folder --> forces rms to use seed values from the file (target file must be named "random.seeds")
+FORWARD_MODEL COPY_FILE(<FROM>=<RMS_SEED_FILE>,  <TO>=<RUNPATH>/rms/model/random.seeds)
+
+
+-----------------------------------------------------
+-- ERT uncertainty parameters
+-----------------------------------------------------
+----------------       uncertainty distributions
+GEN_KW  SWITCHES    ../input/distributions/global_variables_switches.dist
+GEN_KW  GLOBVAR     ../input/distributions/global_variables.dist
+GEN_KW  APS_FACIES  ../input/distributions/facies_aps.dist
+GEN_KW  RATE        ../input/distributions/rate_scaling.dist
+----------------
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/global_variables.yml)
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/rate_scaling.yml)
+
+-----------------------------------------------------
+---- RMS
+-----------------------------------------------------
+
+-- Run Main workflow
+FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CONFIG_PATH>/../../rms/model/<RMS_NAME>, <RMS_WORKFLOW>=<RMS_WF_NAME1>, <RMS_TARGET_FILE>=RMS_TARGET_MAIN)

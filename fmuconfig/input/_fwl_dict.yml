@@ -1,0 +1,44 @@
+# These data are currently *not* in use ; they are here for demo purpose!
+# This is primarely an example on how to read 2D data from YAML
+# in the RMS project it will be a demo_*.py script to show how
+# it can be read by python
+
+#    ZONE1 VALYSAR              ZONE2 THERYS ZONE3        ZONE3 VOLON ZONE3
+# - [1660 ~ <FWL_VALYSAR_REG1>, 1660 ~ <FWL_THERYS_REG1>, 1660 ~ <FWL_VOLON_REG1>]  # region 1 WestLowland
+# - [1667 ~ <FWL_VALYSAR_REG2>, 1667 ~ <FWL_THERYS_REG2>, 1680 ~ <FWL_VOLON_REG2>]  # region 2 CentralSouth
+# - [1668 ~ <FWL_VALYSAR_REG3>, 1667 ~ <FWL_THERYS_REG3>, 1680 ~ <FWL_VOLON_REG3>]  # region 3 CentralNorth
+# - [1661 ~ <FWL_VALYSAR_REG4>, 1667 ~ <FWL_THERYS_REG4>, 1680 ~ <FWL_VOLON_REG4>]  # region 4 NorthHorst
+# - [1655 ~ <FWL_VALYSAR_REG5>, 1664 ~ <FWL_THERYS_REG5>, 1680 ~ <FWL_VOLON_REG5>]  # region 5 CentralRamp
+# - [1632 ~ <FWL_VALYSAR_REG6>, 1667 ~ <FWL_THERYS_REG6>, 1680 ~ <FWL_VOLON_REG6>]  # region 6 CentralHorst
+# - [1688 ~ <FWL_VALYSAR_REG7>, 1667 ~ <FWL_THERYS_REG7>, 1690 ~ <FWL_VOLON_REG7>]  # region 7 EastLowland
+
+# better! use dictionary
+
+Westlowland:
+  Valysar: 1660 ~ <FWL_VALYSAR_REG1>
+  Therys: 1660 ~ <FWL_THERYS_REG1>
+  Volon: 1660 ~ <FWL_VOLON_REG1>
+Centralsouth:
+  Valysar: 1667 ~ <FWL_VALYSAR_REG2>
+  Therys: 1667 ~ <FWL_THERYS_REG2>
+  Volon: 1680 ~ <FWL_VOLON_REG2>
+CentralNorth:
+  Valysar: 1668 ~ <FWL_VALYSAR_REG3>
+  Therys: 1667 ~ <FWL_THERYS_REG3>
+  Volon: 1680 ~ <FWL_VOLON_REG3>
+NorthHorst:
+  Valysar: 1661 ~ <FWL_VALYSAR_REG4>
+  Therys: 1667 ~ <FWL_THERYS_REG4>
+  Volon: 1680 ~ <FWL_VOLON_REG4>
+CentralRamp:
+  Valysar: 1655 ~ <FWL_VALYSAR_REG5>
+  Therys: 1664 ~ <FWL_THERYS_REG5>
+  Volon: 1680 ~ <FWL_VOLON_REG5>
+CentralHorst:
+  Valysar: 1632 ~ <FWL_VALYSAR_REG6>
+  Therys: 1667 ~ <FWL_THERYS_REG6>
+  Volon: 1680 ~ <FWL_VOLON_REG6>
+Eastlowland:
+  Valysar: 1688 ~ <FWL_VALYSAR_REG7>
+  Therys: 1667 ~ <FWL_THERYS_REG7>
+  Volon: 1690 ~ <FWL_VOLON_REG7>

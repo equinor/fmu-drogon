@@ -1,0 +1,2 @@
+MAKE_DIRECTORY            <SCRATCH>/<USER>/<CASE_DIR>/share/key_files
+WF_JOB_ECHO_CONFIG_FILE   <CONFIG_PATH>/<CONFIG_FILE>    <SCRATCH>/<USER>/<CASE_DIR>/share/key_files/ert_config_file.info

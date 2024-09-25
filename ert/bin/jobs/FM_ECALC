@@ -1,0 +1,6 @@
+STDERR  ecalc.stderr
+STDOUT  ecalc.stdout
+
+EXECUTABLE  ecalc  -- komodo version
+
+ARGLIST run -o ecalc/output <ECALC_MODEL_FILE>

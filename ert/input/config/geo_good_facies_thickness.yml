@@ -1,0 +1,68 @@
+#Documentation:
+#  https://fmu-docs.equinor.com/docs/grid3d-maps/
+#  https://fmu-docs.equinor.com/docs/grid3d-maps/config-avg.html
+
+title: Drogon
+
+input:
+  grid: share/results/grids/geogrid.roff
+
+
+filters:
+  -
+    name: FACIES
+    discrete: Yes
+    source: share/results/grids/geogrid--facies.roff
+    discrange: [1, 12]  # channel (1) and upper shoreface (12) facies
+
+# Zonation from file on yaml format
+zonation:
+  yamlfile: rms/output/zone/zonation_geo_map.yml
+
+#zonation:
+#  zranges:
+#    - all_zones: [1, 52]
+
+#zonation:
+#  zproperty:
+#    name: Zone
+#    source: share/results/grids/geogrid--zone.roff
+#    zones:
+#      - valysar: [1]   # can be a discrete selection, e.g. [1, 3, 10]
+#      - therys: [2]
+#      - volon: [3]
+
+# diffmode: none (no diffs are made), withfirst, all
+computesettings:
+  mode: rock  # will only look at rock thickness, no HC saturation
+  zone: Yes  # compute for each zone
+  all: Yes   # compute for all combined
+  tuning:
+    zone_avg: Yes         # yes = faster method ( 'ij' averaging vs 'xy' averaging )
+    # coarsen: 1
+#  mask_outside: Yes
+
+# Map definition
+mapsettings:
+  xori: 456511
+  xinc: 75
+  yori: 5926880
+  yinc: 75
+  ncol: 143
+  nrow: 161
+
+plotsettings:
+  faultpolygons: share/results/polygons/topvolantis--gl_faultlines_extracted.pol
+  #valuerange: [0, 5]       # Value range min/max (values above and below will be truncated in plot
+  #diffvaluesrange: [-3, 0] # Value range min/max for date diffs
+  xlabelrotation: 30        # Rotate the x axis labels if (they may overlap)
+  colortable: rainbow       # http://matplotlib.org/examples/color/colormaps_reference.html, or from RMS colour file
+                            # colours jet/rainbow/seismic/gnuplot/gnuplot2/...   OR from RMS colour file
+
+output:
+
+  tag: goodfac    # when zone=Yes; the tag will added to file name as extra info, e.g. as  z1--goodfac_rockthickness--20010701.gri
+  prefix: all  # when all=Yes; replace the default 'all' prefix --> can be useful for better description  when applying filters
+
+  mapfolder: share/results/maps
+ # plotfolder: share/results/images

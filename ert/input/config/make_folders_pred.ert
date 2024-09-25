@@ -1,0 +1,32 @@
+--------------------------------------------------------------------------------------------------
+---- Create fmuconfig folders
+--------------------------------------------------------------------------------------------------
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/fmuconfig/output)
+
+--------------------------------------------------------------------------------------------------
+---- Create eclipse folder structure
+--------------------------------------------------------------------------------------------------
+-- make seperate folder for sch pred files (avoid writing to symlinked folder)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/eclipse/include_pred/schedule)
+
+--------------------------------------------------------------------------------------------------
+---- Create rms folder structure
+--------------------------------------------------------------------------------------------------
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/rms/model)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/rms/input)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/rms/output/well_modelling)
+
+----------------------------------------------------------------------
+--create share/results folders
+----------------------------------------------------------------------
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/maps)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/grids)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/wells)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/tables)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/tables/ecl_summary)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/unsmry)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/images)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/seismic)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/polygons)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/points)

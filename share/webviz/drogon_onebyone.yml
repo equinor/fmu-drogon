@@ -1,0 +1,62 @@
+title: Drogon Webviz OneByOne Sensitivities
+
+# ------------------------------
+options:
+  menu:
+    show_logo: true
+    bar_position: left
+    drawer_position: left
+    initially_pinned: true
+    initially_collapsed: true
+
+#---------------------------------------------------------
+# Webviz demo project: https://webviz-subsurface-example.azurewebsites.net/
+# https://equinor.github.io/webviz-subsurface/#/
+# > webviz docs
+#---------------------------------------------------------
+
+shared_settings:
+  scratch_ensembles:
+    sens_run: /scratch/fmu/course/01_drogon_design/realization-*/iter-0
+
+fipfile: &fipfile /scratch/fmu/course/01_drogon_design/realization-0/iter-0/share/results/tables/fip.yml
+#---------------------------------------------------------
+
+pages:
+  - title: Front page
+    content:
+      - BannerImage:
+          image: ./drogon_logo.png
+          title: Drogon Webviz
+
+  #---------------------------------------------------------
+
+  # - title: Sensitivity study (inplace)
+  #   content:
+  #     - InplaceVolumesOneByOne:
+  #         ensembles:
+  #           - sens_run
+  #         volfiles:
+  #           geogrid: geogrid--vol.csv
+  #           simgrid: simgrid--vol.csv
+  #           eclipse: eclipse--vol.csv
+
+  - title: Sensitivity study (inplace)
+    content:
+      - VolumetricAnalysis:
+          ensembles:
+            - sens_run
+          fipfile: *fipfile
+          volfiles:
+            geogrid: geogrid--vol.csv
+            simgrid: simgrid--vol.csv
+            # eclipse: eclipse--vol.csv
+
+  #---------------------------------------------------------
+  - title: Sensitivity study (time series)
+    content:
+      - SimulationTimeSeriesOneByOne:
+          ensembles:
+            - sens_run
+          rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+          initial_vector: FOPT

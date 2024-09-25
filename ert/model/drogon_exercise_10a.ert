@@ -1,0 +1,166 @@
+-- ==============================================================================
+--
+-- ERT CONFIGURATION FILE   ----   DROGON RESERVOIR MODEL
+--                          "Exercise file running RMS and Eclipse, using GEN_KW"
+-- Documentation:
+--
+-- References:
+--  FMU wiki portal:           https://wiki.equinor.com/wiki/index.php/FMU_portal_home
+--  FMU related documentation: https://fmu-docs.equinor.com/
+--  ERT technical description: https://fmu-docs.equinor.com/docs/ert/index.html
+--
+-- ==============================================================================
+
+
+-----------------------------------------------------
+-- Internal variables
+-----------------------------------------------------
+
+DEFINE <USER>              $USER
+DEFINE <SCRATCH>           /scratch/fmu
+DEFINE <CASE_DIR>          drogon_exercise_10a
+DEFINE <ECLIPSE_NAME>      DROGON_EXERCISE_10A
+--
+DEFINE <RMS_NAME>          drogon.rms14.2.2
+DEFINE <RMS_VERSION>       14.2.2
+DEFINE <RMS_WF_NAME1>      MAIN
+--
+DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
+
+
+-----------------------------------------------------
+-- Observations
+-----------------------------------------------------
+
+DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_wct_gor.obs
+OBS_CONFIG  <OBS_FILE>
+
+
+
+
+-----------------------------------------------------
+-- Runpath folder
+-----------------------------------------------------
+
+-- Runpath folder from where all realizations are run
+RUNPATH  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/iter-<ITER>/
+
+
+-----------------------------------------------------
+-- Eclipse settings
+-----------------------------------------------------
+
+DEFINE  <TEMPLATE_DATA_FILE> ../../eclipse/model/DROGON_HIST.DATA  -- Template DATA file
+
+ECLBASE  eclipse/model/<ECLIPSE_NAME>-<IENS>  -- Name used for the ECLIPSE simulations in runpath
+
+RUN_TEMPLATE  <TEMPLATE_DATA_FILE>  <ECLBASE>.DATA  -- Copy template DATA file to runpath
+
+
+-----------------------------------------------------
+-- ert storage settings
+-----------------------------------------------------
+
+ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+
+RANDOM_SEED  123456  -- ERT seed value
+
+-----------------------------------------------------
+-- LSF settings
+-----------------------------------------------------
+
+NUM_REALIZATIONS    99              -- Set number of realizations to run
+MAX_RUNTIME         18000          -- Set the maximum allowed run time (in seconds)
+MIN_REALIZATIONS    1              -- Success criteria
+MAX_SUBMIT          1              -- How many times should the queue system retry a simulation.
+QUEUE_OPTION  LSF MAX_RUNNING 100  -- Choke the number of simultaneous run
+
+QUEUE_OPTION LSF LSF_QUEUE  mr8     -- Assign LSF cluster queue
+-- QUEUE_SYSTEM LOCAL                 -- OR activate this to run simulations locally
+
+
+-------------------------------------------------------
+--Install custom jobs and workflows
+-------------------------------------------------------
+
+INCLUDE  ../input/config/install_custom_jobs.ert
+
+
+-----------------------------------------------------
+-- Hook workflows
+-----------------------------------------------------
+
+HOOK_WORKFLOW   echo_config_file   PRE_SIMULATION  -- Write ert config file run information to scratch
+
+-----------------------------------------------------
+-- Forward models
+-----------------------------------------------------
+
+INCLUDE  ../input/config/make_folders.ert  -- Make general folder structure
+
+
+-----------------------------------------------------
+---- copy rms folders/files
+-----------------------------------------------------
+
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/bin,                  <TO>=<RUNPATH>/rms)
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/input/well_modelling, <TO>=<RUNPATH>/rms/input)
+
+--Copy seed file to the rms/model folder --> forces rms to use seed values from the file (target file must be named "random.seeds")
+FORWARD_MODEL COPY_FILE(<FROM>=<RMS_SEED_FILE>,  <TO>=<RUNPATH>/rms/model/random.seeds)
+
+
+-----------------------------------------------------
+---- copy eclipse folders/files
+-----------------------------------------------------
+
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/props/drogon.pvt,       <TO>=<RUNPATH>/eclipse/include/props/drogon.pvt)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/solution/drogon.rxvd,   <TO>=<RUNPATH>/eclipse/include/solution/drogon.rxvd)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/summary/drogon.summary, <TO>=<RUNPATH>/eclipse/include/summary/drogon.summary)
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../eclipse/include/schedule/vfp,      <TO>=<RUNPATH>/eclipse/include/schedule)
+
+
+-----------------------------------------------------
+-- Uncertainty parameters
+-----------------------------------------------------
+
+---- Scalar parameters ----
+
+-- Draw values from ERT distributions (values are saved to parameters.txt file in runpath)
+GEN_KW  GLOBVAR    ../input/distributions/global_variables_exercise_03a.dist
+GEN_KW  MULTREGT   ../input/distributions/multregt_exercise_10a.dist
+GEN_KW  APS_FACIES ../input/distributions/facies_aps.dist
+GEN_KW  RATE      ../input/distributions/rate_scaling.dist
+
+
+-----------------------------------------------------
+-- Populate template files with their uncertainty parameter values
+-----------------------------------------------------
+
+-- DESIGN_KW will fetch the variable values from the parameters.txt file
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/global_variables.yml)
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../ert/input/templates/multregt_simple.tmpl,  <result_file>=<RUNPATH>/eclipse/include/grid/drogon.multregt)
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/rate_scaling.yml)
+
+-----------------------------------------------------
+---- RMS
+-----------------------------------------------------
+
+-- Run Main workflow
+FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CONFIG_PATH>/../../rms/model/<RMS_NAME>, <RMS_WORKFLOW>=<RMS_WF_NAME1>, <RMS_TARGET_FILE>=RMS_TARGET_MAIN)
+
+
+-----------------------------------------------------
+---- Eclipse/Flow
+-----------------------------------------------------
+
+FORWARD_MODEL ECLCOMPRESS  -- Compress eclipse include files
+
+FORWARD_MODEL OPM_FLOW  -- flowrc23
+
+----------------------------------------------------
+-- ERT plotting
+-----------------------------------------------------
+INCLUDE  ../input/config/ert_summary_plotting.ert

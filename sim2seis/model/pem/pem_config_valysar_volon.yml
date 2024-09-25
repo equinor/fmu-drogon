@@ -1,0 +1,66 @@
+dry_rock:
+  adjustments:
+  - model:
+      cement:
+        bulk_modulus: 36800000000.0
+        density: 2650
+        shear_modulus: 44000000000.0
+      cement_fraction: 0.04
+      critical_porosity: 0.4
+      lower_bound_pressure: 20000000.0
+      shear_reduction: 0.5
+      type: patchy_cement
+      upper_bound_cement_fraction: 0.1
+    type: pressure_dependency
+  model:
+    cement:
+      bulk_modulus: 36800000000.0
+      density: 2650
+      shear_modulus: 44000000000.0
+    cement_fraction: 0.04
+    critical_porosity: 0.4
+    lower_bound_pressure: 20000000.0
+    shear_reduction: 0.5
+    type: patchy_cement
+    upper_bound_cement_fraction: 0.1
+  porosity:
+    column: PORO
+fluids:
+  constituents:
+  - fraction:
+      column: SWAT
+    material:
+      salinity: 45000
+      type: brine
+  - material:
+      gas_gravity: 0.65
+      gas_oil_ratio:
+        column: RS
+      reference_density: 800
+      type: oil
+  - fraction:
+      column: SGAS
+    material:
+      gas_gravity: 0.65
+      type: gas
+  fluid_model: flag
+  mix_method: wood
+  temperature: 75
+minerals:
+  constituents:
+  - fraction:
+      column: FSAND
+    material:
+      bulk_modulus: 36800000000.0
+      density: 2650
+      shear_modulus: 44000000000.0
+  - material:
+      bulk_modulus: 25000000000.0
+      density: 2650
+      shear_modulus: 12000000000.0
+pressure:
+  fluid:
+    column: PRESSURE
+  max_effective: 100000000
+  overburden: 50000000
+  reference: 33700000

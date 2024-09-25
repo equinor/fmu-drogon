@@ -1,0 +1,18 @@
+----------------------------------------------------------------------
+--create share/results folders
+----------------------------------------------------------------------
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/maps)
+
+
+--------------------------------------------
+-- Maps - export for RMS covisualization and webviz
+--------------------------------------------
+
+-- Create thickness map of good facies on geogrid  (<eclroot> is bypassed in config file)
+FORWARD_MODEL GRID3D_HC_THICKNESS(<ECLROOT>=<ECLBASE>, <CONFIG_HCMAP>=<CONFIG_PATH>/../input/config/geo_good_facies_thickness.yml)
+
+-- Create oil/gas thickness maps from Eclipse
+FORWARD_MODEL GRID3D_HC_THICKNESS(<ECLROOT>=<ECLBASE>, <CONFIG_HCMAP>=<CONFIG_PATH>/../input/config/ecl_hc_thickness.yml)
+
+-- Create average parameter maps from Eclipse
+FORWARD_MODEL GRID3D_AVERAGE_MAP(<ECLROOT>=<ECLBASE>, <CONFIG_AVGMAP>=<CONFIG_PATH>/../input/config/ecl_avg_map.yml)

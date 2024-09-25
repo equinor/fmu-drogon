@@ -1,0 +1,107 @@
+#Documentation:
+#  https://fmu-docs.equinor.com/docs/grid3d-maps/config-avg.html
+
+title: Drogon
+
+# Eclipse input
+input:
+  fmu_global_config: fmuconfig/output/global_variables.yml
+#  eclroot: eclipse/model/ECLIPSE     # ert will interpret this as relative to <runpath>
+#  grid: $eclroot.EGRID
+
+  properties:
+    -
+      name: PORO
+      source: $eclroot.INIT
+      metadata:
+        attribute: porosity
+        unit: fraction
+    -
+      name: PERMX
+      source: $eclroot.INIT
+      metadata:
+        attribute: permeability
+        unit: mD
+    -
+      name: PERMZ
+      source: $eclroot.INIT
+      metadata:
+        attribute: permeability
+        unit: mD
+    -
+      name: PRESSURE
+      source: $eclroot.UNRST
+      dates:     !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DATES
+      diffdates: !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DIFFDATES
+      metadata:
+        attribute: pressure
+        unit: bar
+
+    -
+      name: SWAT
+      source: $eclroot.UNRST
+      dates:     !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DATES
+      diffdates: !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DIFFDATES
+      metadata:
+        attribute: saturation
+        unit: fraction
+
+    -
+      name: SOIL
+      source: $eclroot.UNRST
+      dates:     !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DATES
+      diffdates: !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DIFFDATES
+      metadata:
+        attribute: saturation
+        unit: fraction
+    -
+      name: SGAS
+      source: $eclroot.UNRST
+      dates:     !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DATES
+      diffdates: !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DIFFDATES
+      metadata:
+        attribute: saturation
+        unit: fraction
+    -
+      name: WT1F
+      source: $eclroot.UNRST
+      dates:     !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DATES
+      diffdates: !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DIFFDATES
+      metadata:
+        attribute: tracer
+        unit: fraction
+    -
+      name: WT2F
+      source: $eclroot.UNRST
+      dates:     !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DATES
+      diffdates: !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DIFFDATES
+      metadata:
+        attribute: tracer
+        unit: fraction
+
+# Zonation from file on yaml format
+zonation:
+  yamlfile: ../iter-0/rms/output/zone/zonation_ecl_map.yml    # ert will interpret this as relative to <runpath>
+
+computesettings:
+  zone: Yes  # compute for each zone
+  all: Yes   # compute for all combined
+  mask_zeros: Yes  # output maps will be set to undef where zero
+  tuning:
+    zone_avg: Yes   # yes = faster method ( 'ij' averaging vs 'xy' averaging )
+    # coarsen: 2
+  # truncate_le: 0.001  # truncate away values less than a given threshold from the result maps
+
+  
+# Map definition
+mapsettings:
+  xori: 456511
+  xinc: 75
+  yori: 5926880
+  yinc: 75
+  ncol: 143
+  nrow: 161
+
+output:
+  mapfolder: fmu-dataio  # use this to export with metadata (data exported to share/results/maps)
+  # mapfolder: share/results/maps  # use this to export without metadata

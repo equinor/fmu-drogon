@@ -1,0 +1,95 @@
+# Webviz config file
+title: DST 55_33-1
+
+# ------------------------------
+options:
+  menu:
+    show_logo: true
+    bar_position: left
+    drawer_position: left
+    initially_pinned: true
+    initially_collapsed: true
+
+shared_settings:
+  scratch_ensembles:
+    iter-0: /scratch/fmu/course/01_drogon_dst/realization-*/iter-0
+    iter-1: /scratch/fmu/course/01_drogon_dst/realization-*/iter-1
+    iter-2: /scratch/fmu/course/01_drogon_dst/realization-*/iter-2
+    iter-3: /scratch/fmu/course/01_drogon_dst/realization-*/iter-3
+
+pages:
+  - title: Front page
+    content:
+      - BannerImage:
+          image: ./drogon_logo.png
+          title: Drogon Webviz - DST
+
+  - title: "Pressure"
+    content:
+      - ReservoirSimulationTimeSeries:
+          ensembles:
+            - iter-0
+            - iter-1
+            - iter-2
+            - iter-3
+          obsfile: /scratch/fmu/course/01_drogon_dst/share/observations/tables/ert_observations.yml
+          sampling: raw
+          options:
+            vector1: WBHP:55_33-1
+            visualization: statistics
+
+  - title: "Pressure derivative"
+    content:
+      - LinePlotterFMU:
+          csvfile: share/results/tables/dpdspt_lag2_55_33-1.csv
+          observation_file: /scratch/fmu/course/01_drogon_dst/share/observations/tables/ert_observations_dpdt.yml
+          observation_group: general
+          ensembles:
+            - iter-0
+            - iter-3
+          initial_data:
+            x: HOURS
+            y: dpd(supt)_w2
+            ensembles:
+              - iter-0
+              - iter-3
+          initial_layout:
+            yaxis:
+              type: log
+            xaxis:
+              type: log
+
+  - title: "Uncertainty parameters"
+    content:
+      - ParameterDistribution:
+          ensembles:
+            - iter-0
+            - iter-1
+            - iter-2
+            - iter-3
+
+  - title: "Correlation between pressure and uncertainty parameters"
+    content:
+      - ParameterResponseCorrelation:
+          ensembles:
+            - iter-0
+            - iter-1
+            - iter-2
+            - iter-3
+          rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+          response_filters:
+            DATE: single
+          response_include:
+            - WBHP:55_33-1
+
+  - title: "Correlation between pressure derivative and uncertainty parameters"
+    content:
+      - ParameterResponseCorrelation:
+          ensembles:
+            - iter-0
+            - iter-1
+            - iter-2
+            - iter-3
+          response_file: share/results/tables/dpdspt_lag2_55_33-1.csv
+          response_filters:
+            HOURS: single

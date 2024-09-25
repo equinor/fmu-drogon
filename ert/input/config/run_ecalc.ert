@@ -1,0 +1,33 @@
+-------------------------------------------------
+-- eCalc example setup for Drogon prediction case
+--
+-- eCalc doc: https://ecalc.equinor.com/docs/docs/
+-------------------------------------------------
+--
+DEFINE  <ECALC_NAME>   drogon_ecalc  -- tmpl and model (yml) file root name
+DEFINE  <ECALC_TMPL>   <CONFIG_PATH>/../../ecalc/model/<ECALC_NAME>.tmpl -- basis for ecalc model file, see DESIGN_KW
+
+-----------------------------------------
+
+-- make folders
+FORWARD_MODEL MAKE_DIRECTORY( <DIRECTORY> = <RUNPATH>/ecalc/model)
+FORWARD_MODEL MAKE_DIRECTORY( <DIRECTORY> = <RUNPATH>/ecalc/output)
+
+-- copy input folder
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../ecalc/input, <TO>=<RUNPATH>/ecalc)
+
+-----------------------------------------
+
+-- draw uncertain parameter values for the ecalc tmpl/model file
+GEN_KW  ECALC  <CONFIG_PATH>/../input/distributions/ecalc.dist
+
+-- set parameter values for the ecalc tmpl/model file
+FORWARD_MODEL DESIGN_KW(<template_file>=<ECALC_TMPL>, <result_file>=ecalc/model/<ECALC_NAME>.yml)
+
+-----------------------------------------
+
+-- create csv file of FOPR, FGPR and FWIR (used by eCalc)
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=summary, <ECLBASE>=<ECLBASE>, <OUTPUT>="drogon_pred.csv", <XARG1>="--column_keys", <XARG2>="FOPR", <XARG3>="FGPR", <XARG4>="FWIR", <XARG5>="--time_index", <XARG6>="raw")
+
+-- run ecalc model (ECALC forward model is defined in "ert/input/config/install_custom_jobs.ert")
+FORWARD_MODEL ECALC(<ECALC_MODEL_FILE>=ecalc/model/<ECALC_NAME>.yml)

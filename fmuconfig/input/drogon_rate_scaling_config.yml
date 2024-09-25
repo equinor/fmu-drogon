@@ -1,0 +1,45 @@
+# -------------------------------------------------
+# fmuconfig file for rate scaling/rate uncertainty
+# (included with "fmuconfig/bin/global_variables_update.sh")
+#
+# Scaling is given as a rate multiplier for a given date interval.
+# One can assign multiple date intervals.
+#
+# The scaling script is run in the RMS workflow "eclipse_well_modelling"
+# Scaling is based on the pypdm csv file "rms/input/well_modelling/prod_data/drogon_prod.csv"
+# -------------------------------------------------
+
+well_column_name: "WELL"  # well column name in pypdm csv file
+date_column_name: "DATE"  # date column name in pypdm csv file
+wi_column_name: "WWIR"  # wi rate column name in pypdm csv file
+gi_column_name: "WGIR"  # gi rate column name in pypdm csv file
+oil_column_name: "WOPR"  # oil rate column name in pypdm csv file
+wat_column_name: "WWPR"  # water rate column name in pypdm csv file
+gas_column_name: "WGPR"  # gas rate column name in pypdm csv file
+
+wi_scaling:
+  55/33-A-5:
+  - from_date: '2018-01-01'
+    to_date: '2019-01-01'
+    multiplier: 1.0   ~  <WWIR_MULT_20180101_A5>
+  - from_date: '2019-01-01'
+    to_date: '2020-07-01'
+    multiplier: 1.0   ~  <WWIR_MULT_20190101_A5>
+
+oil_scaling:
+  55/33-A-1:
+  - from_date: '2018-01-01'
+    to_date: '2020-07-01'
+    multiplier: 1.0   ~  <WOPR_MULT_20180101_A1>
+
+wat_scaling:
+  55/33-A-1:
+  - from_date: '2018-01-01'
+    to_date: '2020-07-01'
+    multiplier: 1.0   ~  <WWPR_MULT_20180101_A1>
+
+gas_scaling:
+  55/33-A-1:
+  - from_date: '2018-01-01'
+    to_date: '2020-07-01'
+    multiplier: 1.0   ~  <WGPR_MULT_20180101_A1>

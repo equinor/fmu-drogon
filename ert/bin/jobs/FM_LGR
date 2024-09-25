@@ -1,0 +1,5 @@
+STDERR LGR.stderr
+STDOUT LGR.stdout
+
+EXECUTABLE ../scripts/fm_lgr.py
+ARGLIST       <WELL> <ECL> <RUNSPEC> <GRID> <SCH> <SIZE> <DUAL>

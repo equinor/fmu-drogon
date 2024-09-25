@@ -1,0 +1,118 @@
+-------------------------------------------------------
+-- Install custom jobs and workflows
+-------------------------------------------------------
+
+-------------------------------------------------------
+-- forward models
+-------------------------------------------------------
+
+-- make single_dates.txt and diff_dates.txt based on global_variables.yml
+INSTALL_JOB  CREATEDATEFILES               ../../bin/jobs/FM_CREATEDATEFILES
+
+-- write simulated tracer break through times
+INSTALL_JOB  TRACER_BREAKTHROUGH           ../../bin/jobs/FM_TRACER_BREAKTHROUGH
+
+-- OPM flow simulator
+INSTALL_JOB  OPM_FLOW                      ../../bin/jobs/FM_OPM_FLOW
+
+-- Make xsections of wells (png file)
+INSTALL_JOB  XSECT_WELLS                   ../../bin/jobs/FM_XSECT_WELLS
+
+-- make symlinks to hist case share/results files
+INSTALL_JOB  SYMLINK_HIST_RESULT_FILES     ../../bin/jobs/FM_SYMLINK_HIST_RESULT_FILES
+
+-- Merge parameters.txt from other ensemble
+INSTALL_JOB  FM_MERGE_PARAMETERS           ../../bin/jobs/FM_MERGE_PARAMETERS
+
+-- eCalc
+INSTALL_JOB ECALC	                   ../../bin/jobs/FM_ECALC
+
+
+-------------------------------------------------------
+-- workflows
+-------------------------------------------------------
+
+---- note that GEN_KW will be run before any workflow (incl. pre-simulation workflows)
+
+-----------------------------------------
+---- Workflow that saves info about the ert run (config file location, user name, etc)
+LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_JOB_ECHO_CONFIG_FILE
+LOAD_WORKFLOW	    ../../bin/workflows/echo_config_file
+
+
+-----------------------------------------
+----execute the fmuconfig script (ensures updated global variables file)
+LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_JOB_RUN_FMUCONFIG
+LOAD_WORKFLOW	    ../../bin/workflows/run_fmuconfig
+
+----execute the fmuconfig script for the prediction spesific global variables file
+LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_JOB_RUN_FMUCONFIG_PRED
+LOAD_WORKFLOW	    ../../bin/workflows/run_fmuconfig_pred
+
+----execute the fmuconfig script for the rate scaling config file
+LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_JOB_RUN_FMUCONFIG_RATE
+LOAD_WORKFLOW	    ../../bin/workflows/run_fmuconfig_rate
+
+
+-----------------------------------------
+---- Workflow that reads the OBS_CONFIG file and creates a yaml file
+-- the output yaml file can be used with webviz
+-- The OBS_CONFIG file name must be defined with the user variable <OBS_FILE>
+-- doc: https://equinor.github.io/subscript/scripts/fmuobs.html
+LOAD_WORKFLOW ../../bin/workflows/wf_fmuobs
+
+
+-----------------------------------------
+---- Worklow for creating case/ensemble metadata (dataio)
+LOAD_WORKFLOW       ../../bin/workflows/xhook_create_case_metadata
+
+
+-----------------------------------------
+----workflow that creates swatinit qc file for webviz for a selected realization
+DEFINE <QC_ITER>      iter-0
+DEFINE <QC_REAL>      0
+LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_SWATINIT_QC_FILE
+LOAD_WORKFLOW	    ../../bin/workflows/swatinit_qc_file
+
+
+-----------------------------------------------------
+-- Create aggregated csv by merging pem csv files for all reals
+DEFINE  <PEM_CSV_NAME>  "grid_property_statistics_pemgrid.csv"
+LOAD_WORKFLOW  ../../bin/workflows/wf_merge_pem_csv_iter0
+LOAD_WORKFLOW  ../../bin/workflows/wf_merge_pem_csv_iter3
+LOAD_WORKFLOW  ../../bin/workflows/wf_merge_pem_csv_predop5
+
+
+------------------------------------------------------
+-- Create aggregated csv by merging parameters.txt files for all reals
+-- here one file per iteration, but possible to include all in one file, see: 
+-- https://fmu-docs.equinor.com/docs/ert/reference/workflows/added_workflow_jobs.html#PARAMS2CSV
+LOAD_WORKFLOW     ../../bin/workflows/wf_aggregate_parameters_iter0
+LOAD_WORKFLOW     ../../bin/workflows/wf_aggregate_parameters_iter3
+
+-----------------------------------------------------
+-- The workflows below are experimental and/or may need field spesific adjustments
+-----------------------------------------------------
+--
+-- Create avg grid parameters
+--    Only works if identical grids for all realisations, i.e. no structural uncertainty
+--    Parameters are hardcoded; phit, khlog and facies (transformed to probability), etc.
+--    The result parameters are stored in share/results/grids/ under realization-0/
+--    --> this is a "workaround" for RMS covisualization to be able to pick up the parameters
+--
+-- DEFINE <ITERDIR>    iter-0
+-- DEFINE <FIRSTREAL>  0
+-- DEFINE <LASTREAL>   99
+-- DEFINE <OUTFOLDER>  <SCRATCH>/<USER>/<CASE_DIR>/realization-0/<ITERDIR>/share/results/grids
+-- LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_AVG_PARAM_GEO
+-- LOAD_WORKFLOW       ../../bin/workflows/wf_avg_param_geo
+-- LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_AVG_PARAM_PEM
+-- LOAD_WORKFLOW       ../../bin/workflows/wf_avg_param_pem
+
+
+-----------------------------------------------------
+-- Workflow that calculate misfit for case selected in gui
+-- The output file is located at <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables
+-- DEFINE <OUTPUTDIR_MISFIT>       <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables
+-- LOAD_WORKFLOW_JOB ../../bin/jobs/WF_EXPORT_MISFIT
+-- LOAD_WORKFLOW     ../../bin/workflows/wf_export_misfit

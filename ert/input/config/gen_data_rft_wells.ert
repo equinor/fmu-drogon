@@ -1,0 +1,42 @@
+-------------------------
+-- GENDATA_RFT  -- Create files with simulated rft pressure
+-------------------------
+
+-- ERT doc: https://fmu-docs.equinor.com/docs/ert/reference/forward_models.html#GENDATA_RFT
+
+FORWARD_MODEL GENDATA_RFT(<PATH_TO_TRAJECTORY_FILES>=<CONFIG_PATH>/../input/observations/rft/, <WELL_AND_TIME_FILE>=<CONFIG_PATH>/../input/observations/rft/well_date_rft.txt, <ZONEMAP>=<RUNPATH>/rms/output/zone/layer_zone_table.txt, <CSVFILE>=<RUNPATH>/share/results/tables/gendata_rft.csv)
+
+
+
+-------------------------
+-- GEN_DATA  -- Create GEN_DATA of rft for usage in AHM
+-------------------------
+
+-- ERT doc: https://fmu-docs.equinor.com/docs/ert/reference/configuration/keywords.html#gen-data
+
+--        ert id       Result file name           input format         report step
+GEN_DATA  R_A2_SIM     RESULT_FILE:RFT_R_A2_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
+GEN_DATA  R_A3_SIM     RESULT_FILE:RFT_R_A3_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
+GEN_DATA  R_A4_SIM     RESULT_FILE:RFT_R_A4_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
+GEN_DATA  R_A5_SIM     RESULT_FILE:RFT_R_A5_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
+GEN_DATA  R_A6_SIM     RESULT_FILE:RFT_R_A6_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
+
+-- Result file: created by FORWARD_MODEL GENDATA_RFT, %d will be replaced with report step number
+-- Report step: use 1 for first rft, 2 for second, etc
+-- Ensure the report step number set in GEN_DATA and <WELL_AND_TIME_FILE> matches
+
+
+-- Note: for use in AHM a corresponding GENERAL_OBSERVATION keyword must be included
+--       see the OBS_CONFIG file for corresponding observation values
+
+
+-------------------------
+-- export for Webviz
+-------------------------
+
+-- write ert rft to csv file (must be run after GENDATA_RFT)
+FORWARD_MODEL MERGE_RFT_ERTOBS(<GENDATACSV>=share/results/tables/gendata_rft.csv, <OBSDIR>=<CONFIG_PATH>/../input/observations/rft/, <OUTPUT>=share/results/tables/rft_ert.csv)
+
+-- write eclipse rft to csv file
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=rft, <ECLBASE>=<ECLBASE>,  <OUTPUT>=share/results/tables/rft.csv)
+

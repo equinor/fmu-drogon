@@ -1,0 +1,46 @@
+# Documentation:
+#  https://fmu-docs.equinor.com/docs/grid3d-maps/
+#  https://fmu-docs.equinor.com/docs/grid3d-maps/config-hc.html
+
+title: Drogon
+
+# dates are fetched from global_variables.yml file
+input:
+  fmu_global_config: fmuconfig/output/global_variables.yml
+  dates:     !include_from   fmuconfig/output/global_variables.yml::global.dates.ECLIPSE_HIST_DATES
+  diffdates: !include_from   fmuconfig/output/global_variables.yml::global.dates.ECLIPSE_HIST_DIFFDATES
+
+# Zonation from file on yaml format
+zonation:
+  yamlfile: rms/output/zone/zonation_ecl_map.yml
+
+computesettings:
+  mode: oil  # Choose oil, gas, or both
+  critmode: No  # Compute mobile SOIL using SOGCR or SOWCR or None (sogcr, sowcr, No)
+  method: use_poro
+  zone: Yes  # compute for each zone
+  all: Yes   # compute for all combined
+  tuning:
+    zone_avg: Yes   # yes = faster method ( 'ij' averaging vs 'xy' averaging )
+
+
+# Map definition
+mapsettings:
+  xori: 456511
+  xinc: 75
+  yori: 5926880
+  yinc: 75
+  ncol: 143
+  nrow: 161
+
+
+plotsettings:
+  faultpolygons: share/results/polygons/topvolantis--gl_faultlines_extracted.pol
+  valuerange: [0, 5]       # Value range min/max (values above and below will be truncated in plot
+  diffvaluesrange: [-3, 0] # Value range min/max for diff dates
+  xlabelrotation: 30       # Rotate the x axis labels
+  colortable: rainbow      # http://matplotlib.org/examples/color/colormaps_reference.html, or from RMS colour file
+
+output:
+  mapfolder: fmu-dataio  # use this to export with metadata (data exported to share/results/maps)
+  # mapfolder: share/results/maps  # use this to export without metadata

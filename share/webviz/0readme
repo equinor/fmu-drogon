@@ -1,0 +1,3 @@
+webviz --help        : show available webviz arguments
+webviz build --help  : show help details for build argument
+webviz docs          : open webviz documentation in browser

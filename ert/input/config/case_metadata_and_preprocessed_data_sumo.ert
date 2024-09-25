@@ -1,0 +1,32 @@
+-----------------------------
+-- Sumo set-up (experimental)
+-----------------------------
+-- This setup is specially adapted to Drogon and should not necessarily be applied as-is
+-- to other model workflows. If you are using Sumo in your workflow, coordinate with the
+-- Sumo team on how to best include upload jobs in your config files.
+
+
+-- Sumo variables
+DEFINE  <SUMO_ENV>       prod
+DEFINE  <SUMO_CASEPATH>  <SCRATCH>/<USER>/<CASE_DIR>
+
+-- Load and run hook workflow for creating case metadata and registering case on Sumo
+LOAD_WORKFLOW   ../../bin/workflows/xhook_create_case_metadata_sumo  -- define and load workflow
+HOOK_WORKFLOW   xhook_create_case_metadata_sumo  PRE_SIMULATION      -- run workflow
+
+
+-- Copy preprocessed seismic observation maps to scratch + upload to Sumo
+LOAD_WORKFLOW   ../../bin/workflows/xhook_copy_preprocessed_dataio_sumo  -- define and load workflow
+HOOK_WORKFLOW   xhook_copy_preprocessed_dataio_sumo PRE_SIMULATION       -- run workflow
+
+
+-- Grab data per realization that has been exported with dataio and upload it to Sumo
+FORWARD_MODEL SIM2SUMO
+-- FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/tables/*.arrow")  # handled by SIM2SUMO
+FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/tables/*.csv")
+FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/maps/*.gri")
+FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/volumes/*.csv")
+FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/polygons/*.csv")
+FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/grids/*.roff")
+FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/observations/seismic/*.segy")
+FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/seismic/*.segy")

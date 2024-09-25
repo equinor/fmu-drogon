@@ -1,0 +1,29 @@
+----------------------------------------------------------------------
+--create share/results folders
+----------------------------------------------------------------------
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/grids)
+
+--------------------------------------------
+-- Eclipse 3d parameters - export for RMS covisualization
+--------------------------------------------
+
+-- Create date lists to be used with ECLRST2ROFF and ECLDIFF2ROFF
+-- read dates from global_variables.yml and create 'single_dates.txt' and 'diff_dates.txt' files
+FORWARD_MODEL CREATEDATEFILES(<GLOBVAR_FILE>="fmuconfig/output/global_variables.yml", <DATES>="ECLIPSE_HIST_DATES", <DIFFDATES>="ECLIPSE_HIST_DIFFDATES")
+
+-- Create roff file of eclipse egrid
+FORWARD_MODEL ECLGRID2ROFF(<ECLROOT>=<ECLBASE> , <OUTPUT>=share/results/grids/eclgrid)
+
+-- Create roff file of eclipse init parameter
+FORWARD_MODEL ECLINIT2ROFF(<ECLROOT>=<ECLBASE> , <OUTPUT>=share/results/grids/eclgrid, <PROP>=PORO:PERMX:PERMZ:FIPNUM:SATNUM:EQLNUM)
+
+-- Create roff file of eclipse restart parameter (single_dates.txt file is created by the forward model CREATEDATEFILES)
+FORWARD_MODEL ECLRST2ROFF( <ECLROOT>=<ECLBASE> , <OUTPUT>=share/results/grids/eclgrid, <PROP>=SOIL:SWAT:SGAS:PRESSURE:WT1F:WT2F, <DATES>=<RUNPATH>/single_dates.txt)
+
+-- Create diff parameters and store as roff files (diff_dates.txt file is created by the forward model CREATEDATEFILES)
+FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=<ECLBASE>,  <PROP>=PRESSURE,  <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)
+FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=<ECLBASE>,  <PROP>=SWAT,      <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)
+FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=<ECLBASE>,  <PROP>=SGAS,      <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)
+FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=<ECLBASE>,  <PROP>=SOIL,      <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)
+FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=<ECLBASE>,  <PROP>=WT1F,      <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)
+FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=<ECLBASE>,  <PROP>=WT2F,      <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)

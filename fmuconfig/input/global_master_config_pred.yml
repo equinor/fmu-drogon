@@ -1,0 +1,51 @@
+#########################################################################################
+# Master global config for Drogon
+#########################################################################################
+revision: &revision dev
+#========================================================================================
+# Global section
+#========================================================================================
+
+
+global:
+
+  dates: !include _dates_pred.yml
+  seismic: !include _seismic.yml
+
+
+  #------------------------------------------------------------------------------
+  # Gridmodel names
+  #------------------------------------------------------------------------------
+  GEOGRIDNAME: Geogrid
+  SIMGRIDNAME: Simgrid
+  ECLGRIDNAME: Eclipsegrid
+  ECLGRIDNAME_PEM: Eclipsegrid_pem        # for pem on eclipse grid
+  GEOGRIDNAME_PEM: Geogrid_pem            # for pem on geo grid
+  SIMGRIDNAME_MAPS4AHM: Simgrid_maps4ahm  # for preparing 4D maps for use as obs in AHM in ERT
+
+
+#=======================================================================================
+# RMS IPL section
+# The "rms" in fmuconfig is magic in the sense that special processing is done e.g. to
+# convert YAML to RMS IPL when we have a mix of IPL and Python.
+#
+# Since there are no IPL's in Drogon, this section is small. Instead collect the RMS
+# under "global" (or "rms2") which is more general YAML that can be parsed
+# directly in Python. But "rms" used for special categories as listed below.
+#=======================================================================================
+rms:
+  horizons: !include _rms_horizons.yml
+  zones: !include _rms_zones.yml
+
+
+#========================================================================================
+# The model, masterdata and visuals sections, to be used for SUMO metadata.
+#========================================================================================
+
+model:
+  name: ff
+  revision: *revision
+
+masterdata: !include _masterdata.yml
+access: !include _access.yml
+stratigraphy: !include _stratigraphy.yml

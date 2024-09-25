@@ -1,0 +1,3 @@
+EXECUTABLE check_swatinit
+MIN_ARG	   2
+MAX_ARG	   3

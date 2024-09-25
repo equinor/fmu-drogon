@@ -1,0 +1,42 @@
+title: Drogon Webviz Parameterdistribution & Maps
+
+#---------------------------------------------------------
+# Webviz demo project: https://webviz-subsurface-example.azurewebsites.net/
+# https://equinor.github.io/webviz-subsurface/#/
+# > webviz docs
+#---------------------------------------------------------
+
+shared_settings:
+  scratch_ensembles:
+    iter_0: /scratch/fmu/course/01_drogon_ahm//realization-*/iter-0
+
+fipfile: &fipfile /scratch/fmu/course/01_drogon_design/realization-0/iter-0/share/results/tables/fip.yml
+#---------------------------------------------------------
+
+pages:
+
+  - title: Front page
+    content:
+      - BannerImage:
+          image: ./drogon_logo.png
+          title: Drogon Webviz
+
+#-------------------------------------------------------------
+  - title: Distributions used for input parameters
+    content:
+      - ParameterDistribution:
+          ensembles:
+            - iter_0
+# ------------------------------
+  - section: Webviz Analysis
+    content:
+      - group: Correlations
+        icon: bar_chart
+        content:
+
+          - page: Maps
+            content:
+              - MapViewerFMU:
+                  ensembles:
+                   - iter_0
+                 

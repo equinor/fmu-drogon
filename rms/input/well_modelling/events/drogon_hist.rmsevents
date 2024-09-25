@@ -1,0 +1,366 @@
+RMSEVENTS RMS13
+
+UNITSET 'Metric'
+
+DATEFORMAT 'dd.MM.yyyy'
+
+OWNERFORMAT GROUP
+
+EVENTSBEGIN
+
+
+######################################################
+## Set END of hist and write restart file
+######################################################
+
+# write restart file at 01.07
+'Simulator'
+30.06.2020 IORESTART  FREQMODE='Report' FREQUENCY=1   KEEP='All'    MNEMONIC='DEN ROCKC RPORV RFIP FLOWS FLORES'
+01.07.2020 IORESTART  FREQMODE='Off'    MNEMONIC='*RESET*'
+
+# write end keyword at 01.07.2020
+01.07.2020 USER   TEXT="--------------
+END
+--------------"   LOC='After'  KEYWORD='DATES'  ORDER=1
+
+
+######################################################
+## Tuning
+######################################################
+
+'Simulator'
+01.01.2018 NUMLINEAR    ITERMAX=50     ITERMIN=1
+01.01.2018 NUMNONLINEAR ITERMAX=12     ITERMIN=1
+01.01.2018 NUMWELL      ITERMAX=50     ITERBHPMAX=50
+01.01.2018 TIMESTEP     MAX=30         NEXT=1         WELLMAX=1
+
+
+######################################################
+## Reporting
+######################################################
+
+'Simulator'
+30.06.2018 IOFIP      FIELD=false    REGION=true
+01.07.2018 IOFIP      FIELD=false    REGION=false
+30.06.2019 IOFIP      FIELD=false    REGION=true
+01.07.2019 IOFIP      FIELD=false    REGION=false
+30.06.2020 IOFIP      FIELD=false    REGION=true
+01.07.2020 IOFIP      FIELD=false    REGION=false
+
+'Simulator'
+01.01.2018 IORESTART  FREQMODE='Year'   FREQUENCY=5                 MNEMONIC='FLOWS NORST=1 FLORES'
+30.06.2018 IORESTART  FREQMODE='Report' FREQUENCY=1   KEEP='All'    MNEMONIC='DEN ROCKC RPORV RFIP FLOWS NORST=1 FLORES'
+01.07.2018 IORESTART  FREQMODE='Off'    MNEMONIC='*RESET*'
+30.06.2019 IORESTART  FREQMODE='Report' FREQUENCY=1   KEEP='All'    MNEMONIC='DEN ROCKC RPORV RFIP FLOWS NORST=1 FLORES'
+01.07.2019 IORESTART  FREQMODE='Off'    MNEMONIC='*RESET*'
+
+
+######################################################
+## Well completions
+######################################################
+
+'55_33-A-1'.'55_33-A-1'.'Drilled trajectory'
+05.01.2018  PGROUP  GROUPID='1'  PERFID='Valysar'
+05.01.2018  PGROUP  GROUPID='2'  PERFID='Therys'
+05.01.2018  PGROUP  GROUPID='3'  PERFID='Volon'
+05.01.2018  PERF  MDSTART=1644.49  MDEND=1664.28  RADIUS=0.12065  SKIN=5  PERFID='Valysar'
+05.01.2018  PERF  MDSTART=1664.28  MDEND=1674.18  RADIUS=0.12065  SKIN=5  PERFID='Therys'
+05.01.2018  PERF  MDSTART=1674.18  MDEND=1689.82  RADIUS=0.12065  SKIN=5  PERFID='Volon'
+
+'55_33-A-2'.'55_33-A-2'.'Drilled trajectory'
+10.03.2018  PGROUP  GROUPID='1'  PERFID='Valysar'
+10.03.2018  PERF  MDSTART=1692.79  MDEND=1706.00  RADIUS=0.12065  SKIN=5  PERFID='Valysar'
+
+'55_33-A-3'.'55_33-A-3'.'Drilled trajectory'
+13.07.2018  PGROUP  GROUPID='1'  PERFID='Valysar'
+13.07.2018  PGROUP  GROUPID='2'  PERFID='Therys'
+13.07.2018  PGROUP  GROUPID='3'  PERFID='Volon'
+13.07.2018  PERF  MDSTART=1653.25  MDEND=1671.18  RADIUS=0.12065  SKIN=5  PERFID='Valysar'
+13.07.2018  PERF  MDSTART=1671.18  MDEND=1682.73  RADIUS=0.12065  SKIN=5  PERFID='Therys'
+13.07.2018  PERF  MDSTART=1682.73  MDEND=1697.75  RADIUS=0.12065  SKIN=5  PERFID='Volon'
+
+'55_33-A-4'.'55_33-A-4'.'Drilled trajectory'
+22.09.2018  PGROUP  GROUPID='1'  PERFID='Valysar'
+22.09.2018  PGROUP  GROUPID='3'  PERFID='Volon'
+22.09.2018  PERF  MDSTART=2249.68  MDEND=3040.71  RADIUS=0.12065  SKIN=5  PERFID='Valysar'
+22.09.2018  PERF  MDSTART=3040.71  MDEND=3578.50  RADIUS=0.12065  SKIN=5  PERFID='Volon'
+22.09.2018 TUBING     MDSTART=0      MDEND=10000     RADIUSI=0.075  ROUGH=0.00065
+# 22.09.2018 WSEGMOD TYPE='Staggered' MDSTART=2233.94 MDEND=3578.50 GRAV=True FRIC=True ACCEL=False MULTMOD='Homogeneous' CONDMOD='Perforation mid point'
+22.09.2018 WSEGMOD TYPE='Staggered' MDSTART=2233.94 MDEND=3578.50 GRAV=True FRIC=True ACCEL=False MULTMOD='Homogeneous' CONDMOD='None'
+22.09.2018 WICDNOZZLE MDSTART=1000  MDEND=5000   OPEN=True  TYPE='nozzle'  LENGTH=12   ICDPROP=1.0   AREAC=0.00004  FLOWCOEFF=0.9  LENGTHS=0.1
+
+'55_33-A-5'.'55_33-A-5'.'Drilled trajectory'
+08.05.2018  PGROUP  GROUPID='1'  PERFID='Valysar'
+08.05.2018  PGROUP  GROUPID='2'  PERFID='Therys'
+08.05.2018  PGROUP  GROUPID='3'  PERFID='Volon'
+08.05.2018  PERF  MDSTART=1731.71  MDEND=1753.11  RADIUS=0.12065  SKIN=5  PERFID='Valysar'
+08.05.2018  PERF  MDSTART=1753.11  MDEND=1766.77  RADIUS=0.12065  SKIN=5  PERFID='Therys'
+08.05.2018  PERF  MDSTART=1766.77  MDEND=1776.98  RADIUS=0.12065  SKIN=5  PERFID='Volon'
+
+'55_33-A-6'.'55_33-A-6'.'Drilled trajectory'
+17.11.2018  PGROUP  GROUPID='1'  PERFID='Valysar'
+17.11.2018  PGROUP  GROUPID='2'  PERFID='Therys'
+17.11.2018  PGROUP  GROUPID='3'  PERFID='Volon'
+17.11.2018  PERF  MDSTART=1742.99  MDEND=1758.36  RADIUS=0.12065  SKIN=5  PERFID='Valysar'
+17.11.2018  PERF  MDSTART=1758.36  MDEND=1775.32  RADIUS=0.12065  SKIN=5  PERFID='Therys'
+17.11.2018  PERF  MDSTART=1775.32  MDEND=1783.79  RADIUS=0.12065  SKIN=5  PERFID='Volon'
+
+
+######################################################
+## Production and injection constraints
+######################################################
+
+# add bhp lower limit for producers
+
+# currently an issue with WLIMPRES, it removes the WCONHIST at same date, USER event as a temporary fix
+#'55_33-A-1'
+#05.01.2018 WLIMPRES   TYPEW='Production' MAX=True       ACTION='Target' BHP=50         ON=True
+
+#'55_33-A-2'
+#10.03.2018 WLIMPRES   TYPEW='Production' MAX=True       ACTION='Target' BHP=50         ON=True
+
+#'55_33-A-3'
+#13.07.2018 WLIMPRES   TYPEW='Production' MAX=True       ACTION='Target' BHP=50         ON=True
+
+#'55_33-A-4'
+#22.09.2018 WLIMPRES   TYPEW='Production' MAX=True       ACTION='Target' BHP=50         ON=True
+
+'Simulator'
+05.01.2018       USER       TEXT="WELTARG
+ 'A1'  BHP  50 /
+/"    LOC='After'    KEYWORD='WCONHIST'    ORDER=1
+
+10.03.2018       USER       TEXT="WELTARG
+ 'A2'  BHP  50 /
+/"    LOC='After'    KEYWORD='WCONHIST'    ORDER=1
+
+13.07.2018       USER       TEXT="WELTARG
+ 'A3'  BHP  50 /
+/"    LOC='After'    KEYWORD='WCONHIST'    ORDER=1
+
+22.09.2018       USER       TEXT="WELTARG
+ 'A4'  BHP  50 /
+/"    LOC='After'    KEYWORD='WCONHIST'    ORDER=1
+
+# Set VFP table numbers
+'55_33-A-1'
+05.01.2018 WLIFTTABLE   TABLEID='1'   ON=True
+
+'55_33-A-2'
+10.03.2018 WLIFTTABLE   TABLEID='2'   ON=True
+
+'55_33-A-3'
+13.07.2018 WLIFTTABLE   TABLEID='3'   ON=True
+
+'55_33-A-4'
+22.09.2018 WLIFTTABLE   TABLEID='4'   ON=True
+
+
+######################################################
+## Tracers
+######################################################
+
+'Simulator'
+#-----------------------------------------
+08.06.2018       USER       TEXT="-- 25kg over 1 day with rate 8000 Sm3/d
+WTRACER
+-- 55_33-A-5
+ A5  WT1  3.125 /
+/"    LOC='After'    KEYWORD='DATES'    ORDER=1
+
+09.06.2018       USER       TEXT="WTRACER
+-- 55_33-A-5
+ A5  WT1  0.0 /
+/"    LOC='After'    KEYWORD='DATES'    ORDER=1
+
+#-----------------------------------------
+17.12.2018       USER       TEXT="-- 25kg over 1 day with rate 8000 Sm3/d
+WTRACER
+-- 55_33-A-6
+ A6  WT2  3.125 /
+/"    LOC='After'    KEYWORD='DATES'    ORDER=1
+
+18.12.2018       USER       TEXT="WTRACER
+-- 55_33-A-6
+ A6  WT2  0.0 /
+/"    LOC='After'    KEYWORD='DATES'    ORDER=1
+
+
+######################################################
+## RFT wells
+######################################################
+
+'Simulator'
+## Write rft at t=0 for reference
+01.01.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'  NAME='RFT_55_33-A-2'
+01.01.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'  NAME='RFT_55_33-A-3'
+01.01.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'  NAME='RFT_55_33-A-4'
+01.01.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'  NAME='RFT_55_33-A-5'
+01.01.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'  NAME='RFT_55_33-A-6'
+## Write rft at date of measurement
+01.03.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'   NAME='RFT_55_33-A-2'
+03.07.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'   NAME='RFT_55_33-A-3'
+12.09.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'   NAME='RFT_55_33-A-4'
+28.04.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'   NAME='RFT_55_33-A-5'
+07.11.2018 IORFT      RFTFREQ='Now'  PLTFREQ='Off'  SEGFREQ='Off'   NAME='RFT_55_33-A-6'
+
+
+
+'RFT_55_33-A-2'
+01.01.2018 WCROSSFL   ON=false
+01.01.2018 WSTATE     STATE='Shut'
+01.01.2018 WCONTROL   MODE='Reservoir rate' PHASE='Oil'    FREE=true
+01.01.2018 WHISTRATE  SRATEG=0       SRATEO=0       SRATEW=0       SRATEL=0       ON=true
+01.01.2018 WHISTPRES  BHP=50         ON=true
+
+'RFT_55_33-A-2'.'RFT_55_33-A-2'.'Drilled trajectory'
+01.01.2018 PERF       MDSTART=0      MDEND=10000    RADIUS=0.12065 SKIN=0         PERFID='RFT'
+
+'RFT_55_33-A-3'
+01.01.2018 WCROSSFL   ON=false
+01.01.2018 WSTATE     STATE='Shut'
+01.01.2018 WCONTROL   MODE='Reservoir rate' PHASE='Oil'    FREE=true
+01.01.2018 WHISTRATE  SRATEG=0       SRATEO=0       SRATEW=0       SRATEL=0       ON=true
+01.01.2018 WHISTPRES  BHP=50         ON=true
+
+'RFT_55_33-A-3'.'RFT_55_33-A-3'.'Drilled trajectory'
+01.01.2018 PERF       MDSTART=0      MDEND=10000    RADIUS=0.12065 SKIN=0         PERFID='RFT'
+
+'RFT_55_33-A-4'
+01.01.2018 WCROSSFL   ON=false
+01.01.2018 WSTATE     STATE='Shut'
+01.01.2018 WCONTROL   MODE='Reservoir rate' PHASE='Oil'    FREE=true
+01.01.2018 WHISTRATE  SRATEG=0       SRATEO=0       SRATEW=0       SRATEL=0       ON=true
+01.01.2018 WHISTPRES  BHP=50         ON=true
+
+'RFT_55_33-A-4'.'RFT_55_33-A-4'.'Drilled trajectory'
+01.01.2018 PERF       MDSTART=0      MDEND=10000    RADIUS=0.12065 SKIN=0         PERFID='RFT'
+
+'RFT_55_33-A-5'
+01.01.2018 WCROSSFL   ON=false
+01.01.2018 WSTATE     STATE='Shut'
+01.01.2018 WCONTROL   MODE='Reservoir rate' PHASE='Oil'    FREE=true
+01.01.2018 WHISTRATE  SRATEG=0       SRATEO=0       SRATEW=0       SRATEL=0       ON=true
+01.01.2018 WHISTPRES  BHP=50         ON=true
+
+'RFT_55_33-A-5'.'RFT_55_33-A-5'.'Drilled trajectory'
+01.01.2018 PERF       MDSTART=0      MDEND=10000    RADIUS=0.12065 SKIN=0         PERFID='RFT'
+
+'RFT_55_33-A-6'
+01.01.2018 WCROSSFL   ON=false
+01.01.2018 WSTATE     STATE='Shut'
+01.01.2018 WCONTROL   MODE='Reservoir rate' PHASE='Oil'    FREE=true
+01.01.2018 WHISTRATE  SRATEG=0       SRATEO=0       SRATEW=0       SRATEL=0       ON=true
+01.01.2018 WHISTPRES  BHP=50         ON=true
+
+'RFT_55_33-A-6'.'RFT_55_33-A-6'.'Drilled trajectory'
+01.01.2018 PERF       MDSTART=0      MDEND=10000    RADIUS=0.12065 SKIN=0         PERFID='RFT'
+
+######################################################
+## Group members
+######################################################
+
+'FIELD'
+01.01.2018 GMEMBER    MEMBER='OP'
+01.01.2018 GMEMBER    MEMBER='WI'
+01.01.2018 GMEMBER    MEMBER='RFT'
+
+'OP'
+05.01.2018 GMEMBER    MEMBER='55_33-A-1'
+10.03.2018 GMEMBER    MEMBER='55_33-A-2'
+13.07.2018 GMEMBER    MEMBER='55_33-A-3'
+22.09.2018 GMEMBER    MEMBER='55_33-A-4'
+
+'WI'
+08.05.2018 GMEMBER    MEMBER='55_33-A-5'
+17.11.2018 GMEMBER    MEMBER='55_33-A-6'
+
+'RFT'
+01.01.2018 GMEMBER    MEMBER='RFT_55_33-A-2'
+01.01.2018 GMEMBER    MEMBER='RFT_55_33-A-3'
+01.01.2018 GMEMBER    MEMBER='RFT_55_33-A-4'
+01.01.2018 GMEMBER    MEMBER='RFT_55_33-A-5'
+01.01.2018 GMEMBER    MEMBER='RFT_55_33-A-6'
+
+
+######################################################
+# Date inserts
+######################################################
+
+'Simulator'
+#################
+# general dates
+01.02.2018     DATE
+01.03.2018     DATE
+01.04.2018     DATE
+01.05.2018     DATE
+01.06.2018     DATE
+01.07.2018     DATE
+01.08.2018     DATE
+01.09.2018     DATE
+01.10.2018     DATE
+01.11.2018     DATE
+01.12.2018     DATE
+01.01.2019     DATE
+01.02.2019     DATE
+01.03.2019     DATE
+01.04.2019     DATE
+01.05.2019     DATE
+01.06.2019     DATE
+01.07.2019     DATE
+01.08.2019     DATE
+01.09.2019     DATE
+01.10.2019     DATE
+01.11.2019     DATE
+01.12.2019     DATE
+01.01.2020     DATE
+01.02.2020     DATE
+01.03.2020     DATE
+01.04.2020     DATE
+01.05.2020     DATE
+01.06.2020     DATE
+01.07.2020     DATE
+#################
+# dates corresponding to ERT wbhp summary observations
+05.05.2019     DATE
+02.11.2019     DATE
+05.05.2020     DATE
+#################
+# dates corresponding to ERT wct and gor summary observations
+30.03.2018    DATE
+02.06.2018    DATE
+22.06.2018    DATE
+25.08.2018    DATE
+14.09.2018    DATE
+05.10.2018    DATE
+17.11.2018    DATE
+07.12.2018    DATE
+15.12.2018    DATE
+28.12.2018    DATE
+09.02.2019    DATE
+01.03.2019    DATE
+09.03.2019    DATE
+22.03.2019    DATE
+04.05.2019    DATE
+24.05.2019    DATE
+01.06.2019    DATE
+14.06.2019    DATE
+27.07.2019    DATE
+16.08.2019    DATE
+24.08.2019    DATE
+06.09.2019    DATE
+19.10.2019    DATE
+08.11.2019    DATE
+16.11.2019    DATE
+29.11.2019    DATE
+11.01.2020    DATE
+31.01.2020    DATE
+08.02.2020    DATE
+21.02.2020    DATE
+04.04.2020    DATE
+24.04.2020    DATE
+02.05.2020    DATE
+15.05.2020    DATE
+27.06.2020    DATE
+
+EVENTSEND

@@ -1,0 +1,3 @@
+EXECUTABLE ../scripts/wf_print_config_path_2file.sh
+MIN_ARG	   2
+MAX_ARG	   2

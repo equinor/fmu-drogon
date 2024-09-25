@@ -1,0 +1,267 @@
+#
+# relperm definitions to be accessed via YAML/Python
+#
+# rnyb Apr 20, all relperm variables given as dict
+#              where key = satnum number
+#
+# rnyb Jul 20 - low relperm (partly based on Reek case satnum 2)
+  
+#---------------------------------
+# relperm endpoints and LET exponents
+#---------------------------------
+
+KRWEND:
+  1:   &krwend1  0.99
+  2:   &krwend2  0.99
+  3:   &krwend3  0.99
+  4:   &krwend4  0.99
+  5:   &krwend5  0.99
+  6:   &krwend6  0.99
+  7:   &krwend7  0.75
+  8:   &krwend8  0.75
+  9:   &krwend9  0.75
+  10:  &krwend10 0.75
+  11:  &krwend11 0.75
+  12:  &krwend12 0.75
+
+SORW:
+  1:   &sorw1  0.10
+  2:   &sorw2  0.10
+  3:   &sorw3  0.10
+  4:   &sorw4  0.10
+  5:   &sorw5  0.10
+  6:   &sorw6  0.10
+  7:   &sorw7  0.10
+  8:   &sorw8  0.10
+  9:   &sorw9  0.10
+  10:  &sorw10 0.10
+  11:  &sorw11 0.10
+  12:  &sorw12 0.10
+
+SORG:
+  1:   &sorg1  0.10
+  2:   &sorg2  0.10
+  3:   &sorg3  0.10
+  4:   &sorg4  0.10
+  5:   &sorg5  0.10
+  6:   &sorg6  0.10
+  7:   &sorg7  0.10
+  8:   &sorg8  0.10
+  9:   &sorg9  0.10
+  10:  &sorg10 0.10
+  11:  &sorg11 0.10
+  12:  &sorg12 0.10
+
+SGCR:
+  1:   &sgcr1  0.05
+  2:   &sgcr2  0.05
+  3:   &sgcr3  0.05
+  4:   &sgcr4  0.05
+  5:   &sgcr5  0.05
+  6:   &sgcr6  0.05
+  7:   &sgcr7  0.05
+  8:   &sgcr8  0.05
+  9:   &sgcr9  0.05
+  10:  &sgcr10 0.05
+  11:  &sgcr11 0.05
+  12:  &sgcr12 0.05
+
+KRGEND:
+  1:   &krgend1  0.95
+  2:   &krgend2  0.95
+  3:   &krgend3  0.95
+  4:   &krgend4  0.95
+  5:   &krgend5  0.95
+  6:   &krgend6  0.95
+  7:   &krgend7  0.95
+  8:   &krgend8  0.95
+  9:   &krgend9  0.95
+  10:  &krgend10 0.95
+  11:  &krgend11 0.95
+  12:  &krgend12 0.95
+
+# swl is calculated at a specified height, SWLHEIGHT, above the FWL
+# swcr_add is a constant added to swl to achive swcr
+# swcr is defined as follows: swcr=swl+swcr_add
+SWCR_ADD:
+  1:   &swcr_add  0.01   #~ <SWCR_ADD>
+  2:   *swcr_add
+  3:   *swcr_add
+  4:   *swcr_add
+  5:   *swcr_add
+  6:   *swcr_add
+  7:   *swcr_add
+  8:   *swcr_add
+  9:   *swcr_add
+  10:  *swcr_add
+  11:  *swcr_add
+  12:  *swcr_add
+
+LW:
+  1:   &lw1  1.8
+  2:   &lw2  1.8
+  3:   &lw3  1.8
+  4:   &lw4  1.8
+  5:   &lw5  1.8
+  6:   &lw6  1.8
+  7:   &lw7  1.8
+  8:   &lw8  1.8
+  9:   &lw9  1.8
+  10:  &lw10 1.8
+  11:  &lw11 1.8
+  12:  &lw12 1.8
+  
+EW:
+  1:   &ew1  1.9
+  2:   &ew2  1.9
+  3:   &ew3  1.9
+  4:   &ew4  1.9
+  5:   &ew5  1.9
+  6:   &ew6  1.9
+  7:   &ew7  1.9
+  8:   &ew8  1.9
+  9:   &ew9  1.9
+  10:  &ew10 1.9
+  11:  &ew11 1.9
+  12:  &ew12 1.9
+  
+TW:
+  1:   &tw1  1.4
+  2:   &tw2  1.4
+  3:   &tw3  1.4
+  4:   &tw4  1.4
+  5:   &tw5  1.4
+  6:   &tw6  1.4
+  7:   &tw7  1.4
+  8:   &tw8  1.4
+  9:   &tw9  1.4
+  10:  &tw10 1.4
+  11:  &tw11 1.4
+  12:  &tw12 1.4
+  
+LO:
+  1:   &lo1  4.2
+  2:   &lo2  4.2
+  3:   &lo3  4.2
+  4:   &lo4  4.2
+  5:   &lo5  4.2
+  6:   &lo6  4.2
+  7:   &lo7  4.2
+  8:   &lo8  4.2
+  9:   &lo9  4.2
+  10:  &lo10 4.2
+  11:  &lo11 4.2
+  12:  &lo12 4.2
+  
+EO:
+  1:   &eo1  5.5
+  2:   &eo2  5.5
+  3:   &eo3  5.5
+  4:   &eo4  5.5
+  5:   &eo5  5.5
+  6:   &eo6  5.5
+  7:   &eo7  5.5
+  8:   &eo8  5.5
+  9:   &eo9  5.5
+  10:  &eo10 5.5
+  11:  &eo11 5.5
+  12:  &eo12 5.5
+  
+TO:
+  1:   &to1  1.0
+  2:   &to2  1.0
+  3:   &to3  1.0
+  4:   &to4  1.0
+  5:   &to5  1.0
+  6:   &to6  1.0
+  7:   &to7  1.0
+  8:   &to8  1.0
+  9:   &to9  1.0
+  10:  &to10 1.0
+  11:  &to11 1.0
+  12:  &to12 1.0
+  
+LOG:
+  1:   &log1  4.8
+  2:   &log2  4.8
+  3:   &log3  4.8
+  4:   &log4  4.8
+  5:   &log5  4.8
+  6:   &log6  4.8
+  7:   &log7  4.8
+  8:   &log8  4.8
+  9:   &log9  4.8
+  10:  &log10 4.8
+  11:  &log11 4.8
+  12:  &log12 4.8
+  
+EOG:
+  1:   &eog1  3.0
+  2:   &eog2  3.0
+  3:   &eog3  3.0
+  4:   &eog4  3.0
+  5:   &eog5  3.0
+  6:   &eog6  3.0
+  7:   &eog7  3.0
+  8:   &eog8  3.0
+  9:   &eog9  3.0
+  10:  &eog10 3.0
+  11:  &eog11 3.0
+  12:  &eog12 3.0
+  
+TOG:
+  1:   &tog1  0.8
+  2:   &tog2  0.8
+  3:   &tog3  0.8
+  4:   &tog4  0.8
+  5:   &tog5  0.8
+  6:   &tog6  0.8
+  7:   &tog7  0.8
+  8:   &tog8  0.8
+  9:   &tog9  0.8
+  10:  &tog10 0.8
+  11:  &tog11 0.8
+  12:  &tog12 0.8
+  
+LG:
+  1:   &lg1  1.0
+  2:   &lg2  1.0
+  3:   &lg3  1.0
+  4:   &lg4  1.0
+  5:   &lg5  1.0
+  6:   &lg6  1.0
+  7:   &lg7  1.0
+  8:   &lg8  1.0
+  9:   &lg9  1.0
+  10:  &lg10 1.0
+  11:  &lg11 1.0
+  12:  &lg12 1.0
+  
+EG:
+  1:   &eg1  1.3
+  2:   &eg2  1.3
+  3:   &eg3  1.3
+  4:   &eg4  1.3
+  5:   &eg5  1.3
+  6:   &eg6  1.3
+  7:   &eg7  1.3
+  8:   &eg8  1.3
+  9:   &eg9  1.3
+  10:  &eg10 1.3
+  11:  &eg11 1.3
+  12:  &eg12 1.3
+  
+TG:
+  1:   &tg1  1.3
+  2:   &tg2  1.3
+  3:   &tg3  1.3
+  4:   &tg4  1.3
+  5:   &tg5  1.3
+  6:   &tg6  1.3
+  7:   &tg7  1.3
+  8:   &tg8  1.3
+  9:   &tg9  1.3
+  10:  &tg10 1.3
+  11:  &tg11 1.3
+  12:  &tg12 1.3
+

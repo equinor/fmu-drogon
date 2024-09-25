@@ -1,0 +1,22 @@
+  #seismic pred dates should include diff dates and relevant single dates
+  SEISMIC_PRED_DATES: &4d_pred_dates
+    - 2018-01-01
+    - 2020-07-01
+    - 2025-01-01
+
+  SEISMIC_PRED_DIFFDATES: &4d_pred_diffdates
+    - [2025-01-01, 2018-01-01]
+    - [2025-01-01, 2020-07-01]
+
+
+  #ecl_dates should be aligned with rmsevents IORESTART keyword (restart reporting)
+  ECLIPSE_INIT_DATE: 2018-01-01
+  
+  ECLIPSE_PRED_DATES:
+    - 2025-01-01
+    
+  ECLIPSE_PRED_DIFFDATES:
+    - [2025-01-01, 2018-01-01]
+    - [2025-01-01, 2020-07-01]
+
+

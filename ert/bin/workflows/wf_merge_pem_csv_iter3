@@ -1,0 +1,2 @@
+MAKE_DIRECTORY  <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables
+CSV_MERGE "<SCRATCH>/<USER>/<CASE_DIR>/realization-*/iter-3/share/results/tables/<PEM_CSV_NAME>" "<SCRATCH>/<USER>/<CASE_DIR>/share/results/tables/iter-3_<PEM_CSV_NAME>"

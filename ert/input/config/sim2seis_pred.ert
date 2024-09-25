@@ -1,0 +1,59 @@
+-------------------------------------------------------------------------
+---- Assign environment variable used in RMS SIM2SEIS workflow
+-------------------------------------------------------------------------
+
+SETENV FLOWSIM_IS_PREDICTION  True   -- use prediction dates
+
+-- When this variable is set to True, prediction dates will be used in SIM2SEIS workflow
+-- The prediction dates are defined in the global_variables_pred.yml file
+
+-------------------------------------------------------------------------
+---- Create sim2seis folder structure
+-------------------------------------------------------------------------
+
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/sim2seis/input/pem)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/sim2seis/output/pem)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/sim2seis/output/seismic_forward)
+
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/maps)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/tables)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/seismic)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/points)
+
+-------------------------------------------------------------------------
+---- make symbolic links to simulation model
+-------------------------------------------------------------------------
+
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/eclipse/model/ECLIPSE_MERGED.EGRID, <LINKNAME>=<RUNPATH>/sim2seis/input/pem/ECLIPSE.EGRID)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/eclipse/model/ECLIPSE_MERGED.INIT,  <LINKNAME>=<RUNPATH>/sim2seis/input/pem/ECLIPSE.INIT)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/eclipse/model/ECLIPSE_MERGED.UNRST, <LINKNAME>=<RUNPATH>/sim2seis/input/pem/ECLIPSE.UNRST)
+
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>="<RUNPATH>/../<RESTART_DIR>/sim2seis/input/pem/simgrid--ntg_pem.roff", <LINKNAME>="<RUNPATH>/sim2seis/input/pem/simgrid--ntg_pem.roff")
+
+
+-------------------------------------------------------------------------
+---- copy sim2seis folders/files
+-------------------------------------------------------------------------
+
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../sim2seis/model,                 <TO>=<RUNPATH>/sim2seis)
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../sim2seis/bin,                   <TO>=<RUNPATH>/sim2seis)
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../sim2seis/input/seismic_forward, <TO>=<RUNPATH>/sim2seis/input)
+
+
+-------------------------------------------------------------------------
+---- run sim2seis workflow
+-------------------------------------------------------------------------
+
+DEFINE  <RMS_WF_SIM2SEIS>  SIM2SEIS
+
+FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CONFIG_PATH>/../../rms/model/<RMS_NAME>, <RMS_WORKFLOW>=<RMS_WF_SIM2SEIS>, <RMS_TARGET_FILE>=RMS_TARGET_SIM2SEIS)
+
+
+----------------------------------------------------------------------
+-- Delete directories and files
+----------------------------------------------------------------------
+
+-- Delete the synthetic seismic files after the attribute maps have been calculated
+FORWARD_MODEL DELETE_DIRECTORY(<DIRECTORY>=sim2seis/output/seismic_forward/)
+FORWARD_MODEL DELETE_DIRECTORY(<DIRECTORY>=sim2seis/output/pem/)
+FORWARD_MODEL DELETE_DIRECTORY(<DIRECTORY>=sim2seis/input/seismic_forward/)

@@ -1,0 +1,9 @@
+#
+# All the static HORIZONS and ZONES definitions to be accessed via IPL or YAML/Python
+#
+
+TOP_RES:
+  - TopVolantis
+  - TopTherys
+  - TopVolon
+  - BaseVolantis

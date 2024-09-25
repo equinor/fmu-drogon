@@ -1,0 +1,6 @@
+STDERR  createdatefiles.stderr
+STDOUT  createdatefiles.stdout
+
+EXECUTABLE    ../scripts/fm_create_date_files.py
+
+ARGLIST <GLOBVAR_FILE>  <DATES>  <DIFFDATES>

@@ -1,0 +1,15 @@
+
+--create tracer folder
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/tracer)
+
+-- write simulated tracer break-through times to file
+-- this is a locally installed forward model (well names and tracer names are hardcoded)
+FORWARD_MODEL TRACER_BREAKTHROUGH(<ECLROOT>=<ECLBASE>,  <OUTPUT>=<RUNPATH>/tracer/drogon_tracer_sim_1.txt)
+
+
+-- use output file from TRACER_BREAKTHROUGH in ahm
+GEN_DATA  TRACER_SIM    RESULT_FILE:tracer/drogon_tracer_sim_%d.txt  INPUT_FORMAT:ASCII   REPORT_STEPS:1
+
+
+-- Note: for use in AHM a corresponding GENERAL_OBSERVATION keyword must be included
+--       see the OBS_CONFIG file for corresponding observation values

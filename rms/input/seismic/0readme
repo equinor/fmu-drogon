@@ -1,0 +1,2 @@
+Input seismic file path is set in global variables file _seismic.yml
+Symbolic links to these data are created in the rms workflow before import.

@@ -1,0 +1,277 @@
+title: FMU course - Webviz example
+
+#---------------------------------------------------------
+# live example: https://webviz-subsurface-example.azurewebsites.net/
+# https://equinor.github.io/webviz-subsurface/
+# > webviz docs
+#---------------------------------------------------------
+
+shared_settings:
+  scratch_ensembles:
+    iter-0: /scratch/fmu/course/01_drogon_ahm/realization-*/iter-0
+    iter-3: /scratch/fmu/course/01_drogon_ahm/realization-*/iter-3
+    pred_ref: /scratch/fmu/course/01_drogon_ahm/realization-*/pred_ref
+    pred_op5: /scratch/fmu/course/01_drogon_ahm/realization-*/pred_op5
+    constant_multregt: /scratch/fmu/course/drogon_exercise_10a/realization-*/iter-0
+
+# --- User defined settings/aliases ---
+
+hm_ensembles: &hm_ensembles # Ensembles used for history matching analysis
+  - iter-0
+  - iter-3
+
+coverage_ensembles: &coverage_ensembles # Ensembles used to demonstrate coverage
+  - constant_multregt
+  - iter-0
+
+all_ensembles: &all_ensembles # Ensembles used for prediction runs
+  - iter-0
+  - iter-3
+  - pred_ref
+  - pred_op5
+
+# Shared settings
+obsfile: &obsfile /scratch/fmu/course/01_drogon_ahm/share/observations/tables/ert_observations.yml
+
+obsfile_validation: &obsfile_validation /scratch/fmu/course/01_drogon_ahm/share/observations/tables/validation_obs.yml
+
+fipfile: &fipfile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/tables/fip.yml
+
+formationfile: &formationfile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/tables/formations.csv
+
+faultlinefile: &faultlinefile /scratch/fmu/course/01_drogon_ahm/realization-0/iter-0/share/results/polygons/toptherys--gl_faultlines_extract_postprocess.csv
+
+# ------------------------------
+options:
+  menu:
+    show_logo: true
+    bar_position: left
+    drawer_position: left
+    initially_pinned: true
+    initially_collapsed: true
+
+# ------------------------------
+layout:
+  - section: Webviz Intro
+    content:
+      # ------------------------------
+
+      - page: Front page
+        icon: home
+        content:
+          - BannerImage:
+              image: ./content/drogon_banner_image.png
+              height: 350
+          - This is a setup for Webviz in FMU basic course
+          - Markdown:
+              markdown_file: ./content/front_page.md
+
+      # ------------------------------
+      - group: Information
+        icon: info_circle
+        content:
+          - page: How was this made (yaml config file)
+            content:
+              - |
+                ##### The yaml configuration file
+
+                * This page shows the yaml configuration file that was used to build
+                  this webviz demo app.
+
+                * The first part includes **shared_settings** (which ensembles to
+                use), but also other optional shared data.  The optional shared data
+                comes in handy when several plugins uses the same data, or simply for
+                a better overview of various input data.
+
+                * The second part (from options/layout) contains the plugins to be
+                loaded. To get started on your own webviz set-up you can copy/paste
+                from this config file.
+                ---
+
+              - SyntaxHighlighter:
+                  filename: ./drogon_ahm.yml
+
+          - page: FMU|Drogon|Webviz
+            content:
+              - Markdown:
+                  markdown_file: ./content/fmu_drogon_webviz.md
+
+          - page: Plugins documentation
+            content:
+              - Markdown:
+                  markdown_file: ./content/links_to_doc.md
+
+          - page: Disk usage
+            content:
+              - DiskUsage:
+                  scratch_dir: /scratch/fmu/.
+                  # date: "2021-07-09"  # date only needed if requesting a specific report,
+                  # otherwise using latest available.
+
+      # ------------------------------
+      - group: Drogon description
+        icon: platform
+        content:
+          - page: Drogon conceptual description
+            content:
+              - |
+                ##### Including field/model information as a pdf file.
+
+                * This page contains a pdf file with Drogon conceptual
+                description. This illustrates one way of including
+                descriptive/useful/general information about the field/model one are
+                working on.
+                ---
+
+              - EmbedPdf:
+                  pdf_file: ./content/dteam_2020--drogon_concept.pdf
+
+          - page: Drogon parameters and observation data
+            content:
+              - Markdown:
+                  markdown_file: ./content/parameters_table.md
+              - DataTable:
+                  csv_file: ./content/parameters_table.csv
+              - Markdown:
+                  markdown_file: ./content/observations_table.md
+              - DataTable:
+                  csv_file: ./content/observations_table.csv
+
+  # ------------------------------
+  - section: Webviz Analysis
+    content:
+      # -------------------------------
+      - group: Model general
+        icon: timeline
+        content:
+          - page: Map Viewer
+            content:
+              - MapViewerFMU:
+                  ensembles: *all_ensembles
+                  map_surface_names_to_fault_polygons:
+                    all: toptherys
+                    therys: toptherys
+                    valysar: topvolantis
+                    volon: topvolon
+                  well_pick_file: ../../share/results/tables/well_picks.csv
+                  map_surface_names_to_well_pick_names:
+                    toptherys: TopTherys
+                    topvolantis: TopVolantis
+                    topvolon: TopVolon
+                    basevolantis: BaseVolantis
+
+          - page: Volumetrics
+            content:
+              - VolumetricAnalysis:
+                  ensembles: *hm_ensembles
+                  fipfile: *fipfile
+                  volfiles:
+                    geogrid: geogrid--vol.csv
+                    simgrid: simgrid--vol.csv
+                    eclipse: eclipse--vol.csv
+
+          #------
+          - page: Grid property statistics
+            content:
+              - PropertyStatistics:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/DROGON-*.arrow
+                  statistics_file: share/results/tables/grid_property_statistics_geogrid.csv
+
+          # - page: Parameter distributions
+          #   content:
+          #     - ParameterDistribution:
+          #         ensembles: *hm_ensembles
+
+      - group: HM and parameters
+        icon: repeat
+        content:
+          - page: Simulation time series
+            content:
+              - SimulationTimeSeries:
+                  ensembles: *all_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/DROGON-*.arrow
+                  obsfile: *obsfile
+                  options:
+                    vectors:
+                      - FOPR
+                      - FWPR
+                    # predefined_expressions: timeseries_expressions
+
+          - page: Parameter parallel coordinates
+            content:
+              - ParameterParallelCoordinates:
+                  ensembles: *hm_ensembles
+
+          - page: Parameter analysis
+            content:
+              - ParameterAnalysis:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/DROGON-*.arrow
+                  time_index: "monthly"
+                  drop_constants: true
+
+          - page: RFT plotter
+            content:
+              - RftPlotter:
+                  ensembles: *hm_ensembles
+                  formations: *formationfile
+                  faultlines: *faultlinefile
+
+          - page: Prod misfit
+            content:
+              - ProdMisfit:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/DROGON-*.arrow
+                  sampling: yearly # all_ensembles
+
+          - page: Coverage - RFT Plot
+            content:
+              - RftPlotter:
+                  ensembles: *coverage_ensembles
+                  formations: *formationfile
+                  faultlines: *faultlinefile
+
+
+          - page: Validation
+            content:
+              - SimulationTimeSeries:
+                  ensembles: *all_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/DROGON-*.arrow
+                  obsfile: *obsfile_validation
+                  options:
+                    vectors:
+                      - WOPR:A1
+                      - WGOR:A1
+                      - WWCT:A1
+                    # predefined_expressions: timeseries_expressions          # - page: Well completions
+          #   content:
+          #     - WellCompletions:
+          #         ensembles:
+          #           - iter-0
+          #         compdat_file: "share/results/tables/compdat.csv"
+          #         zone_layer_mapping_file: "rms/output/zone/simgrid_zone_layer_mapping.lyr"
+          #         stratigraphy_file: "rms/output/zone/stratigraphy.json"
+          #         well_attributes_file: "rms/output/wells/well_attributes.json"
+
+      #-------------------------------
+      - group: Correlations
+        icon: bar_chart
+        content:
+          - page: Parameters vs inplace volumes
+            content:
+              - ParameterResponseCorrelation:
+                  ensembles: *hm_ensembles
+                  response_file: share/results/volumes/geogrid--vol.csv
+                  response_filters:
+                    ZONE: multi
+                    REGION: multi
+
+          - page: Parameters vs time series
+            content:
+              - ParameterResponseCorrelation:
+                  ensembles: *hm_ensembles
+                  rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+                  sampling: monthly
+                  response_filters:
+                    DATE: single

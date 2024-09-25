@@ -1,0 +1,3 @@
+EXECUTABLE ../../../fmuconfig/bin/rate_scaling_update.sh
+MIN_ARG	   0
+MAX_ARG	   1

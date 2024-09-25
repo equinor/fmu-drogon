@@ -1,0 +1,39 @@
+
+-- Any Eclipse summary vector can be added
+SUMMARY TCPU        -- Run time
+SUMMARY FOPR        -- Field Oil Production Rate
+SUMMARY FWPR        -- Field Water Production Rate
+SUMMARY FGPR        -- Field Gas Production Rate
+SUMMARY FOPT        -- Field Oil Production Total
+SUMMARY FWPT        -- Field Water Production Total
+SUMMARY FGPT        -- Field Gas Production Toral
+SUMMARY FWCT        -- Field WCT
+SUMMARY FGOR        -- Field GOR
+SUMMARY FWIR        -- Field Water Injcetion Rate
+SUMMARY FWIT        -- Field Water Injection Total
+SUMMARY FPR         -- Field PRessure
+SUMMARY FOIP        -- Field Oil In Place
+SUMMARY RPR:*       -- Region Pressure
+SUMMARY ROIP:*      -- Region Oil In Place
+SUMMARY ROE:*       -- Region Oil Recovery
+SUMMARY WOPR:A*     -- Well Oil Production Rate
+SUMMARY WWPR:A*     -- Well Water Production Rate
+SUMMARY WGPR:A*     -- Well Gas Production Rate
+SUMMARY WOPT:A*     -- Well Oil Production Total
+SUMMARY WWPT:A*     -- Well Water Production Total
+SUMMARY WGPT:A*     -- Well Gas Production Toral
+SUMMARY WWCT:A*     -- Well WCT
+SUMMARY WGOR:A*     -- Well GOR
+SUMMARY WWIR:A*     -- Well Water Injcetion Rate
+SUMMARY WWIT:A*     -- Well Water Injection Total
+SUMMARY WBHP:A*     -- Well BHP
+----------------
+SUMMARY WOPR:OP*    -- Well Oil Production Rate
+SUMMARY WWPR:OP*    -- Well Water Production Rate
+SUMMARY WGPR:OP*    -- Well Gas Production Rate
+SUMMARY WOPT:OP*    -- Well Oil Production Total
+SUMMARY WWPT:OP*    -- Well Water Production Total
+SUMMARY WGPT:OP*    -- Well Gas Production Toral
+SUMMARY WWCT:OP*    -- Well WCT
+SUMMARY WGOR:OP*    -- Well GOR
+SUMMARY WBHP:OP*    -- Well BHP

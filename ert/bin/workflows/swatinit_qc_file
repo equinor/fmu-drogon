@@ -1,0 +1,1 @@
+WF_SWATINIT_QC_FILE   -o  <SCRATCH>/<USER>/<CASE_DIR>/realization-<QC_REAL>/<QC_ITER>/share/results/tables/check_swatinit.csv  <SCRATCH>/<USER>/<CASE_DIR>/realization-<QC_REAL>/<QC_ITER>/eclipse/model/<ECLIPSE_NAME>-<QC_REAL>.DATA

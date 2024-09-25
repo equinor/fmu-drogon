@@ -1,0 +1,3 @@
+MAKE_DIRECTORY  <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables
+
+PARAMS2CSV "--verbose" "-o" <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables/iter-0_params_aggregated.csv <SCRATCH>/<USER>/<CASE_DIR>/realization-*/iter-0/parameters.txt

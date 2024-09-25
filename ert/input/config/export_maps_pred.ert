@@ -1,0 +1,17 @@
+----------------------------------------------------------------------
+--create share/results folders
+----------------------------------------------------------------------
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/maps)
+
+
+--------------------------------------------
+-- Maps - export for RMS covisualization and webviz
+--------------------------------------------
+
+
+-- Create oil/gas thickness maps from Eclipse prediction. Use the merged UNRST file (root name ECLIPSE)
+FORWARD_MODEL GRID3D_HC_THICKNESS(<ECLROOT>=eclipse/model/ECLIPSE_MERGED, <CONFIG_HCMAP>=<CONFIG_PATH>/../input/config/ecl_hc_thickness_pred.yml)
+
+
+-- Create average parameter maps from Eclipse
+FORWARD_MODEL GRID3D_AVERAGE_MAP(<ECLROOT>=eclipse/model/ECLIPSE_MERGED, <CONFIG_AVGMAP>=<CONFIG_PATH>/../input/config/ecl_avg_map_pred.yml)

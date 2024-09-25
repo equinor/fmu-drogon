@@ -1,0 +1,6 @@
+EXECUTABLE  ../scripts/fm_xsect_wells.py
+
+ARGLIST <RUNPATH>
+
+STDERR  xsect_wells.stderr
+STDOUT  xsect_wells.stdout

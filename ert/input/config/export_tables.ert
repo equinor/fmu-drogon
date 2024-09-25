@@ -1,0 +1,43 @@
+----------------------------------------------------------------------
+--create share/results folders
+----------------------------------------------------------------------
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/tables)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/volumes)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/tables/vfp)
+FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/tables/ecl_summary)
+
+--------------------------------------------
+-- Misc. Eclipse data exported for Webviz
+--------------------------------------------
+
+-- References:
+--      PRTVOL2CSV: https://fmu-docs.equinor.com/docs/subscript/scripts/prtvol2csv.html
+--                  https://equinor.github.io/res2df/res2csv.html#Sub-commands
+--      RES2CSV:    https://fmu-docs.equinor.com/docs/ert/reference/configuration/forward_model.html#RES2CSV
+--                  https://equinor.github.io/res2df/res2csv.html#
+--                  https://equinor.github.io/res2df/res2csv.html#Sub-commands
+
+
+-- Extract volume information from eclipse prt file at initial timestep
+FORWARD_MODEL PRTVOL2CSV(<DATAFILE>=<ECLBASE>, <REGIONS>=<CONFIG_PATH>/../input/config/region2fipnum.yml, <DIR>=., <OUTPUTFILENAME>="<RUNPATH>/share/results/volumes/eclipse--vol.csv")
+
+-- Create pyarrow file with summary vectors
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=summary, <ECLBASE>=<ECLBASE>, <OUTPUT>="share/results/tables/ecl_summary/<ECLIPSE_NAME>-<IENS>.arrow", <XARG1>="--time_index", <XARG2>=raw, <XARG3>="--arrow")
+
+-- Create csv file with saturation tables
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=satfunc, <ECLBASE>=<ECLBASE>,  <OUTPUT>=share/results/tables/relperm.csv)
+
+-- Create csv file with PVT tables
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=pvt, <ECLBASE>=<ECLBASE>, <OUTPUT>=share/results/tables/pvt.csv)
+
+-- Create pyarrow file of vfp tables
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=vfp, <ECLBASE>=<ECLBASE>, <OUTPUT>="share/results/tables/vfp/vfp", <XARG1>="--keyword", <XARG2>="VFPPROD", <XARG3>="--arrow")
+
+-- Create csv file with gruptree info
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=gruptree, <ECLBASE>=<ECLBASE>,  <OUTPUT>=share/results/tables/gruptree.csv)
+
+-- Create pyarrow file with well completion data
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=wellcompletiondata, <ECLBASE>=<ECLBASE>, <OUTPUT>="share/results/tables/wellcompletiondata.arrow", <XARG1>="--zonemap", <XARG2>=rms/output/zone/simgrid_zone_layer_mapping.lyr, <XARG3>="--arrow")
+
+-- -- Create csv file with compdat info
+-- FORWARD_MODEL RES2CSV(<SUBCOMMAND>=compdat, <ECLBASE>=<ECLBASE>,  <OUTPUT>=share/results/tables/compdat.csv)

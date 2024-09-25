@@ -1,0 +1,45 @@
+-- ----------------------------------------
+-- Set-up based on multnum for each region and zone (21 multnums)
+-- ----------------------------------------
+MULTREGT
+--REGIONS    MULTIPLIER         DIRECTION
+  1   8      <MULT_R1_VALYSAR_THERYS>  'Z'   / -- Tran mult between Valysar and Therys
+  1  15      <MULT_R1_VALYSAR_VOLON>   'Z'   / -- Tran mult between Valysar and Volon
+  8  15      <MULT_R1_THERYS_VOLON>    'Z'   / -- Tran mult between Therys and Volon
+--
+  2   9      <MULT_R2_VALYSAR_THERYS>  'Z'   / -- Tran mult between Valysar and Therys
+  2  16      <MULT_R2_VALYSAR_VOLON>   'Z'   / -- Tran mult between Valysar and Volon
+  9  16      <MULT_R2_THERYS_VOLON>    'Z'   / -- Tran mult between Therys and Volon
+--
+  3  10      <MULT_R3_VALYSAR_THERYS>  'Z'   / -- Tran mult between Valysar and Therys
+  3  17      <MULT_R3_VALYSAR_VOLON>   'Z'   / -- Tran mult between Valysar and Volon
+ 10  17      <MULT_R3_THERYS_VOLON>    'Z'   / -- Tran mult between Therys and Volon
+--
+  4  11      <MULT_R4_VALYSAR_THERYS>  'Z'   / -- Tran mult between Valysar and Therys
+  4  18      <MULT_R4_VALYSAR_VOLON>   'Z'   / -- Tran mult between Valysar and Volon
+ 11  18      <MULT_R4_THERYS_VOLON>    'Z'   / -- Tran mult between Therys and Volon
+--
+  5  12      <MULT_R5_VALYSAR_THERYS>  'Z'   / -- Tran mult between Valysar and Therys
+  5  19      <MULT_R5_VALYSAR_VOLON>   'Z'   / -- Tran mult between Valysar and Volon
+ 12  19      <MULT_R5_THERYS_VOLON>    'Z'   / -- Tran mult between Therys and Volon
+--
+  6  13      <MULT_R6_VALYSAR_THERYS>  'Z'   / -- Tran mult between Valysar and Therys
+  6  20      <MULT_R6_VALYSAR_VOLON>   'Z'   / -- Tran mult between Valysar and Volon
+ 13  20      <MULT_R6_THERYS_VOLON>    'Z'   / -- Tran mult between Therys and Volon
+--
+  7  14      <MULT_R7_VALYSAR_THERYS>  'Z'   / -- Tran mult between Valysar and Therys
+  7  21      <MULT_R7_VALYSAR_VOLON>   'Z'   / -- Tran mult between Valysar and Volon
+ 14  21      <MULT_R7_THERYS_VOLON>    'Z'   / -- Tran mult between Therys and Volon
+-----------
+-----------
+-----------
+-- Inter-region barrier
+-----------
+ 12  2      <MULT_R5_THERYS_R2_ALL>  'XYZ'   / -- Tran mult between Region 5 Therys and Region 2 Valysar
+ 12  9      <MULT_R5_THERYS_R2_ALL>  'XYZ'   / -- Tran mult between Region 5 Therys and Region 2 Therys
+ 12 16      <MULT_R5_THERYS_R2_ALL>  'XYZ'   / -- Tran mult between Region 5 Therys and Region 2 Volon 
+ 12  6      <MULT_R5_THERYS_R6_ALL>  'XYZ'   / -- Tran mult between Region 5 Therys and Region 6 Valysar
+ 12 13      <MULT_R5_THERYS_R6_ALL>  'XYZ'   / -- Tran mult between Region 5 Therys and Region 6 Therys
+ 12 20      <MULT_R5_THERYS_R6_ALL>  'XYZ'   / -- Tran mult between Region 5 Therys and Region 6 Volon 
+-----------
+/

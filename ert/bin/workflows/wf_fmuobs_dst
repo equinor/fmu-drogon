@@ -1,0 +1,2 @@
+MAKE_DIRECTORY      <SCRATCH>/<USER>/<CASE_DIR>/share/observations/tables
+FMUOBS "--starttime" <STARTTIME> "--verbose"  <CONFIG_PATH>/<OBS_FILE>  "--yaml"   <SCRATCH>/<USER>/<CASE_DIR>/share/observations/tables/ert_observations.yml

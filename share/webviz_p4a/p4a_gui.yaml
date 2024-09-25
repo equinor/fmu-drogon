@@ -1,0 +1,12 @@
+title: P4A - PEM FOR ALL 
+
+pages: 
+
+  - title: Front page
+    content:
+      - Welcome to the PEM for all (P4A) Webviz plugin! 
+
+  - title: PEM Inputs & Parameters
+    content:
+      - P4aInputs:
+          export_path: ./

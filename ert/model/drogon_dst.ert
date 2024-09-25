@@ -1,0 +1,231 @@
+-- ==============================================================================
+--
+-- ERT CONFIGURATION FILE   ----   DROGON RESERVOIR MODEL
+--
+-- Documentation:
+--
+-- References:
+--  FMU wiki portal:            https://wiki.equinor.com/wiki/index.php/FMU_portal_home
+--  FMU related documentation:  https://fmu-docs.equinor.com/
+--  ERT technical description:  https://fmu-docs.equinor.com/docs/ert/index.html
+--
+-- ==============================================================================
+
+
+-----------------------------------------------------
+-- Internal variables
+-----------------------------------------------------
+
+DEFINE <USER>             $USER
+DEFINE <SCRATCH>          /scratch/fmu
+DEFINE <CASE_DIR>         01_drogon_dst
+DEFINE <ECLIPSE_NAME>     DROGON_DST
+--
+DEFINE <RMS_NAME>         drogon.rms14.2.2
+DEFINE <RMS_VERSION>      14.2.2
+DEFINE <RMS_WF_NAME>     MAIN
+--
+DEFINE <RMS_SEED_FILE>    <CONFIG_PATH>/../input/distributions/random.seeds
+--
+DEFINE <DST_WELL>         55_33-1
+DEFINE <BUILD_UP>         2
+
+
+-----------------------------------------------------
+-- Observations
+-----------------------------------------------------
+
+DEFINE <OBS_FILE>         ../input/observations/<DST_WELL>_obs.txt
+OBS_CONFIG  <OBS_FILE>
+
+-----------------------------------------------------
+-- Runpath folder
+-----------------------------------------------------
+
+-- Runpath folder from where all realizations are run
+RUNPATH  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/iter-<ITER>/
+
+
+-----------------------------------------------------
+-- Eclipse settings
+-----------------------------------------------------
+
+DEFINE <TEMPLATE_DATA_FILE>  ../../eclipse/model/DROGON_DST_<DST_WELL>.DATA  -- Template DATA file
+
+ECLBASE  eclipse/model/<ECLIPSE_NAME>-<IENS>  -- Name used for the ECLIPSE simulations in runpath
+
+RUN_TEMPLATE  <TEMPLATE_DATA_FILE>  <ECLBASE>.DATA  -- Copy template DATA file to runpath
+
+
+-----------------------------------------------------
+-- ert storage settings
+-----------------------------------------------------
+
+ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+
+RANDOM_SEED  123456  -- ERT seed value
+
+
+-----------------------------------------------------
+-- LSF settings
+-----------------------------------------------------
+
+NUM_REALIZATIONS        100             -- Set number of realizations to run
+MAX_RUNTIME             18000           -- Set the maximum allowed run time (in seconds)
+MIN_REALIZATIONS        1               -- The minimum number of realizations that must have succeeded for the simulation to be regarded as a success
+MAX_SUBMIT              1               -- How many times should the queue system retry a simulation. Default = 2 (use 1 when debugging)
+QUEUE_OPTION       LSF MAX_RUNNING 100  -- Choke the number of simultaneous run
+QUEUE_OPTION       LSF LSF_QUEUE  mr8     -- Assign LSF cluster queue
+--
+--QUEUE_SYSTEM LOCAL               -- OR activate this to run simulations locally
+
+
+-------------------------------------------------------
+-- Install custom jobs and workflows
+-------------------------------------------------------
+
+-- Create LGR near wellbore
+INSTALL_JOB LGR                                         ../bin/jobs/FM_LGR
+
+-----------------------------------------
+----execute the fmuconfig script (ensures updated global variables file)
+LOAD_WORKFLOW_JOB  ../bin/jobs/WF_JOB_RUN_FMUCONFIG
+LOAD_WORKFLOW      ../bin/workflows/run_fmuconfig
+
+-----------------------------------------
+----Workflow that reads the OBS_CONFIG file and creates a yaml file
+-- the output yaml file can be used with webviz
+-- The OBS_CONFIG file name must be defined with the user variable <OBS_FILE>
+-- doc: https://equinor.github.io/subscript/scripts/fmuobs.html
+DEFINE  <STARTTIME>  2015-07-28
+LOAD_WORKFLOW      ../bin/workflows/wf_fmuobs_dst
+
+
+-----------------------------------------
+----Workflow that reads the Saphir output dpdt file and creates a yaml file
+-- the output yaml file can be used with webviz
+DEFINE <DPDT_FILE>        ../../rms/input/well_modelling/prod_data/<DST_WELL>_dpdt_bu<BUILD_UP>_saphir.txt
+DEFINE <YML>              share/observations/tables/ert_observations_dpdt.yml
+DEFINE <INDEX_LIST>       None -- Alternatives: None, List f.ex. 0 10
+LOAD_WORKFLOW_JOB         ../bin/jobs/WF_DPDT2YML
+LOAD_WORKFLOW             ../bin/workflows/wf_dpdt2yml
+
+
+---------------------------------------
+-- Workflow that calculate misfit for case selected in gui
+-- The output file is located at <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables
+DEFINE <OUTPUTDIR_MISFIT>       <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables
+LOAD_WORKFLOW_JOB               ../bin/jobs/WF_EXPORT_MISFIT
+LOAD_WORKFLOW                   ../bin/workflows/wf_export_misfit
+
+
+-----------------------------------------
+---- Worklow that creates the case metadata and registers on Sumo (optional)
+DEFINE <SUMO_ENV>       prod
+DEFINE <SUMO_CASEPATH>  <SCRATCH>/<USER>/<CASE_DIR>
+LOAD_WORKFLOW           ../bin/workflows/xhook_create_case_metadata
+
+
+-----------------------------------------------------
+-- Hook workflows
+-----------------------------------------------------
+HOOK_WORKFLOW   run_fmuconfig     PRE_SIMULATION  -- Create global_variables.yml and global_variables.yml.tmpl files
+HOOK_WORKFLOW  wf_fmuobs_dst  PRE_SIMULATION      -- Generate yaml version of ERT observations for use with Webviz
+HOOK_WORKFLOW  wf_dpdt2yml  PRE_SIMULATION        -- Generate yaml version of dpdt observations for use with Webviz
+HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio and register on Sumo (optional)
+
+
+-----------------------------------------------------
+-- Forward models
+-----------------------------------------------------
+
+INCLUDE  ../input/config/make_folders.ert -- Make general folder structure
+
+-----------------------------------------------------
+---- Copy rms folders/files
+-----------------------------------------------------
+
+FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/input/well_modelling, <TO>=<RUNPATH>/rms/input)
+
+-- Copy seed file to the rms/model folder --> forces rms to use seed values from the file (target file must be named "random.seeds")
+FORWARD_MODEL COPY_FILE(<FROM>=<RMS_SEED_FILE>,  <TO>=<RUNPATH>/rms/model/random.seeds)
+
+
+-----------------------------------------------------
+---- copy eclipse folders/files
+-----------------------------------------------------
+
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/props/drogon.pvt,       <TO>=<RUNPATH>/eclipse/include/props/drogon.pvt)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/solution/drogon.rxvd,   <TO>=<RUNPATH>/eclipse/include/solution/drogon.rxvd)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/summary/drogon.summary, <TO>=<RUNPATH>/eclipse/include/summary/drogon.summary)
+
+
+-----------------------------------------------------
+-- Uncertainty parameters
+-----------------------------------------------------
+
+---- Scalar parameters ----
+
+-- Draw values from ERT distributions (values are saved to parameters.txt file in runpath)
+GEN_KW  SWITCHES        ../input/distributions/global_variables_switches.dist
+GEN_KW  GLOBVAR         ../input/distributions/global_variables.dist
+GEN_KW  MULTREGT        ../input/distributions/multregt.dist
+GEN_KW  DUAL_PORO       ../input/distributions/dual_poro.dist
+GEN_KW  APS_FACIES      ../input/distributions/facies_aps.dist
+
+---- 2d parameters ----
+INCLUDE  ../input/config/ahm_surface.ert    -- update horizons
+
+---- 3d parameters ----
+INCLUDE  ../input/config/ahm_field_aps.ert  -- update aps grid parameters
+
+-----------------------------------------------------
+-- Populate template files with their uncertainty parameter values
+-----------------------------------------------------
+
+-- DESIGN_KW will fetch variable values from the parameters.txt file
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl, <result_file>=<RUNPATH>/fmuconfig/output/global_variables.yml)
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../ert/input/templates/multregt.tmpl,          <result_file>=<RUNPATH>/eclipse/include/grid/drogon.multregt)
+FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../ert/input/templates/dual_poro.tmpl,         <result_file>=<RUNPATH>/dual_poro.txt)
+
+
+-----------------------------------------------------
+---- RMS
+-----------------------------------------------------
+
+-- Run Main workflow
+FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CONFIG_PATH>/../../rms/model/<RMS_NAME>, <RMS_WORKFLOW>=<RMS_WF_NAME>, <RMS_TARGET_FILE>=RMS_TARGET_MAIN)
+
+
+-----------------------------------------------------
+---- ECLIPSE & DST
+-----------------------------------------------------
+
+-- Add LGR
+FORWARD_MODEL LGR(<WELL>=eclipse/include/schedule/<DST_WELL>.wells, <ECL>=<ECLBASE>.DATA, <RUNSPEC>=eclipse/include/runspec/lgr.runspec, <GRID>=eclipse/include/grid/lgr.grid, <SCH>=eclipse/include/schedule/lgr.sch, <SIZE>=small, <DUAL>=dual_poro.txt)
+
+--FORWARD_MODEL INSERT_NOSIM
+
+FORWARD_MODEL ECLIPSE100(<VERSION>=2022.2)
+
+-- Extract simulated welltest results
+FORWARD_MODEL MAKE_DIRECTORY( <DIRECTORY> = <RUNPATH>/share/results/tables )
+FORWARD_MODEL WELLTEST_DPDS(<ECLBASE>=<ECLBASE>, <WELLNAME>=<DST_WELL>, <PHASE>=OIL, <BUILDUP_NR>=<BUILD_UP>, <OUTPUTDIRECTORY>=share/results/tables, <OUTFILESSUFFIX>=<DST_WELL>, <GENOBS_RESULTFILE>=<CONFIG_PATH>/../../rms/input/well_modelling/prod_data/<DST_WELL>_dpdt_bu<BUILD_UP>_saphir.txt)
+
+-- Create csv file with summary vectors
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=summary, <ECLBASE>=<ECLBASE>, <OUTPUT>="share/results/tables/ecl_summary/<ECLIPSE_NAME>-<IENS>.arrow", <XARG1>="--time_index", <XARG2>=raw, <XARG3>="--column_keys", <XARG4>="WBHP:*", <XARG5>="--arrow")
+
+
+GEN_DATA  DPDT_SIM  INPUT_FORMAT:ASCII  RESULT_FILE:share/results/tables/dpdspt_lag2_genobs_<DST_WELL>_%d   REPORT_STEPS:<BUILD_UP>
+
+
+-----------------------------------------------------
+-- ERT plotting
+-----------------------------------------------------
+
+SUMMARY WOPR:*
+SUMMARY WWPR:*
+SUMMARY WGPR:*
+SUMMARY WBHP:*

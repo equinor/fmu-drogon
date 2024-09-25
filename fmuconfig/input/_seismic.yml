@@ -1,0 +1,63 @@
+# NOTE: Cubes and names here would normally come from OpenWorks
+#       These would be placed on the project disk, outside the revision
+#       But in Drogon these are place on scratch to provide access in the courses
+
+# Data used for property modelling or to compare to seismic from geogrid
+real_3d_path:         "/scratch/fmu/share/drogon/modeldata/share/seismic/static/input"
+real_3d_cropped_path: "/scratch/fmu/share/drogon/modeldata/share/seismic/static/21_0_0/cropped"  # not used in workflow
+3d_templatecube: "/scratch/fmu/share/drogon/modeldata/share/seismic/static/21_0_0/template/seismic_layout_static.segy"
+
+real_3d:
+  "18v":
+     ecldate: "20180101"
+     time:
+       amplitude_near: "owexport_ampl_near_time_2018.segy"
+       amplitude_far:  "owexport_ampl_far_time_2018.segy"
+       relai_near: "owexport_rai_near_time_2018.segy"
+       relai_far:  "owexport_rai_far_time_2018.segy"
+
+# Data used to compare with synthetic 4D seismic. Can be single vintages or difference cubes
+# If single vintages are used as input,
+# then difference cubes for relevant time intervals can be calculated in the workflow
+
+real_4d_path: "/scratch/fmu/share/drogon/modeldata/share/seismic/4d/input" # not used in workflow
+real_4d_cropped_path: "/scratch/fmu/share/drogon/modeldata/share/seismic/4d/21_0_0/cropped"
+4d_templatecube: "/scratch/fmu/share/drogon/modeldata/share/seismic/4d/21_0_0/template/seismic_layout_4d.segy"
+
+real_4d:
+  "18h_18v":
+    ecldate: [2018-07-01, 2018-01-01]
+    time:
+      amplitude: "owexport_ampl_18h_18v.segy"
+      relai:     "owexport_relai_18h_18v.segy"
+
+  "19h_18v":
+    ecldate: [2019-07-01, 2018-01-01]
+    time:
+      amplitude: "owexport_ampl_19h_18v.segy"
+      relai:     "owexport_relai_19h_18v.segy"
+
+  "20h_18v":
+    ecldate: [2020-07-01, 2018-01-01]
+    time:
+      amplitude: "owexport_ampl_20h_18v.segy"
+      relai:     "owexport_relai_20h_18v.segy"
+
+
+ATTRIBUTE_HORIZONS_4D:
+  - TopVolantis
+  - BaseVolantis
+
+ATTRIBUTE_HORIZONS_3D:
+  - TopVolantis
+  - TopTherys
+  - TopVolon
+  - BaseVolantis
+
+ZONES_4D:
+  Valysar:   ["TopVolantis","TopTherys"]
+  Therys: ["TopTherys", "TopVolon"]
+  Volon: ["TopVolon", "BaseVolantis"]
+
+ZONES_3D:
+  Valysar:   ["TopVolantis","TopTherys"]

@@ -1,0 +1,5 @@
+STDERR merge_parameters.stderr
+STDOUT merge_parameters.stdout
+
+EXECUTABLE ../scripts/fm_merge_parameters.py
+ARGLIST       <PATH_BASE> <PATH_PREPEND>

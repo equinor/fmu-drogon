@@ -1,0 +1,14 @@
+
+-- Hook workflow for creating case metadata
+HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION
+
+-- Get static (preprocessed) seismic observation files to case share folder for RMS-covisualization/webviz
+HOOK_WORKFLOW   xhook_copy_preprocessed_dataio PRE_SIMULATION
+
+
+----------------
+-- Note
+----------------
+-- This setup is adapted to Drogon and may not work out of the box for other fields.
+-- Coordinate with the FMU TDI team on how to best include metadata in your config
+-- files.

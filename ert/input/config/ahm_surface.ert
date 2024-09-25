@@ -1,0 +1,11 @@
+-----------------------------------------------------
+-- AHM - horizons
+-----------------------------------------------------
+-- Use ert/updated surfaces if they exist
+-- Ert surfaces are generated for the second iteration/posterior (i.e. after prior is finished)
+-- Make sure to delete the storage if you for some reason have to rerun (otherwise the prior will also get an ert updated surface)
+
+SURFACE TOP_VOLANTIS    OUTPUT_FILE:ert_TopVolantis.irap  INIT_FILES:rms/output/hum/TopVolantis.irap    BASE_SURFACE:../../rms/output/hum/TopVolantis.irap   FORWARD_INIT:True
+SURFACE TOP_THERYS      OUTPUT_FILE:ert_TopTherys.irap    INIT_FILES:rms/output/hum/TopTherys.irap      BASE_SURFACE:../../rms/output/hum/TopTherys.irap     FORWARD_INIT:True
+SURFACE TOP_VOLON       OUTPUT_FILE:ert_TopVolon.irap     INIT_FILES:rms/output/hum/TopVolon.irap	BASE_SURFACE:../../rms/output/hum/TopVolon.irap	     FORWARD_INIT:True
+SURFACE BASE_VOLANTIS	OUTPUT_FILE:ert_BaseVolantis.irap INIT_FILES:rms/output/hum/BaseVolantis.irap	BASE_SURFACE:../../rms/output/hum/BaseVolantis.irap  FORWARD_INIT:True

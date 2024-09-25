@@ -1,0 +1,226 @@
+-- ==============================================================================
+--
+-- ERT CONFIGURATION FILE   ----   DROGON RESERVOIR MODEL
+--                                     "MODEL CASE"
+--
+-- ==============================================================================
+
+
+-----------------------------------------------------
+-- Internal variables
+-----------------------------------------------------
+
+DEFINE <USER>                 $USER
+DEFINE <SCRATCH>              /scratch/fmu
+DEFINE <CASE_DIR>             03_drogon_ahm
+DEFINE <ECLIPSE_NAME>         DROGON
+--
+DEFINE <RMS_NAME>             drogon.rms14.2.2
+DEFINE <RMS_VERSION>          14.2.2
+DEFINE <RMS_WF_NAME>          WELL_PLANNING
+
+DEFINE <RMS_SEED_FILE>    <CONFIG_PATH>/../input/distributions/random.seeds
+--
+DEFINE <PRED_DIR_NAME>    pred_op5     -- name of the prediction folder
+--
+DEFINE <RESTART_DIR>      iter-3       -- name of the history folder to restart from
+DEFINE <RESTART_CASE>     ../../../<RESTART_DIR>/eclipse/model/<ECLIPSE_NAME>-<IENS>   -- path is relative to eclipse/model
+DEFINE <RESTART_REPORT>   82
+
+-- Point to runpath where it restart from, relative to current case runpath
+-- Used by fmu-dataio to set value: fmu\iteration\restart_from
+SETENV RESTART_FROM_PATH  ../<RESTART_DIR>/
+
+
+-----------------------------------------------------
+-- Runpath folder
+-----------------------------------------------------
+
+-- Runpath from where all realizations are run
+RUNPATH	  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/<PRED_DIR_NAME>
+
+
+-----------------------------------------------------
+-- Eclipse settings
+-----------------------------------------------------
+
+DEFINE  <TEMPLATE_DATA_FILE> ../../eclipse/model/DROGON_PRED.DATA  -- Template DATA file
+
+ECLBASE  eclipse/model/<ECLIPSE_NAME>-<IENS>  -- Name used for the ECLIPSE simulations in runpath
+
+-- Copy template DATA file to runpath + do variable substitution
+RUN_TEMPLATE  <TEMPLATE_DATA_FILE>  <ECLBASE>.DATA
+
+
+-----------------------------------------------------
+-- ert storage settings
+-----------------------------------------------------
+
+ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+
+RANDOM_SEED  123456  -- ERT seed value
+
+-----------------------------------------------------
+-- LSF settings, AHM configuration etc.
+-----------------------------------------------------
+
+NUM_CPU             1
+NUM_REALIZATIONS    100            -- Set number of realizations to run
+MAX_RUNTIME         10000           -- Set the maximum allowed run time (in seconds)
+MIN_REALIZATIONS    1              -- Success criteria
+MAX_SUBMIT          1              -- How many times should the queue system retry a simulation.
+QUEUE_OPTION  LSF MAX_RUNNING 100  -- Choke the number of simultaneous run
+
+QUEUE_OPTION LSF LSF_QUEUE  mr8     -- Assign LSF cluster queue
+-- QUEUE_SYSTEM LOCAL                 -- OR activate this to run simulations locally
+
+
+-------------------------------------------------------
+--Install custom jobs and workflows
+-------------------------------------------------------
+
+INCLUDE  ../input/config/install_custom_jobs.ert
+
+
+-----------------------------------------------------
+-- Pre-sim workflows
+-----------------------------------------------------
+
+-- Write config file run information to scratch
+HOOK_WORKFLOW   echo_config_file  PRE_SIMULATION
+
+
+-- run fmuconfig for pred case
+--> create global_variables_pred.yml and global_variables_pred.yml.tmpl files
+---- Wiki doc: https://wiki.equinor.com/wiki/index.php/FMU_drogon/ert_topics_fmuconfig
+HOOK_WORKFLOW   run_fmuconfig_pred     PRE_SIMULATION
+
+-----------------------------------------------------
+-- Forward Models
+-----------------------------------------------------
+
+INCLUDE  ../input/config/make_folders_pred.ert  -- Make general folder structure
+
+
+-----------------------------------------------------
+-- fmuconfig - hist and pred
+-----------------------------------------------------
+
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../<RESTART_DIR>/fmuconfig/output/global_variables.yml, <LINKNAME>=<RUNPATH>/fmuconfig/output/global_variables.yml)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../fmuconfig/output/global_variables_pred.yml, <TO>=<RUNPATH>/fmuconfig/output/global_variables_pred.yml)
+
+
+-----------------------------------------------------
+-- Make symbolic link to eclipse restart case
+-----------------------------------------------------
+
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../<RESTART_DIR>/eclipse/include, <LINKNAME>=<RUNPATH>/eclipse/include)
+
+
+-----------------------------------------------------
+-- rms well modelling
+-----------------------------------------------------
+
+FORWARD_MODEL COPY_DIRECTORY( <FROM> = <CONFIG_PATH>/../../rms/input/well_modelling, <TO> = <RUNPATH>/rms/input/)
+
+-- Symlink eclipse grid and init files of restart case - needed for rms well modelling (flow model event)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RESTART_CASE>.EGRID, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE.EGRID)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RESTART_CASE>.INIT, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE.INIT)
+
+-- Symlink surfaces - needed for rms well modelling (snap to surface)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>="<RUNPATH>/../<RESTART_DIR>/share/results/maps/topvolantis--ds_extract_postprocess.gri", <LINKNAME>="<RUNPATH>/share/results/maps/topvolantis--ds_extract_postprocess.gri")
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>="<RUNPATH>/../<RESTART_DIR>/share/results/maps/toptherys--ds_extract_postprocess.gri", <LINKNAME>="<RUNPATH>/share/results/maps/toptherys--ds_extract_postprocess.gri")
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>="<RUNPATH>/../<RESTART_DIR>/share/results/maps/topvolon--ds_extract_postprocess.gri", <LINKNAME>="<RUNPATH>/share/results/maps/topvolon--ds_extract_postprocess.gri")
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>="<RUNPATH>/../<RESTART_DIR>/share/results/maps/basevolantis--ds_extract_postprocess.gri", <LINKNAME>="<RUNPATH>/share/results/maps/basevolantis--ds_extract_postprocess.gri")
+
+
+-----------------------------------------------------
+-- Merge parameters.txt from restart run (combine hist and pred parameters in same file)
+FORWARD_MODEL FM_MERGE_PARAMETERS(<PATH_BASE>=<RUNPATH>, <PATH_PREPEND>=<RUNPATH>/../<RESTART_DIR>)
+
+
+-----------------------------------------------------
+-- RMS
+-----------------------------------------------------
+-- Symlink rms/output/zone from RESTART case
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../<RESTART_DIR>/rms/output/zone, <LINKNAME>=<RUNPATH>/rms/output/zone)
+
+--Copy seed file to the rms/model folder --> forces rms to use seed values from the file (target file must be named "random.seeds")
+FORWARD_MODEL COPY_FILE(<FROM>=<RMS_SEED_FILE>,  <TO>=rms/model/random.seeds)
+
+FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CONFIG_PATH>/../../rms/model/<RMS_NAME>, <RMS_WORKFLOW>=<RMS_WF_NAME>, <RMS_TARGET_FILE>=RMS_TARGET_PRED)
+
+
+-----------------------------------------------------
+-- Eclipse/Flow
+-----------------------------------------------------
+
+-- FORWARD_MODEL INSERT_NOSIM
+-- FORWARD_MODEL ECLIPSE100(<VERSION>=2022.2)
+
+FORWARD_MODEL OPM_FLOW  -- flowrc23
+
+-- Merge hist and pred UNRST files
+FORWARD_MODEL MERGE_UNRST_FILES(<UNRST1>=../<RESTART_DIR>/<ECLBASE>.UNRST, <UNRST2>=<ECLBASE>.UNRST, <OUTPUT>=eclipse/model/ECLIPSE_MERGED.UNRST)
+
+-- Symlink the corresponding egrid and init files (note:target is defined relative to linkname)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=../../<ECLBASE>.EGRID, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE_MERGED.EGRID)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=../../<ECLBASE>.INIT, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE_MERGED.INIT)
+
+
+-----------------------------------------------------
+---- Export data for visualisation (webviz,RMS covisualization)
+-----------------------------------------------------
+
+-- Create arrow file with summary vectors
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=summary, <ECLBASE>=<ECLBASE>, <OUTPUT>="share/results/tables/ecl_summary/<ECLIPSE_NAME>-<IENS>.arrow", <XARG1>="--time_index", <XARG2>=raw, <XARG3>="--arrow")
+
+
+INCLUDE ../input/config/export_maps_pred.ert      -- simgrid and geogrid maps, for visualization
+INCLUDE ../input/config/export_ecl_roff_pred.ert  -- sim model restart and init parameters, for visualization
+
+
+
+-----------------------------------------------------
+-- symlink all grid and map files in hist case (for sim2seis and RMS covisualization convenience)
+-----------------------------------------------------
+FORWARD_MODEL SYMLINK_HIST_RESULT_FILES(<DIR_FROM>=<RUNPATH>/../<RESTART_DIR>/share/results/grids, <DIR_TO>=<RUNPATH>/share/results/grids)
+FORWARD_MODEL SYMLINK_HIST_RESULT_FILES(<DIR_FROM>=<RUNPATH>/../<RESTART_DIR>/share/results/maps, <DIR_TO>=<RUNPATH>/share/results/maps)
+
+-----------------------------------------------------
+-- qc - make xsection images for planned well
+-----------------------------------------------------
+
+-- Symlink polygon - used with xsect_wells forward model
+DEFINE <POL_FILE> "share/results/polygons/toptherys--gl_faultlines_extract_postprocess.pol"
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>="<RUNPATH>/../<RESTART_DIR>/<POL_FILE>", <LINKNAME>="<RUNPATH>/<POL_FILE>")
+
+-- Create planned well cross scetion, save as png file - for well path qc
+FORWARD_MODEL XSECT_WELLS(<RUNPATH>=<RUNPATH>)
+
+-----------------------------------------------------
+---- SIM2SEIS
+-----------------------------------------------------
+
+INCLUDE  ../input/config/sim2seis_pred.ert  -- sim2seis for prediction/feasability
+
+
+----------------------------------------------------
+-- Run eCalc
+----------------------------------------------------
+INCLUDE  ../input/config/run_ecalc.ert  -- ecalc setup
+
+
+----------------------------------------------------
+-- ERT plotting
+-----------------------------------------------------
+INCLUDE  ../input/config/ert_summary_plotting_pred.ert  -- summary vectors
+
+
+----------------------------------------------------------------------
+-- Delete files
+----------------------------------------------------------------------
+
+-- FORWARD_MODEL DELETE_FILE(<FILES>=eclipse/model/ECLIPSE_MERGED.UNRST)  -- delete the merged UNRST file

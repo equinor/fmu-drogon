@@ -1,0 +1,690 @@
+#########################################################################################
+# Master global config for Drogon
+#########################################################################################
+
+#========================================================================================
+# Global section
+#========================================================================================
+
+
+global:
+
+  dates: !include _dates.yml
+  seismic: !include _seismic.yml
+
+  #------------------------------------------------------------------------------
+  # Depth conversion velocity model alternatives, alt1" or "alt2"
+  # alt 1: contant V in overburden, constant V in Volantis
+  # alt 2: V = a*Tmap + b in overburden, constant V in Volantis (default)
+  #------------------------------------------------------------------------------
+  DCONV_ALTERNATIVE: 2 ~ <>
+
+  #------------------------------------------------------------------------------
+  # Hum model mode: 0 PREDICTION, 1 SIMULATION
+  #------------------------------------------------------------------------------
+  HUM_MODEL_MODE: 0 ~ <>
+
+  #------------------------------------------------------------------------------
+  # Facies model setup;
+  # 0 for using RMS common algorithms like belts, indicator etc
+  # 1 for using APS in all zones
+  #------------------------------------------------------------------------------
+  FACIESMODEL_ALTERNATIVE: 1 ~ <>
+
+  #------------------------------------------------------------------------------
+  # Petrophysical model setup;
+  # 0 for simple, constant value per facies,
+  # 1 for standard multivariate analysis
+  #------------------------------------------------------------------------------
+  PETROMODEL_ALTERNATIVE: 1 ~ <>
+
+  #------------------------------------------------------------------------------
+  # Seismic conditioning  # 0: don't condition on seismic  1: condition on seismic
+  # used in "switches_for_facies.py" (workflow: facies_basic)
+  # used in "switch for valysar_seiscond.py" (workflow: facies_aps)
+  FACIES_VALYSAR_SEISCOND: 1 ~ <>
+  #------------------------------------------------------------------------------
+
+
+  #------------------------------------------------------------------------------
+  # Gridmodel names
+  #------------------------------------------------------------------------------
+  GEOGRIDNAME: Geogrid                    # sampling properties from individual zones. Modelling of saturations ++
+  SIMGRIDNAME: Simgrid
+  ECLGRIDNAME: Eclipsegrid
+  GEOGRIDNAME_VALYSAR: Geogrid_Valysar    # for modelling in Valysar
+  GEOGRIDNAME_THERYS: Geogrid_Therys      # for modelling in therys
+  GEOGRIDNAME_VOLON: Geogrid_Volon        # for modelling in volon
+  ECLGRIDNAME_PRED: Eclipsegrid_pred      # for prediction well planning
+  ECLGRIDNAME_PEM: Eclipsegrid_pem        # for pem on eclipse grid
+  GEOGRIDNAME_PEM: Geogrid_pem            # for pem on geo grid
+  SIMGRIDNAME_MAPS4AHM: Simgrid_maps4ahm  # for preparing 4D maps for use as obs in AHM in ERT
+  GEOGRID_VALYSAR_SEISCOND: Geogrid_Valysar_seiscondtest   # for demo examples of alterantive seismic conditioning methods
+
+  #------------------------------------------------------------------------------
+  # Simgrid active cells manipulation
+  #------------------------------------------------------------------------------
+
+  # ||rms: set_poro2zero_if_below_minpv.py||
+  # set simgrid porosity to zero for cells with small porv (--> inactivated by Eclipse)
+  # minpv value is relative to a 100x100 cell (will be scaled to each cells dx*dy)
+  SIMGRID_MINPV: 100.0  ~ <SIMGRID_MINPV>
+
+  # ||rms: set_poro2zero_outside_area_of_interest.py||
+  # 0 = do nothing
+  # 1 = set simgrid porosity to zero for cells outside area of interest
+  #     outside area is defined as eqlnum 7
+  SIMGRID_AREA_OF_INTEREST: 0
+
+  #------------------------------------------------------------------------------
+  # Regions and contacts
+  #------------------------------------------------------------------------------
+
+  # this shows and example of a composite YAML which is easy in Python, but
+  # almost impossible with IPL.
+  REGIONS:
+    WestLowland:
+      NUM: 1               # region number
+      OWC: 1660.0
+      FWL: 1660.0
+      GOC: 1000.0
+      COL: (238, 221, 130) # RGB color for RMS
+      EQT: 0               # EQUIL_TYPE (N value)
+      BO: 1.434            # Oil formation volume factor (rm3/sm3), used with rms volumetrics
+      RS: 140.8            # Gas oil ratio (sm3/sm3), used with rms volumetrics and 3d pem workflow
+      BG: 0.0043           # Gas formation volume factor (rm3/sm3), used with rms volumetrics
+      RV: 0.000153         # Liquid gas ratio (sm3/sm3), used with rms volumetrics
+    CentralSouth:
+      NUM: 2
+      OWC: 1677.0     ~ <FWL_CENTRAL>
+      FWL: 1677.0     ~ <FWL_CENTRAL>
+      GOC: 1000.0
+      EQT: 0
+      COL: (105, 89, 205)
+      BO: 1.434
+      RS: 140.8
+      BG: 0.0043
+      RV: 0.000153
+    CentralNorth:
+      NUM: 3
+      OWC: 1677.0     ~ <FWL_CENTRAL>
+      FWL: 1677.0     ~ <FWL_CENTRAL>
+      GOC: 1000.0
+      EQT: 0
+      COL: (238, 121, 159)
+      BO: 1.434
+      RS: 140.8
+      BG: 0.0043
+      RV: 0.000153
+    NorthHorst:
+      NUM: 4
+      OWC: 1660.0     ~ <FWL_NORTH_HORST>
+      FWL: 1660.0     ~ <FWL_NORTH_HORST>
+      GOC: 1640.0     ~ <GOC_NORTH_HORST>
+      EQT: 0
+      COL: (193, 255, 193)
+      BO: 1.628
+      RS: 195.9
+      BG: 0.0043
+      RV: 0.000153
+    CentralRamp:
+      NUM: 5
+      OWC: 1677.0     ~ <FWL_CENTRAL>
+      FWL: 1677.0     ~ <FWL_CENTRAL>
+      GOC: 1000.0
+      EQT: 0
+      COL: (83, 134, 139)
+      BO: 1.434
+      RS: 140.8
+      BG: 0.0043
+      RV: 0.000153
+    CentralHorst:
+      NUM: 6
+      OWC: 1677.0     ~ <FWL_CENTRAL>
+      FWL: 1677.0     ~ <FWL_CENTRAL>
+      GOC: 1000.0
+      EQT: 0
+      COL: (102, 205, 170)
+      BO: 1.434
+      RS: 140.8
+      BG: 0.0043
+      RV: 0.000153
+    EastLowland:
+      NUM: 7
+      OWC: 1660.0
+      FWL: 1660.0
+      GOC: 1000.0
+      EQT: 0
+      COL: (39, 64, 139)
+      BO: 1.434
+      RS: 140.8
+      BG: 0.0043
+      RV: 0.000153
+
+  # these are for example use *only*:
+  #FWL_EXAMPLE: !include _fwl_2dtable.yml
+  #FWL_BETTER_EXAMPLE: !include _fwl_dict.yml
+
+  #------------------------------------------------------------------------------
+  # Trend contour alternatives
+  # For all zones it is possible to run a simple uncertainty on input isochore
+  # trends, doing interpolation in 2 alterantive variants. The weight here is
+  # between 0 and 1 and is weight on alternative1, i.e.
+  # result = weight * alt1 + (1 - weight) * alt2
+  #------------------------------------------------------------------------------
+
+  ISOTREND_ALT1W_VALYSAR: 0.9   ~ <>
+  ISOTREND_ALT1W_THERYS: 0.9    ~ <>
+  ISOTREND_ALT1W_VOLON: 0.5     ~ <>
+
+
+  #------------------------------------------------------------------------------
+  # Facies
+  #------------------------------------------------------------------------------
+
+  # Facies codes with names
+  FACIES: &facies_code_names
+    0: Floodplain
+    1: Channel
+    2: Crevasse
+    5: Coal
+    6: Calcite
+    10: Offshore
+    11: Lowershoreface
+    12: Uppershoreface
+
+  # Facies per zone
+  FACIES_ZONE:
+    Valysar:
+      0: Floodplain
+      1: Channel
+      2: Crevasse
+      5: Coal
+    Therys:
+      6: Calcite
+      10: Offshore
+      11: Lowershoreface
+      12: Uppershoreface
+    Volon:
+      0: Floodplain
+      1: Channel
+      6: Calcite
+
+
+  #------------------------------------------------------------------------------
+  # Facies settings
+  # Only used when FACIESMODEL_ALTERNATIVE = 0
+  #------------------------------------------------------------------------------
+
+  # Therys facies job alternatives - alt1=Indicators, alt2=Belts
+  # used in "switches_for_facies.py" (workflow: facies_basic)
+  FACIES_THERYS_ALT2: 1 ~ <>  # 0: alt1=Indicators, 1: alt2=Belts
+
+  # Channels in Valysar
+  # used in "modify_job_facies_valysar_*.py" (workflow: facies_basic)
+  VALYSAR_CHANNEL_AZIMUTH: 70.0   ~<VALYSAR_CHANNEL_AZIMUTH>
+  VALYSAR_CHANNEL_WIDTH: 700.0   ~<VALYSAR_CHANNEL_WIDTH>
+  VALYSAR_CHANNEL_VOLFRAC: 0.6   ~<VALYSAR_CHANNEL_VOLFRAC>
+
+  # Floodplain in Volon
+  # used in "modify_job_facies_volon.py" (workflow: facies_basic)
+  VOLON_FLOODPLAIN_AZIMUTH: 0.0   ~<VOLON_FLOODPLAIN_AZIMUTH>
+  VOLON_FLOODPLAIN_VARIOGRAM_RANGE_PARALLEL: 800.0   ~<VOLON_FLOODPLAIN_VARIOGRAM_RANGE_PARALLEL>
+  VOLON_FLOODPLAIN_VARIOGRAM_RANGE_NORMAL: 200.0   ~<VOLON_FLOODPLAIN_VARIOGRAM_RANGE_NORMAL>
+  VOLON_FLOODPLAIN_VOLFRAC: 0.3   ~<VOLON_FLOODPLAIN_VOLFRAC>
+
+
+  #------------------------------------------------------------------------------
+  # Simple property model - constant values per facies for each zone (subgrid)
+  # Only used when PETROMODEL_ALTERNATIVE = 0
+  #------------------------------------------------------------------------------
+
+  # used in
+  #   1) "props_const_per_facies_valysar.py", etc (workflow: "facies_props_simple")
+  CONST_PROPS:
+    Valysar:
+      PORO:
+        Floodplain: 0.1
+        Channel: 0.27     ~ <VALYSAR_PORO_CHANNEL>
+        Crevasse: 0.22    ~ <VALYSAR_PORO_CREVASSE>
+        Coal: 0.0
+      PERMH:
+        Floodplain: 1.0
+        Channel: 1000.0   ~ <VALYSAR_PERMH_CHANNEL>
+        Crevasse: 100.0   ~ <VALYSAR_PERMH_CREVASSE>
+        Coal: 0.0
+    Therys:
+      PORO:
+        Offshore: 0.1
+        Lowershoreface: 0.23     ~ <THERYS_PORO_LS>
+        Uppershoreface: 0.31     ~ <THERYS_PORO_US>
+        Calcite: 0.0
+      PERMH:
+        Offshore: 2.0
+        Lowershoreface: 40.0     ~ <THERYS_PERMH_LS>
+        Uppershoreface: 1200.0   ~ <THERYS_PERMH_US>
+        Calcite: 0.0
+    Volon:
+      PORO:
+        Floodplain: 0.13
+        Channel: 0.20     ~ <VOLON_PORO_CHANNEL>
+        Calcite: 0.0
+      PERMH:
+        Floodplain: 1.0
+        Channel: 1100.0   ~ <VOLON_PERMH_CHANNEL>
+        Calcite: 0.0
+
+  #------------------------------------------------------------------------------
+  # KvKh per facies code
+  #------------------------------------------------------------------------------
+
+  # used in
+  #   1) create_kv.py (workflow: props_resample_etc)
+  KVKH:
+    0: 0.1
+    1: 0.6     ~ <KVKH_CHANNEL>
+    2: 0.3     ~ <KVKH_CREVASSE>
+    5: 0.1
+    6: 0.1
+    10: 0.5
+    11: 0.7    ~ <KVKH_LS>
+    12: 0.6    ~ <KVKH_US>
+
+  #-----------------------------------------
+  # geo water saturation model, j-function a, b and swirr values
+  #-----------------------------------------
+
+  # used in
+  #   1) swinit_oil (workflow: make_sw)
+  #   2) swinit_gas (workflow: make_sw)
+
+  # WARNING: current RMS set-up does not read these values ; manually entered in jobs
+
+  # JFUNC settings per facies. NB Facies names must be exact same as in FACIES
+  JFUNCTIONS:
+    Floodplain:
+      AOIL: &aoilfl 30.0 #~ <AOIL_FLOODPLAIN>
+      BOIL: &boilfl -6.0 #~ <BOIL_FLOODPLAIN>
+      SWIRROIL: &swirroilfl 0.2 #~ <SWIRROIL_FLOODPLAIN>
+      AGAS: &agasfl 20.0 #~ <AGAS_FLOODPLAIN>
+      BGAS: &bgasfl -6.0 #~ <BGAS_FLOODPLAIN>
+      SWIRRGAS: &swirrgasfl 0.0 #~ <SWIRRGAS_FLOODPLAIN>
+
+    Channel:
+      AOIL: &aoilch 4.5 #~ <AOIL_CHANNEL>
+      BOIL: &boilch -2.2 #~ <BOIL_CHANNEL>
+      SWIRROIL: &swirroilch 0.0 #~ <SWIRROIL_CHANNEL>
+      AGAS: &agasch 3.8 #~ <AGAS_CHANNEL>
+      BGAS: &bgasch -1.9 #~ <BGAS_CHANNEL>
+      SWIRRGAS: &swirrgasch 0.0 #~ <SWIRRGAS_CHANNEL>
+
+    Crevasse:
+      AOIL: &aoilcr 6.5 #~ <AOIL_CREVASSE>
+      BOIL: &boilcr -3.3 #~ <BOIL_CREVASSE>
+      SWIRROIL: &swirroilcr 0.0 #~ <SWIRROIL_CREVASSE>
+      AGAS: &agascr 7.5 #~ <AGAS_CREVASSE>
+      BGAS: &bgascr -2.6 #~ <BGAS_CREVASSE>
+      SWIRRGAS: &swirrgascr 0.0 #~ <SWIRRGAS_CREVASSE>
+
+    Coal:
+      AOIL: &aoilnr 100
+      BOIL: &boilnr -20
+      SWIRROIL: &swirroilnr 1.0
+      AGAS: &agasnr 100
+      BGAS: &bgasnr -20
+      SWIRRGAS: &swirrgasnr 1.0
+
+    Calcite:
+      AOIL: *aoilnr
+      BOIL: *boilnr
+      SWIRROIL: *swirroilnr
+      AGAS: *agasnr
+      BGAS: *bgasnr
+      SWIRRGAS: *swirrgasnr
+
+    Offshore:
+      AOIL: &aoilof 25.0 #~ <AOIL_OFFSHORE>
+      BOIL: &boilof -6.0 #~ <BOIL_OFFSHORE>
+      SWIRROIL: &swirroilof 0.2 #~ <SWIRROIL_OFFSHORE>
+      AGAS: &agasof 8.0 #~ <AGAS_OFFSHORE>
+      BGAS: &bgasof -7.0 #~ <BGAS_OFFSHORE>
+      SWIRRGAS: &swirrgasof 0.2 #~ <SWIRRGAS_OFFSHORE>
+
+    Uppershoreface:
+      AOIL: &aoilus 4.5 #~ <AOIL_USHOREFACE>
+      BOIL: &boilus -2.2 #~ <BOIL_USHOREFACE>
+      SWIRROIL: &swirroilus 0.0 #~ <SWIRROIL_USHOREFACE>
+      AGAS: &agasus 3.8 #~ <AGAS_USHOREFACE>
+      BGAS: &bgasus -1.9 #~ <BGAS_USHOREFACE>
+      SWIRRGAS: &swirrgasus 0.0 #~ <SWIRRGAS_USHOREFACE>
+
+    Lowershoreface:
+      AOIL: &aoills 6.5 #~ <AOIL_LSHOREFACE>
+      BOIL: &boills -3.3 #~ <BOIL_LSHOREFACE>
+      SWIRROIL: &swirroills 0.1 #~ <SWIRROIL_LSHOREFACE>
+      AGAS: &agasls 5.8 #~ <AGAS_LSHOREFACE>
+      BGAS: &bgasls -2.6 #~ <BGAS_LSHOREFACE>
+      SWIRRGAS: &swirrgasls 0.1 #~ <SWIRRGAS_LSHOREFACE>
+
+ #------------------------------------------------------------------------------
+ # Input for APS jobs
+ #------------------------------------------------------------------------------
+  APS:
+    VALYSAR:
+        APS_1_0_GF_GRF1_RESIDUAL_MAINRANGE:    2000.0 ~ <VALYSAR_APS_1_0_GF_GRF1_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF1_RESIDUAL_PERPRANGE:     400.0 ~ <VALYSAR_APS_1_0_GF_GRF1_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF1_RESIDUAL_VERTRANGE:       5.0 ~ <VALYSAR_APS_1_0_GF_GRF1_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF1_RESIDUAL_AZIMUTHANGLE:   70.0 ~ <VALYSAR_APS_1_0_GF_GRF1_RESIDUAL_AZIMUTHANGLE>
+        APS_1_0_GF_GRF2_RESIDUAL_MAINRANGE:    1000.0 ~ <VALYSAR_APS_1_0_GF_GRF2_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_PERPRANGE:    1000.0 ~ <VALYSAR_APS_1_0_GF_GRF2_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_VERTRANGE:       5.0 ~ <VALYSAR_APS_1_0_GF_GRF2_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_AZIMUTHANGLE:   70.0 ~ <VALYSAR_APS_1_0_GF_GRF2_RESIDUAL_AZIMUTHANGLE>
+        APS_1_0_GF_GRF3_RESIDUAL_MAINRANGE:    1000.0 ~ <VALYSAR_APS_1_0_GF_GRF3_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_PERPRANGE:    1000.0 ~ <VALYSAR_APS_1_0_GF_GRF3_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_VERTRANGE:       5.0 ~ <VALYSAR_APS_1_0_GF_GRF3_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_AZIMUTHANGLE:    0.0 ~ <VALYSAR_APS_1_0_GF_GRF3_RESIDUAL_AZIMUTHANGLE>
+
+    THERYS:
+        APS_1_0_GF_GRF1_RESIDUAL_MAINRANGE:    1000.0 ~ <THERYS_APS_1_0_GF_GRF1_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF1_RESIDUAL_PERPRANGE:    6000.0 ~ <THERYS_APS_1_0_GF_GRF1_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF1_RESIDUAL_VERTRANGE:       5.0 ~ <THERYS_APS_1_0_GF_GRF1_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF1_TREND_AZIMUTH:          300.0 ~ <THERYS_APS_1_0_GF_GRF1_TREND_AZIMUTH>
+        APS_1_0_GF_GRF1_TREND_STACKANGLE:       0.015 ~ <THERYS_APS_1_0_GF_GRF1_TREND_STACKANGLE>
+        APS_1_0_GF_GRF2_RESIDUAL_MAINRANGE:    6000.0 ~ <THERYS_APS_1_0_GF_GRF2_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_PERPRANGE:    1000.0 ~ <THERYS_APS_1_0_GF_GRF2_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_VERTRANGE:       5.0 ~ <THERYS_APS_1_0_GF_GRF2_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_AZIMUTHANGLE:   10.0 ~ <THERYS_APS_1_0_GF_GRF2_RESIDUAL_AZIMUTHANGLE>
+        APS_1_0_GF_GRF3_RESIDUAL_MAINRANGE:    1500.0 ~ <THERYS_APS_1_0_GF_GRF3_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_PERPRANGE:    1500.0 ~ <THERYS_APS_1_0_GF_GRF3_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_VERTRANGE:       1.0 ~ <THERYS_APS_1_0_GF_GRF3_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_AZIMUTHANGLE:   10.0 ~ <THERYS_APS_1_0_GF_GRF3_RESIDUAL_AZIMUTHANGLE>
+
+    VOLON:
+        APS_1_0_GF_GRF1_RESIDUAL_MAINRANGE:     900.0 ~ <VOLON_APS_1_0_GF_GRF1_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF1_RESIDUAL_PERPRANGE:     200.0 ~ <VOLON_APS_1_0_GF_GRF1_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF1_RESIDUAL_VERTRANGE:       5.0 ~ <VOLON_APS_1_0_GF_GRF1_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF1_RESIDUAL_AZIMUTHANGLE:    5.0 ~ <VOLON_APS_1_0_GF_GRF1_RESIDUAL_AZIMUTHANGLE>
+        APS_1_0_GF_GRF2_RESIDUAL_MAINRANGE:    1000.0 ~ <VOLON_APS_1_0_GF_GRF2_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_PERPRANGE:    1000.0 ~ <VOLON_APS_1_0_GF_GRF2_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_VERTRANGE:       5.0 ~ <VOLON_APS_1_0_GF_GRF2_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF2_RESIDUAL_AZIMUTHANGLE:    0.0 ~ <VOLON_APS_1_0_GF_GRF2_RESIDUAL_AZIMUTHANGLE>
+        APS_1_0_GF_GRF3_RESIDUAL_MAINRANGE:     800.0 ~ <VOLON_APS_1_0_GF_GRF3_RESIDUAL_MAINRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_PERPRANGE:     800.0 ~ <VOLON_APS_1_0_GF_GRF3_RESIDUAL_PERPRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_VERTRANGE:       1.0 ~ <VOLON_APS_1_0_GF_GRF3_RESIDUAL_VERTRANGE>
+        APS_1_0_GF_GRF3_RESIDUAL_AZIMUTHANGLE:    0.0 ~ <VOLON_APS_1_0_GF_GRF3_RESIDUAL_AZIMUTHANGLE>
+
+
+    # Facies fractions per zone
+    # The fraction for the facies tagged with "bg" will be calculated as 1-"sum of the other facies fractions"
+    FACIES_PROBABILITIES:
+      Valysar:
+        Floodplain: bg # background facies - default 0.43
+        Channel: 0.34 ~ <VALYSAR_APS_PROB_CHANNEL>
+        Crevasse: 0.13
+        Coal: 0.10
+      Therys:
+        Calcite: 0.10
+        Offshore: bg # background facies - default 0.40
+        Lowershoreface: 0.30 ~ <THERYS_APS_PROB_LOWSHOREFACE>
+        Uppershoreface: 0.20 ~ <THERYS_APS_PROB_UPSHOREFACE>
+      Volon:
+        Floodplain: bg # background facies - default 0.30
+        Channel: 0.62 ~ <VOLON_APS_PROB_CHANNEL>
+        Calcite: 0.08
+
+
+  #------------------------------------------------------------------------------
+  # Satnum parameter related
+  #------------------------------------------------------------------------------
+
+  # creating satnum for eclipse involves 3 main steps:
+  #   1) create satnum parameter on geogrid
+  #   2) upscale satnum to simgrid
+  #   3) refine satnum by splitting it vertically based on sw value
+  #      --> referenced as "upper" and "lower"
+
+  # Satnum number and corresponding facies name
+  # used to create satnum parameter on geogrid (rms: satnum_geo.py)
+  # [define as dict where key=satnum_number and value=facies_name(s)]
+  SATNUM_FACIES_MAPPING:
+    0: Coal, Calcite
+    1: Channel
+    2: Crevasse
+    3: Uppershoreface
+    4: Lowershoreface
+    5: Offshore
+    6: Floodplain
+
+  # upscaled satnum will be split in 2 vertically (rms: satnum_sim.py)
+  # Satnum split criteria is given as sw fraction
+  # [define as dict where key = satnum number and value = sw split value]
+  SATNUM_SPLIT_SW:
+    1: 0.3 # Channel
+    2: 0.3 # Crevasse
+    3: 0.3 # Uppershoreface
+    4: 0.3 # Lowershoreface
+    5: 0.3 # Offshore
+    6: 0.3 # Floodplain
+
+  # resulting satnum values:
+  # Channel:        upper = 1, lower = 7
+  # Crevasse:       upper = 2, lower = 8
+  # Uppershoreface: upper = 3, lower = 9
+  # Lowershoreface: upper = 4, lower = 10
+  # Offshore:       upper = 5, lower = 11
+  # Floodplain:     upper = 6, lower = 12
+  # Coal&Calcite (non-reservoir): set to satnum=0 and inactivate
+
+  #------------------------------------------------------------------------------
+  # Eclipse relperm and pc related
+  #  --> used by rms:prepare_pyscal_input.py
+  #------------------------------------------------------------------------------
+
+  # satnum comments
+  SATNUM_COMMENT:
+    0: "CalciteCoal"
+    1: "Channel_upper"
+    2: "Crevasse_upper"
+    3: "Uppershoreface_upper"
+    4: "Lowershoreface_upper"
+    5: "Offshore_upper"
+    6: "Floodplain_upper"
+    7: "Channel_lower"
+    8: "Crevasse_lower"
+    9: "Uppershoreface_lower"
+    10: "Lowershoreface_lower"
+    11: "Offshore_lower"
+    12: "Floodplain_lower"
+
+  # reference perm used in pc calc, one value per satnum
+  PERMREF:
+    1: &permrefch 1050.0   ~ <PERMREF_CHANNEL>
+    2: &permrefcr 100.0    ~ <PERMREF_CREAVASSE>
+    3: &permrefus 1200.0   ~ <PERMREF_USHOREFACE>
+    4: &permrefls 40.0     ~ <PERMREF_LSHOREFACE>
+    5: &permrefof 2.0      ~ <PERMREF_OFFSHORE>
+    6: &permreffl 1.0      ~ <PERMREF_FLOODPLAIN>
+    7: *permrefch
+    8: *permrefcr
+    9: *permrefus
+    10: *permrefls
+    11: *permrefof
+    12: *permreffl
+
+  # reference poro used in pc calc, one value per satnum
+  POROREF:
+    1: &pororefch 0.24     ~ <POROREF_CHANNEL>
+    2: &pororefcr 0.22     ~ <POROREF_CREAVASSE>
+    3: &pororefus 0.31     ~ <POROREF_USHOREFACE>
+    4: &pororefls 0.23     ~ <POROREF_LSHOREFACE>
+    5: &pororefof 0.10     ~ <POROREF_OFFSHORE>
+    6: &pororeffl 0.13     ~ <POROREF_FLOODPLAIN>
+    7: *pororefch
+    8: *pororefcr
+    9: *pororefus
+    10: *pororefls
+    11: *pororefof
+    12: *pororeffl
+
+  # a values in rms simplified J (use same values as input to geo sw)
+  AVALUE:
+    1: *aoilch
+    2: *aoilcr
+    3: *aoilus
+    4: *aoills
+    5: *aoilof
+    6: *aoilfl
+    7: *aoilch
+    8: *aoilcr
+    9: *aoilus
+    10: *aoills
+    11: *aoilof
+    12: *aoilfl
+
+  # b values in rms simplified J (use same values as input to geo sw)
+  BVALUE:
+    1: *boilch
+    2: *boilcr
+    3: *boilus
+    4: *boills
+    5: *boilof
+    6: *boilfl
+    7: *boilch
+    8: *boilcr
+    9: *boilus
+    10: *boills
+    11: *boilof
+    12: *boilfl
+
+  # swirr used in simplified J equation (use same values as input to geo sw)
+  # (asymptotic value; higher values  will shift curves towards higher sw)
+  SWIRR:
+    1: *swirroilch
+    2: *swirroilcr
+    3: *swirroilus
+    4: *swirroills
+    5: *swirroilof
+    6: *swirroilfl
+    7: *swirroilch
+    8: *swirroilcr
+    9: *swirroilus
+    10: *swirroills
+    11: *swirroilof
+    12: *swirroilfl
+
+  # Used for EQUIL and PEM workflows
+  REF_DEPTH: 1750
+  REF_PRESSURE: 310.0
+
+  # Densities at res cond (rough "average" estimate)
+  # Used in RMS:
+  #  - J to Pcow conversion (prepare_pyscal_input.py)
+  #  - Compute initial pressure (compute_initial_pressure_etc_for_pem.py)
+  #  - FWL_WG (make_contacts.py)
+
+  DENSITY:
+    OIL:
+      1: 0.68
+      2: 0.68
+      3: 0.68
+      4: 0.68
+      5: 0.68
+      6: 0.68
+      7: 0.68
+      8: 0.68
+      9: 0.68
+      10: 0.68
+      11: 0.68
+      12: 0.68
+
+    WATER:
+      1: 0.97
+      2: 0.97
+      3: 0.97
+      4: 0.97
+      5: 0.97
+      6: 0.97
+      7: 0.97
+      8: 0.97
+      9: 0.97
+      10: 0.97
+      11: 0.97
+      12: 0.97
+
+    GAS:
+      1: 0.267
+      2: 0.267
+      3: 0.267
+      4: 0.267
+      5: 0.267
+      6: 0.267
+      7: 0.267
+      8: 0.267
+      9: 0.267
+      10: 0.267
+      11: 0.267
+      12: 0.267
+
+  # for computing swl (swl = sw at swlheight).
+  # if gas cap is present, increase height to "compensate" for Pcow vs Pcgw difference
+  SWLHEIGHT: 350.0   ~ <SWLHEIGHT>
+
+  #---------------------------------
+  # LET relperm exponents and endpoints
+  #---------------------------------
+
+  RELPERM_BASE: !include _relperm_base.yml
+  RELPERM_HIGH: !include _relperm_high.yml
+  RELPERM_LOW: !include _relperm_low.yml
+
+  # relperm interpolation value
+  RELPERM_INT_WO: 0.0   ~<RELPERM_INT_WO>
+  RELPERM_INT_GO: 0.0   ~<RELPERM_INT_GO>
+
+
+  #---------------------------------
+  # Fault seal
+  #---------------------------------
+
+  # Curve scaling factor for faultzone perm vs SGR
+  FAULT_SEAL_SCALING: 1.0   ~<FAULT_SEAL_SCALING>
+
+
+  #---------------------------------
+  # PEM related
+  #---------------------------------
+
+  VPCARB: 4472
+  VSCARB: 2766
+  DENSCARB: 2710
+
+  VPCOAL: 2160
+  VSCOAL: 870
+  DENSCOAL: 1750
+
+
+#=======================================================================================
+# RMS IPL section
+# The "rms" in fmuconfig is magic in the sense that special processing is done e.g. to
+# convert YAML to RMS IPL when we have a mix of IPL and Python.
+#
+# Since there are no IPL's in Drogon, this section is small. Instead collect the RMS
+# under "global" (or "rms2") which is more general YAML that can be parsed
+# directly in Python. But "rms" used for special categories as listed below.
+#=======================================================================================
+rms:
+  horizons: !include _rms_horizons.yml
+  zones: !include _rms_zones.yml
+
+
+#========================================================================================
+# The model, masterdata and visuals sections, to be used for SUMO metadata.
+#========================================================================================
+
+model:
+  name: ff
+  revision: undefined
+
+masterdata: !include _masterdata.yml
+access: !include _access.yml
+stratigraphy: !include _stratigraphy.yml
