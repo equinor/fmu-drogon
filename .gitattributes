@@ -1,3 +1,5 @@
 rms/model/drogon.tar.gz filter=lfs diff=lfs merge=lfs -text
 sim2seis/bin/impedance filter=lfs diff=lfs merge=lfs -text
 sim2seis/bin/timeshift filter=lfs diff=lfs merge=lfs -text
+share/external/*.tar.gz filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
