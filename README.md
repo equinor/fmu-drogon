@@ -9,7 +9,7 @@ Files and folders for Drogon FMU.
 
 This GitHub version is a minimized version that requires a restoring workflow to be run
 after a git clone (Equinor). As an alternative for externals, one can use a bundle that
-includes a restored state of Drogon (soon to come).
+includes a restored state of Drogon, located in share/external folder.
 
 As the RMS project is stored as a large binary file we may need to restrict how often we
 push it, as the full size of it will stack up each time. This has the downside that the
