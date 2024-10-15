@@ -8,6 +8,10 @@
 
 set -e
 
+if [ -z "${ECLRUNPATH}" ]; then
+    echo "For Equinor: Need to set ECLRUNPATH env variable. Contact FMU Targa team for details"
+    echo "STOP!"
+    exit 1
 VERSION="14.2.2"
 
 CURRENT="drogon.rms$VERSION"
@@ -85,7 +89,7 @@ if [ -d "$GENERIC" ]; then
     echo
 
     sleep 3
-    source /prog/res/ecl/script/eclrun.bash #!/bin/sh -> /bin/bash
+    source $ECLRUNPATH/eclrun.bash #!/bin/sh -> /bin/bash
     runrms --version $VERSION  $GENERIC --batch $GIT_WF_RMS > $RESTORELOG 2>&1
     echo "RMS restore is now finished!"
 else
