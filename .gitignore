@@ -22,6 +22,8 @@ drogon*backup*
 *.UNRST
 *.SMSPEC
 *.UNSMRY
+*.INSPEC
+*.RSSPEC
 /eclipse/model/ECL.CFE
 /eclipse/include_pred/schedule/drogon_pred.sch
 /eclipse/include/edit/*.trans
