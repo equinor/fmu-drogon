@@ -1,0 +1,33 @@
+name: test
+
+on:
+ push:
+   branches:
+     - main
+   tags: "*"
+ pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.8', '3.11' ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install test-requirements
+        run: |
+          pip install -r test-requirements.txt
+
+      - name: Run unit tests
+        run: |
+            pytest ert/bin/scripts/fm_lgr.py ert/bin/scripts/fm_tracer_breakthrough.py # currently the only scripts with unit tests
