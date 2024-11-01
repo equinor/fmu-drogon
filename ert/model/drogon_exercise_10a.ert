@@ -19,7 +19,7 @@
 DEFINE <USER>              $USER
 DEFINE <SCRATCH>           /scratch/fmu
 DEFINE <CASE_DIR>          drogon_exercise_10a
-DEFINE <ECLIPSE_NAME>      DROGON_EXERCISE_10A
+DEFINE <ECLIPSE_NAME>      DROGON
 --
 DEFINE <RMS_NAME>          drogon.rms14.2.2
 DEFINE <RMS_VERSION>       14.2.2
