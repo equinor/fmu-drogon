@@ -1,4 +1,4 @@
-RMSEVENTS RMS13
+RMSEVENTS RMS14
 
 UNITSET 'Metric'
 
@@ -110,39 +110,24 @@ END
 ## Production and injection constraints
 ######################################################
 
-# add bhp lower limit for producers
+# add bhp lower limit for producers (requires RMS version 14.2.2 or newer)
 
-# currently an issue with WLIMPRES, it removes the WCONHIST at same date, USER event as a temporary fix
-#'55_33-A-1'
-#05.01.2018 WLIMPRES   TYPEW='Production' MAX=True       ACTION='Target' BHP=50         ON=True
+'55_33-A-1'
+05.01.2018 WLIMPRES   TYPEW='Production'    ACTION='Target' BHP=50         ON=True
 
-#'55_33-A-2'
-#10.03.2018 WLIMPRES   TYPEW='Production' MAX=True       ACTION='Target' BHP=50         ON=True
+'55_33-A-2'
+10.03.2018 WLIMPRES   TYPEW='Production'    ACTION='Target' BHP=50         ON=True
 
-#'55_33-A-3'
-#13.07.2018 WLIMPRES   TYPEW='Production' MAX=True       ACTION='Target' BHP=50         ON=True
+'55_33-A-3'
+13.07.2018 WLIMPRES   TYPEW='Production'    ACTION='Target' BHP=50         ON=True
 
-#'55_33-A-4'
-#22.09.2018 WLIMPRES   TYPEW='Production' MAX=True       ACTION='Target' BHP=50         ON=True
+'55_33-A-4'
+22.09.2018 WLIMPRES   TYPEW='Production'    ACTION='Target' BHP=50         ON=True
 
-'Simulator'
-05.01.2018       USER       TEXT="WELTARG
- 'A1'  BHP  50 /
-/"    LOC='After'    KEYWORD='WCONHIST'    ORDER=1
 
-10.03.2018       USER       TEXT="WELTARG
- 'A2'  BHP  50 /
-/"    LOC='After'    KEYWORD='WCONHIST'    ORDER=1
-
-13.07.2018       USER       TEXT="WELTARG
- 'A3'  BHP  50 /
-/"    LOC='After'    KEYWORD='WCONHIST'    ORDER=1
-
-22.09.2018       USER       TEXT="WELTARG
- 'A4'  BHP  50 /
-/"    LOC='After'    KEYWORD='WCONHIST'    ORDER=1
 
 # Set VFP table numbers
+
 '55_33-A-1'
 05.01.2018 WLIFTTABLE   TABLEID='1'   ON=True
 
