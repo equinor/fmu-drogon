@@ -500,8 +500,8 @@ def run(file_well, file_eclipse, file_runspec, file_grid, file_sch, size, file_d
     df_compdat = create_compdat_dataframe(f)
     f.close()
 
-    add_num_lgr(df_compdat)
-    lgr = remove_same_layer_completions(df_compdat)
+    lgr = add_num_lgr(df_compdat)
+    remove_same_layer_completions(df_compdat)
     change_layers_to_int(df_compdat)
 
     # -------------------------------------------------
