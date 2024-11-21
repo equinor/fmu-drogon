@@ -76,11 +76,9 @@ pages:
             - iter-1
             - iter-2
             - iter-3
-          rel_file_pattern: share/results/tables/ecl_summary/*.arrow
+          response_file: share/results/tables/ecl_summary/DROGON_DST.csv
           response_filters:
             DATE: single
-          response_include:
-            - WBHP:55_33-1
 
   - title: "Correlation between pressure derivative and uncertainty parameters"
     content:
