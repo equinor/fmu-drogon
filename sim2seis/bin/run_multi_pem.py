@@ -1,16 +1,11 @@
-#! /usr/bin/env python3
+#! /usr/bin/env python
 """
 This script executes Petro-Elastic Modelling using the petro_elastic library
-available on{
-        "parameter": "Zone",
-        "values": "3",
-        "PEM config": "../../sim2seis/model/pem/pem_config_hdn_aare5_3_4_2.yml",
-    },
- Komodo.
+available on Komodo.
 
 Author: Jimmy Zurcher (jiz@equinor.com), November 2020
 Updated April 2021 to use several PEM config depending a discrete parameter.
-Vegard Berg 28.02.2022 - for use in Heidrun N segment - multi PEM use
+Vegard Berg 28.02.2022 - multi PEM use
 """
 import os
 import pandas as pd
