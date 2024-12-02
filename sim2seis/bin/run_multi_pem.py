@@ -234,7 +234,7 @@ def run_multi_config_pem(
         )
         # Add PEM results to the inputs and merge it with "results"
         subset_results = pd.concat([subset_data, res], axis=1)
-        results = results.append(subset_results)
+        results = pd.concat([results,subset_results])
 
         # Delete csv file for subset data
         os.remove(subset_data_file)
