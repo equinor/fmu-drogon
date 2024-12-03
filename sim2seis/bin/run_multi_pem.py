@@ -4,6 +4,7 @@ This script executes Petro-Elastic Modelling using the petro_elastic library
 available on Komodo
 
 Author: Jimmy Zurcher (jiz@equinor.com), November 2020
+Updated 2024 to reduce runtime.
 """
 import time
 from os import getenv, remove
