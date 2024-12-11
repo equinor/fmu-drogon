@@ -49,12 +49,12 @@ PEM_CONFIG_FILES = [
     {
         "parameter": "Zone",
         "values": "1,3",
-        "PEM_config": "../../sim2seis/model/pem/pem_config_valysar_volon.yml",
+        "pem_config": "../../sim2seis/model/pem/pem_config_valysar_volon.yml",
     },
     {
         "parameter": "Zone",
         "values": "2",
-        "PEM_config": "../../sim2seis/model/pem/pem_config_therys.yml",
+        "pem_config": "../../sim2seis/model/pem/pem_config_therys.yml",
     },
 ]
 RUN_ID = ""
@@ -127,7 +127,7 @@ def run_pem(pem_configs):
         # Loop through different PEM configs for different zones
         for i, subset in enumerate(pem_configs):
 
-            print(f">> Subset {i+1}/{n_subsets}: {subset['PEM_config']}...")
+            print(f">> Subset {i+1}/{n_subsets}: {subset['pem_config']}...")
 
             # Make subset of the input
             subset_data = make_sub_dataframe(df_date, subset, i)
@@ -135,7 +135,7 @@ def run_pem(pem_configs):
             subset_data.to_csv(subset_data_file)
 
             # Define inputs
-            config_file=subset["PEM_config"]
+            config_file=subset["pem_config"]
             with open(config_file, "r") as f:
                 pem_input = make_input(f, subset_data_file)
 
