@@ -37,9 +37,6 @@ DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_rft_wct_gor_tracer_plt
 OBS_CONFIG  <OBS_FILE>
 
 
--- preprocess correlated seismic observations in ahm update step
-ANALYSIS_SET_VAR OBSERVATIONS AUTO_SCALE AMP*
-
 
 -----------------------------------------------------
 -- Runpath folder

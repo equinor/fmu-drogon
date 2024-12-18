@@ -91,9 +91,10 @@ HOOK_WORKFLOW   run_fmuconfig_pred  PRE_SIMULATION  -- create global_variables_p
 -- Forward Models
 -----------------------------------------------------
 
--- fmuconfig - copy global_variables_pred.yml file
+-- fmuconfig - hist and pred - copy global_variables_pred.yml file, symlink global_variables.yml file
 FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/fmuconfig/output)
 FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../fmuconfig/output/global_variables_pred.yml, <TO>=<RUNPATH>/fmuconfig/output/global_variables_pred.yml)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../<RESTART_DIR>/fmuconfig/output/global_variables.yml, <LINKNAME>=<RUNPATH>/fmuconfig/output/global_variables.yml)
 
 -- Make symbolic link to eclipse restart case
 FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../<RESTART_DIR>/eclipse/include, <LINKNAME>=<RUNPATH>/eclipse/include)
