@@ -22,29 +22,37 @@ Alternative cases with active "switches", used for analysis in courses
 -----------------
 
 FACIES_VALYSAR_SEISCOND: 0 ~ <>  # if 0 don't condition on seismic:
-    Included in exercise in course ""Seismic conditioning of geomodels""
+    Included in exercise in course "Seismic conditioning of geomodels"
     02_drogon_ahm.ert  		    APS without seismic prob
     02_drogon_pred_ref.ert          as above, with prediction ref case
     02_drogon_pred_op5.ert	    prediction incl op5
     localization is included, cutofff 0.3
 
 FACIESMODEL_ALTERNATIVE: 0
-    Included in exercise in "FMUC"APS course""
+    Included in exercise in "FMU APS course"
     03_drogon_ahm.ert  		    Run with facies basics
     03_drogon_pred_ref.ert          as above, with prediction ref case
     03_drogon_pred_op5.ert          prediction incl op5
     localization is included, cutofff 0.3
     
 Use alternative observation file:
-    Not included in any exercises yet
+    Included in exercise in Localization part of "AHM course"
     04_drogon_ahm.ert               As 01, but 4D not used as observation
     04_drogon_pred_ref.ert          as above, with prediction ref case
     04_drogon_pred_op5.ert          prediction incl op5
     localization is included, cutofff 0.3
+
 -----------------
 Run without localization:
-    Not included in any exercises yet
+    Included in exercise in Localization part of "AHM course"
     05_drogon_ahm.ert               As 01, but without localization
     05_drogon_pred_ref.ert          as above, with prediction ref case
     05_drogon_pred_op5.ert          prediction incl op5
+    no localization
+
+Use alternative observation file:
+    Included in Localization part of AHM course
+    06_drogon_ahm.ert               As 01, but 4D not used as observation
+    06_drogon_pred_ref.ert          as above, with prediction ref case
+    06_drogon_pred_op5.ert          prediction incl op5
     no localization

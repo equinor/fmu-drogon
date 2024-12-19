@@ -9,10 +9,9 @@
 -----------------------------------------------------
 -- Internal variables
 -----------------------------------------------------
-
-DEFINE <USER>             $USER
+DEFINE <USER>             course
 DEFINE <SCRATCH>          /scratch/fmu
-DEFINE <CASE_DIR>         01_drogon_ahm
+DEFINE <CASE_DIR>         06_drogon_ahm
 DEFINE <ECLIPSE_NAME>     DROGON
 --
 DEFINE <PRED_DIR_NAME>    pred_ref     -- name of the prediction folder (runpath)

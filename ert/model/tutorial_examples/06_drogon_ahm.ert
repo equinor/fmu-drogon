@@ -17,9 +17,9 @@
 -- Internal variables
 -----------------------------------------------------
 
-DEFINE <USER>              $USER
+DEFINE <USER>              course
 DEFINE <SCRATCH>           /scratch/fmu
-DEFINE <CASE_DIR>          04_drogon_ahm
+DEFINE <CASE_DIR>          06_drogon_ahm
 DEFINE <ECLIPSE_NAME>      DROGON
 --
 DEFINE <RMS_NAME>          drogon.rms14.2.2
@@ -35,7 +35,6 @@ DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
 
 DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_rft_wct_gor_tracer_plt.obs
 OBS_CONFIG  <OBS_FILE>
-
 
 
 -----------------------------------------------------
