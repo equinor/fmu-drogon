@@ -156,8 +156,7 @@ FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CON
 
 FORWARD_MODEL ECLCOMPRESS  -- Compress eclipse include files
 
-FORWARD_MODEL OPM_FLOW  -- flowrc23
-
+FORWARD_MODEL FLOW(<VERSION>=rc23, <OPTS>="--solver-max-time-step-in-days=31.0")
 
 ----------------------------------------------------
 -- ERT plotting
