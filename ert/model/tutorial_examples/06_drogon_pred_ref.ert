@@ -9,7 +9,7 @@
 -----------------------------------------------------
 -- Internal variables
 -----------------------------------------------------
-DEFINE <USER>             course
+DEFINE <USER>             $USER
 DEFINE <SCRATCH>          /scratch/fmu
 DEFINE <CASE_DIR>         06_drogon_ahm
 DEFINE <ECLIPSE_NAME>     DROGON
