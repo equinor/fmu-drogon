@@ -108,7 +108,6 @@ INCLUDE  ../input/config/make_folders.ert  -- Make general folder structure
 ---- copy rms folders/files
 -----------------------------------------------------
 
-FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/bin,                  <TO>=<RUNPATH>/rms)
 FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/input/well_modelling, <TO>=<RUNPATH>/rms/input)
 
 

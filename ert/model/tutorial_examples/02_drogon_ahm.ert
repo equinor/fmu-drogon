@@ -114,7 +114,6 @@ INCLUDE  ../input/config/make_folders.ert  -- Make general folder structure
 ---- Copy rms folders/files
 -----------------------------------------------------
 
-FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/bin,                  <TO>=<RUNPATH>/rms)
 FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/input/well_modelling, <TO>=<RUNPATH>/rms/input)
 
 --Copy seed file to the rms/model folder --> forces rms to use seed values from the file (target file must be named "random.seeds")
