@@ -12,9 +12,6 @@ INSTALL_JOB  CREATEDATEFILES               ../../bin/jobs/FM_CREATEDATEFILES
 -- write simulated tracer break through times
 INSTALL_JOB  TRACER_BREAKTHROUGH           ../../bin/jobs/FM_TRACER_BREAKTHROUGH
 
--- OPM flow simulator
-INSTALL_JOB  OPM_FLOW                      ../../bin/jobs/FM_OPM_FLOW
-
 -- Make xsections of wells (png file)
 INSTALL_JOB  XSECT_WELLS                   ../../bin/jobs/FM_XSECT_WELLS
 
@@ -85,7 +82,7 @@ LOAD_WORKFLOW  ../../bin/workflows/wf_merge_pem_csv_predop5
 
 ------------------------------------------------------
 -- Create aggregated csv by merging parameters.txt files for all reals
--- here one file per iteration, but possible to include all in one file, see: 
+-- here one file per iteration, but possible to include all in one file, see:
 -- https://fmu-docs.equinor.com/docs/ert/reference/workflows/added_workflow_jobs.html#PARAMS2CSV
 LOAD_WORKFLOW     ../../bin/workflows/wf_aggregate_parameters_iter0
 LOAD_WORKFLOW     ../../bin/workflows/wf_aggregate_parameters_iter3
