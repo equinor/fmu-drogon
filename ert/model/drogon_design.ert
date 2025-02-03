@@ -130,7 +130,7 @@ FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../eclipse/include/schedule
 -- Design matrix uncertainty parameters
 -----------------------------------------------------
 
-FORWARD_MODEL DESIGN2PARAMS(<xls_filename>=<CONFIG_PATH>/<DESIGN_MATRIX>, <designsheet>=<DESIGN_SHEET>, <defaultssheet>=DefaultValues)
+DESIGN_MATRIX <CONFIG_PATH>/<DESIGN_MATRIX> DESIGN_SHEET:<DESIGN_SHEET> DEFAULT_SHEET:DefaultValues
 
 -----------------------------------------------------
 -- Populate template files with their uncertainty parameter values

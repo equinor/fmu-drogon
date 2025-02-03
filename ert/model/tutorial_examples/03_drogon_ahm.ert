@@ -148,7 +148,7 @@ GEN_KW  RATE      ../input/distributions/rate_scaling.dist
 -- Special case: get APS prior uncertainty variables from design matrix (instead of GEN_KW) and append to parameters.txt file
 DEFINE  <DESIGN_MATRIX>    ../input/distributions/design_matrix_ahm.xlsx
 DEFINE  <DESIGN_SHEET>     DesignSheet01
-FORWARD_MODEL  DESIGN2PARAMS(<xls_filename>=<CONFIG_PATH>/<DESIGN_MATRIX>, <designsheet>=<DESIGN_SHEET>, <defaultssheet>=DefaultValues)
+DESIGN_MATRIX <CONFIG_PATH>/<DESIGN_MATRIX> DESIGN_SHEET:<DESIGN_SHEET> DEFAULT_SHEET:DefaultValues
 
 ---- 2d parameters ----
 INCLUDE  ../input/config/ahm_surface.ert    -- update horizons
