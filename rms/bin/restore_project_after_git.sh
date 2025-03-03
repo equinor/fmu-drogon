@@ -85,7 +85,9 @@ if [ -d "$GENERIC" ]; then
     echo
 
     sleep 3
+    set +e  # eclrun.bash can trigger exit on string comparisons
     source /prog/res/ecl/script/eclrun.bash #!/bin/sh -> /bin/bash
+    set -e
     runrms --version $VERSION  $GENERIC --batch $GIT_WF_RMS > $RESTORELOG 2>&1
     echo "RMS restore is now finished!"
 else
