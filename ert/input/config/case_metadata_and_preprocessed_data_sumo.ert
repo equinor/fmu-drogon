@@ -30,3 +30,4 @@ FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/polygons/*.csv")
 FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/grids/*.roff")
 FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/observations/seismic/*.segy")
 FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/seismic/*.segy")
+FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/tables/volumes/*.parquet")  -- upload standard result: inplace_volumes
