@@ -1,3 +1,3 @@
-Run fmudesign command to create desig matrix
+Run fmudesign command to create design matrix
 
-    > fmudesign design_input_one_by_one.xlsx design_matrix_one_by_one.xlsx
+    > fmudesign  design_input_one_by_one.xlsx  design_matrix_one_by_one.xlsx
