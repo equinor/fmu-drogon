@@ -181,7 +181,7 @@ FORWARD_MODEL ECLCOMPRESS  -- Compress eclipse include files
 -- FORWARD_MODEL INSERT_NOSIM
 -- FORWARD_MODEL ECLIPSE100(<VERSION>=2022.2)
 
-FORWARD_MODEL FLOW(<VERSION>=rc23, <OPTS>="--solver-max-time-step-in-days=31.0")
+FORWARD_MODEL FLOW(<VERSION>=rc32, <OPTS>="--solver-max-time-step-in-days=31.0")
 
 -- make symlinks with generic name
 FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/<ECLBASE>.EGRID, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE.EGRID)
