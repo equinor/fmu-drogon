@@ -68,7 +68,7 @@ MIN_REALIZATIONS    1              -- Success criteria
 MAX_SUBMIT          1              -- How many times should the queue system retry a simulation.
 QUEUE_OPTION  LSF MAX_RUNNING 100  -- Choke the number of simultaneous run
 
-QUEUE_OPTION LSF LSF_QUEUE  mr8     -- Assign LSF cluster queue
+QUEUE_OPTION LSF LSF_QUEUE  mr     -- Assign LSF cluster queue
 -- QUEUE_SYSTEM LOCAL                 -- OR activate this to run simulations locally
 
 

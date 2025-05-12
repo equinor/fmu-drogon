@@ -77,7 +77,7 @@ MAX_RUNTIME             18000           -- Set the maximum allowed run time (in 
 MIN_REALIZATIONS        1               -- The minimum number of realizations that must have succeeded for the simulation to be regarded as a success
 MAX_SUBMIT              1               -- How many times should the queue system retry a simulation. Default = 2 (use 1 when debugging)
 QUEUE_OPTION       LSF MAX_RUNNING 100  -- Choke the number of simultaneous run
-QUEUE_OPTION       LSF LSF_QUEUE  mr8     -- Assign LSF cluster queue
+QUEUE_OPTION       LSF LSF_QUEUE  mr     -- Assign LSF cluster queue
 --
 --QUEUE_SYSTEM LOCAL               -- OR activate this to run simulations locally
 
