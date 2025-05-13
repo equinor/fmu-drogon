@@ -143,9 +143,8 @@ GEN_KW  MULTREGT  ../input/distributions/multregt.dist
 GEN_KW  RATE      ../input/distributions/rate_scaling.dist
 
 -- Special case: get APS prior uncertainty variables from design matrix (instead of GEN_KW) and append to parameters.txt file
-DEFINE  <DESIGN_MATRIX>    ../input/distributions/design_matrix_ahm.xlsx
-DEFINE  <DESIGN_SHEET>     DesignSheet01
-DESIGN_MATRIX <CONFIG_PATH>/<DESIGN_MATRIX> DESIGN_SHEET:<DESIGN_SHEET> DEFAULT_SHEET:DefaultValues
+DEFINE  <DESIGN_MATRIX>    <CONFIG_PATH>/../input/distributions/design_matrix_ahm.xlsx
+DESIGN_MATRIX  <DESIGN_MATRIX>  DESIGN_SHEET:DesignSheet01  DEFAULT_SHEET:DefaultValues
 
 
 ---- 2d parameters ----
