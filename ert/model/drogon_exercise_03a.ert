@@ -69,6 +69,7 @@ RANDOM_SEED  123456  -- ERT seed value
 -- LSF settings
 -----------------------------------------------------
 
+NUM_CPU             1
 NUM_REALIZATIONS    5              -- Set number of realizations to run
 MAX_RUNTIME         18000          -- Set the maximum allowed run time (in seconds)
 MIN_REALIZATIONS    1              -- Success criteria
