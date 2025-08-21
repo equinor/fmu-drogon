@@ -109,6 +109,7 @@ layout:
                     therys: TopTherys
                     valysar: TopVolantis
                     volon: TopVolon
+                    render_surfaces_as_images: false
                     
           #------
           - page: Volumetrics
