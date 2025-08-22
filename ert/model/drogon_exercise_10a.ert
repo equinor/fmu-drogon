@@ -160,6 +160,14 @@ FORWARD_MODEL ECLCOMPRESS  -- Compress eclipse include files
 
 FORWARD_MODEL FLOW(<VERSION>=rc32, <OPTS>="--solver-max-time-step-in-days=31.0")
 
+
+-----------------------------------------------------
+---- Export data for visualisation (webviz,RMS covisualization)
+---- Prepare model response data for use in AHM
+-----------------------------------------------------
+
+INCLUDE  ../input/config/gen_data_rft_wells.ert -- RFT data used in conditioning/ahm, incl export for visualization
+
 ----------------------------------------------------
 -- ERT plotting
 -----------------------------------------------------
