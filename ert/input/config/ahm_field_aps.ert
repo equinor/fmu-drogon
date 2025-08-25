@@ -4,8 +4,6 @@
 -- Use ert/updated field parameters if they exist
 -- Ert parameters are generated for the second iteration/posterior (i.e. after prior is finished)
 
-FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY>=<ITER>)  -- Create folder name = iter number (used by aps job to decide if in prior or update mode)
-
 GRID     ../../../rms/output/aps/ERTBOX.EGRID     -- Neccessary for AHM using field parameters
 
 FIELD aps_Valysar_GRF1   PARAMETER   aps_Valysar_GRF1.roff   INIT_FILES:rms/output/aps/aps_Valysar_GRF1.roff   MIN:-5.5   MAX:5.5   FORWARD_INIT:True
