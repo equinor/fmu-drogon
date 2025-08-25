@@ -1,7 +1,7 @@
 -- Create ensemble metadata
 
---                       ert_caseroot                 ert_configpath    ert_casename   ert_username
-WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>  <CONFIG_PATH>     <CASE_DIR>     <USER>
+--                       ert_caseroot                 ert_configpath    ert_casename
+WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>  <CONFIG_PATH>     <CASE_DIR>
 
 -- This workflow is intended to be run as a HOOK workflow.
 -- This workflow job is shipped with Komodo
@@ -9,6 +9,4 @@ WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>  <CONFIG_PATH>     <CASE_DI
 
 -- The workflow name is prefixed "xhook" to signal that even if it appears in the ERT
 -- workflow dropdown, it is not supposed to be ran by the user. Also, the "x" in front
--- makes it go to the bottom of the drop-down. When having many HOOK workflows, it is
--- annoying that they take up a lot of space in the ERT dropdown. This is NOT the case
--- in Drogon, with very few workflows, but the routine is useful for setups in the wild.
+-- makes it go to the bottom of the drop-down.
