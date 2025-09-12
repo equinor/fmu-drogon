@@ -1,7 +1,7 @@
 -- Create ensemble metadata and register on Sumo
 
---                       ert_caseroot                 ert_configpath    ert_casename   sumo_flag   sum_env
-WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>  <CONFIG_PATH>     <CASE_DIR>     "--sumo"    "--sumo_env" <SUMO_ENV>
+--                       ert_caseroot                 ert_configpath    ert_casename   sumo_flag
+WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>  <CONFIG_PATH>     <CASE_DIR>     "--sumo"
 
 -- This workflow is intended to be run as a HOOK workflow.
 -- This workflow job is shipped with Komodo
