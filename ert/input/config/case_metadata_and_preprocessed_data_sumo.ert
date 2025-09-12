@@ -3,7 +3,8 @@
 -----------------------------
 -- This setup is specially adapted to Drogon and should not necessarily be applied as-is
 -- to other model workflows. If you are using Sumo in your workflow, coordinate with the
--- Sumo team on how to best include upload jobs in your config files.
+-- Sumo team on how to best include upload jobs in your config files. Sumo is currently
+-- available to designated test-users only.
 
 
 -- Sumo variables
@@ -22,16 +23,10 @@ HOOK_WORKFLOW   xhook_copy_preprocessed_dataio_sumo PRE_SIMULATION       -- run 
 
 -- Grab data per realization that has been exported with dataio and upload it to Sumo
 FORWARD_MODEL SIM2SUMO
--- FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/tables/*.arrow")  # handled by SIM2SUMO
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/tables/*.csv")
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/maps/*.gri")
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/volumes/*.csv")
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/polygons/*.csv")
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/grids/*.roff")
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/observations/seismic/*.segy")
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/seismic/*.segy")
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/tables/inplace_volumes/*.parquet")  -- upload standard result: inplace_volumes
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/polygons/field_outline/*.parquet")  -- upload standard result: field_outline
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/maps/structure_depth_surface/*.gri")  -- upload standard result: structure_depth_surface
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/maps/structure_depth_isochore/*.gri")  -- upload standard result: structure_depth_isochore
-FORWARD_MODEL SUMO_UPLOAD(<SEARCHPATH>="share/results/polygons/structure_depth_fault_lines/*.parquet")  -- upload standard result: structure_depth_fault_lines
+FORWARD_MODEL SUMO_UPLOAD
+
+-- Note! 
+-- SIM2SUMO will store simulation results to Sumo.
+-- SUMO_UPLOAD will store general data to Sumo. When implementing in other workflows, you can include as
+-- many instances of SUMO_UPLOAD as you want. We recommend placing one directly after the main RMS run,
+-- and one at the end of the workflow. SUMO_UPLOAD will store all data exported by fmu-dataio to Sumo.
