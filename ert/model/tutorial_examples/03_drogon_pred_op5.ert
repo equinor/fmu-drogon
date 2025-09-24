@@ -95,7 +95,7 @@ HOOK_WORKFLOW   echo_config_file  PRE_SIMULATION
 -- run fmuconfig for pred case
 --> create global_variables_pred.yml and global_variables_pred.yml.tmpl files
 ---- Wiki doc: https://wiki.equinor.com/wiki/index.php/FMU_drogon/ert_topics_fmuconfig
-HOOK_WORKFLOW   run_fmuconfig_pred     PRE_SIMULATION
+HOOK_WORKFLOW   run_fmuconfig_pred     PRE_EXPERIMENT
 
 -----------------------------------------------------
 -- Forward Models

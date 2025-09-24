@@ -131,9 +131,9 @@ LOAD_WORKFLOW           ../bin/workflows/xhook_create_case_metadata
 -----------------------------------------------------
 -- Hook workflows
 -----------------------------------------------------
-HOOK_WORKFLOW   run_fmuconfig     PRE_SIMULATION  -- Create global_variables.yml and global_variables.yml.tmpl files
-HOOK_WORKFLOW  wf_fmuobs_dst  PRE_SIMULATION      -- Generate yaml version of ERT observations for use with Webviz
-HOOK_WORKFLOW  wf_dpdt2yml  PRE_SIMULATION        -- Generate yaml version of dpdt observations for use with Webviz
+HOOK_WORKFLOW   run_fmuconfig  PRE_EXPERIMENT  -- Create global_variables.yml and global_variables.yml.tmpl files
+HOOK_WORKFLOW   wf_fmuobs_dst  PRE_EXPERIMENT  -- Generate yaml version of ERT observations for use with Webviz
+HOOK_WORKFLOW   wf_dpdt2yml    PRE_EXPERIMENT  -- Generate yaml version of dpdt observations for use with Webviz
 HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio and register on Sumo (optional)
 
 
