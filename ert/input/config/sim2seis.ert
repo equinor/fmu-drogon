@@ -8,7 +8,7 @@ HOOK_WORKFLOW      xhook_copy_preprocessed_dataio PRE_SIMULATION       -- run wo
 
 -- 2) Copy obs data that do not have metadata yet
 LOAD_WORKFLOW  ../../bin/workflows/copy_seisobs  -- define and load workflow
-HOOK_WORKFLOW  copy_seisobs PRE_SIMULATION       -- run workflow
+HOOK_WORKFLOW  copy_seisobs PRE_EXPERIMENT       -- run workflow
 
 
 -------------------------------------------------------------------------

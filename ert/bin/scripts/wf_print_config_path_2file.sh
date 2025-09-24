@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # rnyb Feb 19, create file containing ert config name (including full path) and time it was run
-#              run as ert pre_simulation job 
+#              run as ert pre_simulation or pre_experiment hook workflow job 
 #
 # rnyb, Sep 19, added user name to output
 # rnyb, Jun 22, added host and komodo info
@@ -12,7 +12,7 @@ configpath=$1
 outfile=$2
 
 #append new line for every time ert is run for current casedir (keep history)
-echo 'Write ert config file path to file ' $outfile
+echo 'Write ert config file info to ' $outfile
 echo '---------------------------------' >> $outfile
 echo Run by $USER, $(date): >> $outfile
 echo $configpath >> $outfile

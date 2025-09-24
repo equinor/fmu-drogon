@@ -89,7 +89,7 @@ INCLUDE  ../input/config/install_custom_jobs.ert
 -----------------------------------------------------
 
 HOOK_WORKFLOW   echo_config_file    PRE_SIMULATION  -- Write config file run information to scratch
-HOOK_WORKFLOW   run_fmuconfig_pred  PRE_SIMULATION  -- create global_variables_pred  files
+HOOK_WORKFLOW   run_fmuconfig_pred  PRE_EXPERIMENT  -- create global_variables_pred  files
 
 -----------------------------------------------------
 -- Forward Models
