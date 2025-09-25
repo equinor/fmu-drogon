@@ -14,12 +14,12 @@ FORWARD_MODEL GENDATA_RFT(<PATH_TO_TRAJECTORY_FILES>=<CONFIG_PATH>/../input/obse
 
 -- ERT doc: https://fmu-docs.equinor.com/docs/ert/reference/configuration/keywords.html#gen-data
 
---        ert id       Result file name           input format         report step
-GEN_DATA  R_A2_SIM     RESULT_FILE:RFT_R_A2_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
-GEN_DATA  R_A3_SIM     RESULT_FILE:RFT_R_A3_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
-GEN_DATA  R_A4_SIM     RESULT_FILE:RFT_R_A4_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
-GEN_DATA  R_A5_SIM     RESULT_FILE:RFT_R_A5_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
-GEN_DATA  R_A6_SIM     RESULT_FILE:RFT_R_A6_%d    INPUT_FORMAT:ASCII   REPORT_STEPS:1
+--        ert id       Result file name           report step
+GEN_DATA  R_A2_SIM     RESULT_FILE:RFT_R_A2_%d    REPORT_STEPS:1
+GEN_DATA  R_A3_SIM     RESULT_FILE:RFT_R_A3_%d    REPORT_STEPS:1
+GEN_DATA  R_A4_SIM     RESULT_FILE:RFT_R_A4_%d    REPORT_STEPS:1
+GEN_DATA  R_A5_SIM     RESULT_FILE:RFT_R_A5_%d    REPORT_STEPS:1
+GEN_DATA  R_A6_SIM     RESULT_FILE:RFT_R_A6_%d    REPORT_STEPS:1
 
 -- Result file: created by FORWARD_MODEL GENDATA_RFT, %d will be replaced with report step number
 -- Report step: use 1 for first rft, 2 for second, etc

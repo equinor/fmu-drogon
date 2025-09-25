@@ -219,7 +219,7 @@ FORWARD_MODEL WELLTEST_DPDS(<ECLBASE>=<ECLBASE>, <WELLNAME>=<DST_WELL>, <PHASE>=
 FORWARD_MODEL RES2CSV(<SUBCOMMAND>=summary, <ECLBASE>=<ECLBASE>, <OUTPUT>="share/results/tables/ecl_summary/<ECLIPSE_NAME>.csv", <XARG1>="--time_index", <XARG2>=raw, <XARG3>="--column_keys", <XARG4>="WBHP:*")
 
 
-GEN_DATA  DPDT_SIM  INPUT_FORMAT:ASCII  RESULT_FILE:share/results/tables/dpdspt_lag2_genobs_<DST_WELL>_%d   REPORT_STEPS:<BUILD_UP>
+GEN_DATA  DPDT_SIM  RESULT_FILE:share/results/tables/dpdspt_lag2_genobs_<DST_WELL>_%d   REPORT_STEPS:<BUILD_UP>
 
 
 -----------------------------------------------------
