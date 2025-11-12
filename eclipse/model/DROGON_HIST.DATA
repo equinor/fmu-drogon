@@ -98,11 +98,10 @@ UNIFIN
 UNIFOUT
 
 
--- print and stop limits
--- -----------print------------  -----------stop--------------------
--- mes  com  war  prb  err  bug  mes  com   war     prb    err  bug
+-- ----- print limits ---------
+-- mes  com  war  prb  err  bug
 MESSAGES
-   1*   1*   1*   1000 10   1*   1*    1*  1000000 7000    1    1   /
+    1*   1*   1*  1000  1*   1*   /
 
 
 -- =============================================================================
