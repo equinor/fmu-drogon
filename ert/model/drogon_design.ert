@@ -136,10 +136,13 @@ DESIGN_MATRIX <CONFIG_PATH>/<DESIGN_MATRIX> DESIGN_SHEET:<DESIGN_SHEET> DEFAULT_
 -- Populate template files with their uncertainty parameter values
 -----------------------------------------------------
 
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../input/templates/rms_seed.tmpl,                  <result_file>=<RUNPATH>/rms/model/RMS_SEED)
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/global_variables.yml)
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../ert/input/templates/multregt.tmpl,           <result_file>=<RUNPATH>/eclipse/include/grid/drogon.multregt)
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/rate_scaling.yml)
+--                          INPUT FILE                                                 OUTPUT FILE
+RUN_TEMPLATE  <CONFIG_PATH>/../../ert/input/templates/rms_seed.tmpl           <RUNPATH>/rms/model/RMS_SEED
+RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl  <RUNPATH>/fmuconfig/output/global_variables.yml
+RUN_TEMPLATE  <CONFIG_PATH>/../../ert/input/templates/multregt.tmpl           <RUNPATH>/eclipse/include/grid/drogon.multregt
+RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl      <RUNPATH>/fmuconfig/output/rate_scaling.yml
+
+-- RUN_TEMPLATE uses parameter values from GEN_KW and DESIGN_MATRIX. It does not work with DESIGN2PARAMS.
 
 -----------------------------------------------------
 ---- RMS

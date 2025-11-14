@@ -160,11 +160,11 @@ INCLUDE  ../input/config/ahm_surface.ert    -- update horizons
 -- Populate template files with their scalar uncertainty parameter values
 -----------------------------------------------------
 
--- DESIGN_KW will fetch the variable values from the parameters.txt file
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/global_variables.yml)
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../ert/input/templates/multregt.tmpl,  <result_file>=<RUNPATH>/eclipse/include/grid/drogon.multregt)
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl,  <result_file>=fmuconfig/output/rate_scaling.yml)
+RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl  <RUNPATH>/fmuconfig/output/global_variables.yml
+RUN_TEMPLATE  <CONFIG_PATH>/../../ert/input/templates/multregt.tmpl           <RUNPATH>/eclipse/include/grid/drogon.multregt
+RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl      <RUNPATH>/fmuconfig/output/rate_scaling.yml
 
+-- RUN_TEMPLATE uses parameter values from GEN_KW and DESIGN_MATRIX. It does not work with DESIGN2PARAMS.
 
 -----------------------------------------------------
 ---- RMS
