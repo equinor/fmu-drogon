@@ -5,7 +5,7 @@
 -------------------------------------------------
 --
 DEFINE  <ECALC_NAME>   drogon_ecalc  -- tmpl and model (yml) file root name
-DEFINE  <ECALC_TMPL>   <CONFIG_PATH>/../../ecalc/model/<ECALC_NAME>.tmpl -- basis for ecalc model file, see DESIGN_KW
+DEFINE  <ECALC_TMPL>   <CONFIG_PATH>/../../ecalc/model/<ECALC_NAME>.tmpl -- basis for ecalc model file, see RUN_TEMPLATE
 
 -----------------------------------------
 
@@ -22,7 +22,7 @@ FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../ecalc/input, <TO>=<RUNPA
 GEN_KW  ECALC  <CONFIG_PATH>/../input/distributions/ecalc.dist
 
 -- set parameter values for the ecalc tmpl/model file
-FORWARD_MODEL DESIGN_KW(<template_file>=<ECALC_TMPL>, <result_file>=ecalc/model/<ECALC_NAME>.yml)
+RUN_TEMPLATE  <ECALC_TMPL>  ecalc/model/<ECALC_NAME>.yml
 
 -----------------------------------------
 

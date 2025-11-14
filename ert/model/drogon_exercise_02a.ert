@@ -85,8 +85,10 @@ GEN_KW  GLOBVAR     ../input/distributions/global_variables.dist
 GEN_KW  APS_FACIES  ../input/distributions/facies_aps.dist
 GEN_KW  RATE        ../input/distributions/rate_scaling.dist
 ----------------
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/global_variables.yml)
-FORWARD_MODEL DESIGN_KW(<template_file>=<CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl,  <result_file>=<RUNPATH>/fmuconfig/output/rate_scaling.yml)
+RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl   <RUNPATH>/fmuconfig/output/global_variables.yml
+RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl       <RUNPATH>/fmuconfig/output/rate_scaling.yml
+
+-- RUN_TEMPLATE uses parameter values from GEN_KW and DESIGN_MATRIX. It does not work with DESIGN2PARAMS.
 
 -----------------------------------------------------
 ---- RMS
