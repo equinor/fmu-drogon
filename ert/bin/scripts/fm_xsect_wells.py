@@ -6,12 +6,12 @@
 # alifb June 2024
 
 import argparse
+import os
 import pathlib
 import re
-import os
-import xtgeo
 
-import xtgeoviz.plot as plot
+import xtgeo
+from xtgeoviz import plot
 
 DESCRIPTION = """
 Create a png file with cross section of well path and surfaces and optional grid properties
@@ -75,7 +75,8 @@ def get_parser():
     """Construct a parser for command line and for command line help"""
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
-        "runpath", help="ERT runpath where data is located, typically <RUNPATH>"
+        "runpath",
+        help="ERT runpath where data is located, typically <RUNPATH>",
     )
     parser.add_argument("--wells", nargs="+", default=W_LIST)
     return parser
@@ -168,7 +169,11 @@ def create_plot(surfs, wells, real, grid, prop=None, prop_range=None):
         )
 
         myplot.plot_surfaces(
-            fill=False, axisname="lines", legend=False, linewidth=0.5, onecolor="black"
+            fill=False,
+            axisname="lines",
+            legend=False,
+            linewidth=0.5,
+            onecolor="black",
         )
 
         myplot.plot_map()
@@ -200,16 +205,13 @@ if __name__ == "__main__":
 
     create_plot(surfs, wells, real, grd)
     for name, path, *plot_range in GRID_PROPS:
-        if len(plot_range) == 0:
-            plot_range = None
-        else:
-            plot_range = plot_range[0]
+        plot_range = None if len(plot_range) == 0 else plot_range[0]
         prop = xtgeo.gridproperty_from_file(
             pathlib.Path(
                 os.path.join(runpath, path),
                 grid=grd,
                 name=name,
-            )
+            ),
         )
         create_plot(surfs, wells, real, grd, prop, plot_range)
 
