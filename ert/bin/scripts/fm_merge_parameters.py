@@ -8,12 +8,11 @@ import pandas as pd
 
 DESCRIPTION = """
 Purpose is to prepend parameters.txt from other ensembles
-(for example in the case of restart runs). The prepended keys
-can be prefixed with arbitrary text for clarity
+(for example in the case of restart runs).
 """
 
 
-def parse_number(value):
+def parse_number(value) -> int | float:
     """
     Extracted from fmu-ensemble library
 
@@ -46,7 +45,7 @@ def parse_number(value):
             return value
 
 
-def load_txt(fullpath, prefix=""):
+def load_txt(fullpath):
     """
     Load parameters.txt if it exist and return a dictionary
     Adapted from fmu-ensemble library
@@ -67,32 +66,29 @@ def load_txt(fullpath, prefix=""):
         keyvalues = {}
     new_dict = {}
     for key in keyvalues:
-        new_dict[prefix + key] = parse_number(keyvalues[key])
+        new_dict[key] = parse_number(keyvalues[key])
     return new_dict
 
 
 def save_txt(fullpath, parameters):
     """Save parameters dictionary into text file"""
     with open(fullpath, "w") as file_handle:
-        for key in parameters:
-            file_handle.write(f"{key} {parameters[key]}\n")
+        file_handle.writelines(f"{key} {parameters[key]}\n" for key in parameters)
 
 
 def create_parser():
     """Create parser"""
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
-        "path_base", type=str, help="Path to parameters.txt in current ensembles"
+        "path_base",
+        type=str,
+        help="Path to parameters.txt in current ensembles",
     )
     parser.add_argument(
-        "path_prepend", type=str, help="Path to parameters.txt in the other ensembles"
+        "path_prepend",
+        type=str,
+        help="Path to parameters.txt in the other ensembles",
     )
-    # parser.add_argument(
-    #     "--prefix",
-    #     type=str,
-    #     default="",
-    #     help="Text to be prefixed on prepended parameters",
-    # )
     return parser
 
 
@@ -104,12 +100,9 @@ def main(args=None):
     parsed_args = parser.parse_args(args)
     path_base = parsed_args.path_base
     path_prepend = parsed_args.path_prepend
-    # Remove key_prefix option, the script should fail when new parameters.txt
-    # has conflict with other parameters.txt
-    key_prefix = ""  # parsed_args.prefix
 
     dict_base = load_txt(path_base + "/parameters.txt")
-    dict_prepend = load_txt(path_prepend + "/parameters.txt", key_prefix)
+    dict_prepend = load_txt(path_prepend + "/parameters.txt")
 
     for key in dict_base:
         if key in dict_prepend:
@@ -117,18 +110,19 @@ def main(args=None):
                 raise ValueError(
                     "One or more parameter(s) are in conflict.\n"
                     f"The first parameter is {key} which is changed from "
-                    f"{dict_prepend[key]} to {dict_base[key]}"
+                    f"{dict_prepend[key]} to {dict_base[key]}",
                 )
             else:
                 print(
                     f"Warning: The parameter {key} exists in both parameters.txt\n"
-                    "This should preferably be avoided"
+                    "This should preferably be avoided",
                 )
         else:
             dict_prepend[key] = dict_base[key]
     if os.path.exists(path_base + "/parameters.txt"):
         shutil.copyfile(
-            path_base + "/parameters.txt", path_base + "/parameters_original.txt"
+            path_base + "/parameters.txt",
+            path_base + "/parameters_original.txt",
         )
     save_txt(path_base + "/parameters.txt", dict_prepend)
 
