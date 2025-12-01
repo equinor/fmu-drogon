@@ -6,6 +6,7 @@ available on Komodo
 Author: Jimmy Zurcher (jiz@equinor.com), November 2020
 Updated 2024 to reduce runtime.
 """
+
 import time
 from os import getenv, remove
 
@@ -62,6 +63,7 @@ RUN_ID = ""
 KEEP_MISSING_ROWS = True
 UNDEF_VALUES = None
 
+
 def get_values_list(subset_number, subset_values):
     values_list = []
     assert isinstance(subset_values, str), "Values should be defined as a String"
@@ -92,6 +94,7 @@ def get_values_list(subset_number, subset_values):
             raise ValueError(error_message)
     return values_list
 
+
 def make_sub_dataframe(dataframe, subset_dict, subset_number):
     param = subset_dict["parameter"]
     values_list = get_values_list(subset_number, subset_dict["values"])
@@ -100,7 +103,6 @@ def make_sub_dataframe(dataframe, subset_dict, subset_number):
 
 
 def run_pem(pem_configs):
-
     t_start = time.perf_counter()
 
     df_ecl = pd.read_csv(PEM_CSV_INPUT)
@@ -113,7 +115,6 @@ def run_pem(pem_configs):
 
     dfs = []
     for date in SEISDATES:
-
         print(date)
         df_date = df_static.copy()
 
@@ -126,8 +127,7 @@ def run_pem(pem_configs):
 
         # Loop through different PEM configs for different zones
         for i, subset in enumerate(pem_configs):
-
-            print(f">> Subset {i+1}/{n_subsets}: {subset['pem_config']}...")
+            print(f">> Subset {i + 1}/{n_subsets}: {subset['pem_config']}...")
 
             # Make subset of the input
             subset_data = make_sub_dataframe(df_date, subset, i)
@@ -135,7 +135,7 @@ def run_pem(pem_configs):
             subset_data.to_csv(subset_data_file)
 
             # Define inputs
-            config_file=subset["pem_config"]
+            config_file = subset["pem_config"]
             with open(config_file, "r") as f:
                 pem_input = make_input(f, subset_data_file)
 
@@ -196,7 +196,6 @@ def run_pem(pem_configs):
     df_all.to_csv(PEM_CSV_RESULTS, index=False)
 
     print("6", time.perf_counter() - t_start)
-
 
 
 if __name__ == "__main__":
