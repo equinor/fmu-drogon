@@ -1,3 +1,4 @@
 pandas
 pytest
 res2df
+ruff

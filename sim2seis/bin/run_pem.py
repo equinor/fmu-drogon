@@ -5,6 +5,7 @@ available on Komodo
 
 Author: Jimmy Zurcher (jiz@equinor.com), November 2020
 """
+
 import argparse
 import time
 from os import getenv

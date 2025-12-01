@@ -31,3 +31,7 @@ jobs:
       - name: Run unit tests
         run: |
             pytest ert/bin/scripts/fm_lgr.py ert/bin/scripts/fm_tracer_breakthrough.py # currently the only scripts with unit tests
+
+      - name: Ruff format
+        run: |
+            ruff format --check

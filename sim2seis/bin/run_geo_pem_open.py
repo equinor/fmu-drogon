@@ -5,6 +5,7 @@ available on Komodo
 
 Author: Jimmy Zurcher (jiz@equinor.com), November 2020
 """
+
 import argparse
 
 import fmu.config.utilities as utils

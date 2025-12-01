@@ -15,7 +15,6 @@ https://github.com/equinor/fmu-ensemble/blob/master/src/fmu/ensemble/observation
 
 """
 
-
 import argparse
 import os
 
@@ -26,8 +25,7 @@ from fmu import ensemble
 # case settings #####
 
 parser = argparse.ArgumentParser(
-    description="Get WOPTH, WWPTH and WGPTH values at given date from"
-    "single realisation"
+    description="Get WOPTH, WWPTH and WGPTH values at given date from a single realisation"
 )
 parser.add_argument(
     "-s",
