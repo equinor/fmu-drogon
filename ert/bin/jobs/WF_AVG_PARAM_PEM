@@ -1,4 +1,3 @@
-INTERNAL    False
 EXECUTABLE  ../scripts/wf_average_parameter_pemgrid.py
 MIN_ARG     5
 ARG_TYPE    0  STRING
