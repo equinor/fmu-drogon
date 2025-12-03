@@ -15,13 +15,13 @@ shared_settings:
 #    pred_op5: /scratch/fmu/course/01_drogon_ahm/realization-*/pre_op5
 # --- User defined settings/aliases ---
 
-hm_ensembles: &hm_ensembles  # Ensembes used for history matching analysis
+hm_ensembles: &hm_ensembles  # Ensembles used for history matching analysis
   - iter-0_aps
   - iter-3_aps
   - iter-0_basic
   - iter-3_basic
   
-#pred_ensembles: &pred_ensembles # Ensembes used for prediction runs
+#pred_ensembles: &pred_ensembles # Ensembles used for prediction runs
 #  - pred_op5
   
 # Shared settings
