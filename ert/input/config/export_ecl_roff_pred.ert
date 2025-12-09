@@ -14,7 +14,7 @@ FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/results/grids)
 -- Create date lists to be used with ECLRST2ROFF and ECLDIFF2ROFF
 -- read dates from global_variables_pred.yml and create 'single_dates.txt' and 'diff_dates.txt' files
 -- ----------------------------------------------------------------------
-FORWARD_MODEL CREATEDATEFILES(<GLOBVAR_FILE>="fmuconfig/output/global_variables_pred.yml", <DATES>="ECLIPSE_PRED_DATES", <DIFFDATES>="ECLIPSE_PRED_DIFFDATES")
+FORWARD_MODEL CREATE_DATE_FILES(<GLOBVARFILE>="fmuconfig/output/global_variables_pred.yml", <SINGLEDATES>="ECLIPSE_PRED_DATES", <DIFFDATES>="ECLIPSE_PRED_DIFFDATES")
 
 -- Create roff file of eclipse egrid
 FORWARD_MODEL ECLGRID2ROFF(<ECLROOT>=eclipse/model/ECLIPSE_MERGED, <OUTPUT>=share/results/grids/eclgrid)
@@ -27,7 +27,7 @@ FORWARD_MODEL ECLRST2ROFF( <ECLROOT>=eclipse/model/ECLIPSE_MERGED , <OUTPUT>=sha
 
 
 -- Create diff parameters and store as roff files
--- diff dates are read from file created by the forward model CREATEDATEFILES
+-- diff dates are read from file created by the forward model CREATE_DATE_FILES
 FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=eclipse/model/ECLIPSE_MERGED,  <PROP>=PRESSURE,  <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)
 FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=eclipse/model/ECLIPSE_MERGED,  <PROP>=SWAT,      <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)
 FORWARD_MODEL ECLDIFF2ROFF(<ECLROOT>=eclipse/model/ECLIPSE_MERGED,  <PROP>=SGAS,      <DIFFDATES>=<RUNPATH>/diff_dates.txt, <OUTPUT>=share/results/grids/eclgrid)
