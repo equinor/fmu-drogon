@@ -6,9 +6,6 @@
 -- forward models
 -------------------------------------------------------
 
--- make single_dates.txt and diff_dates.txt based on global_variables.yml
-INSTALL_JOB  CREATEDATEFILES               ../../bin/jobs/FM_CREATEDATEFILES
-
 -- write simulated tracer break through times
 INSTALL_JOB  TRACER_BREAKTHROUGH           ../../bin/jobs/FM_TRACER_BREAKTHROUGH
 
