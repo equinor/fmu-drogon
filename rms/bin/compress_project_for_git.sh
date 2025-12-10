@@ -8,10 +8,11 @@
 #
 # JRIV, dec. 2022, last update mar 2023
 # rnyb, May 2024 - added version to runrms command
+# rnyb, Dec 2025 - rms version 15.0.1.0
 
 set -e
 
-VERSION="14.2.2"
+VERSION="15.1.0.1"
 
 CURRENT="drogon.rms$VERSION"
 GENERIC="drogon_git.rms$VERSION"
