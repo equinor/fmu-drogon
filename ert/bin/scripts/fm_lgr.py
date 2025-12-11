@@ -56,7 +56,7 @@ def test_create_wellspec_dataframe():
     )
     assert (
         create_wellspec_dataframe(
-            ["WELSPECS", "--WELL I J K", "name 1.0 2.0 3.0 /", "/"]
+            ["WELSPECS", "--WELL I J K", "name 1.0 2.0 3.0 /", "/"],
         ).to_csv()
         == ",--WELL,I,J,K\n0,name,1.0,2.0,3.0\n"
     )
@@ -94,7 +94,7 @@ def test_create_compdat_dataframe():
     )
     assert (
         create_compdat_dataframe(
-            ["COMPDAT", "--WELL I J K", "name 1.0 2.0 3.0 /", "/"]
+            ["COMPDAT", "--WELL I J K", "name 1.0 2.0 3.0 /", "/"],
         ).to_csv()
         == ",--WELL,I,J,K\n0,name,1.0,2.0,3.0\n"
     )
@@ -105,42 +105,41 @@ def add_num_lgr(df_compdat):
     lgr = []
     data = []
     for i in range(len(df_compdat)):
-        if [df_compdat["I"].loc[i], df_compdat["J"].loc[i]] not in lgr:
-            lgr.append([df_compdat["I"].loc[i], df_compdat["J"].loc[i]])
+        if [df_compdat.loc[i, "I"], df_compdat.loc[i, "J"]] not in lgr:
+            lgr.append([df_compdat.loc[i, "I"], df_compdat.loc[i, "J"]])
         for j in range(len(lgr)):
-            if [df_compdat["I"].loc[i], df_compdat["J"].loc[i]] == lgr[j]:
+            if [df_compdat.loc[i, "I"], df_compdat.loc[i, "J"]] == lgr[j]:
                 data.append(j + 1)
     df_compdat["LGR"] = data
-    return lgr
+    return lgr, df_compdat
 
 
 def test_add_num_lgr():
     df = create_compdat_dataframe(["COMPDAT", "--WELL I J", "name 2 3 /", "/"])
-    lgr = add_num_lgr(df)
+    lgr, df = add_num_lgr(df)
     assert df.to_csv() == ",--WELL,I,J,LGR\n0,name,2,3,1\n"
     assert lgr == [["2", "3"]]
 
 
 def remove_same_layer_completions(df_compdat):
     # Remove completions if same layer for different LGRs
-    list = []
+    drop_indices = []
     for i in range(len(df_compdat) - 1):
         if (
-            df_compdat["K1"].loc[i] == df_compdat["K1"].loc[i + 1]
-            and df_compdat["LGR"].loc[i] != df_compdat["LGR"].loc[i + 1]
+            df_compdat.loc[i, "K1"] == df_compdat.loc[i + 1, "K1"]
+            and df_compdat.loc[i, "LGR"] != df_compdat.loc[i + 1, "LGR"]
         ):
-            list.append(i + 1)
-    for i in range(len(list)):
-        df_compdat.drop(list[i], inplace=True)
-    df_compdat.reset_index(inplace=True)
+            drop_indices.append(i + 1)
+    return df_compdat.drop(drop_indices).reset_index()  # Drop all at once
 
 
 def test_remove_same_layer_completions():
     df = create_compdat_dataframe(
-        ["COMPDAT", "--WELL I J K1", "name1 2 3 4 /", "name2 4 5 4 /", "/"]
+        ["COMPDAT", "--WELL I J K1", "name1 2 3 4 /", "name2 4 5 4 /", "/"],
     )
-    lgr = add_num_lgr(df)
-    remove_same_layer_completions(df)
+    lgr, df = add_num_lgr(df)
+    df = remove_same_layer_completions(df)
+    assert len(df) == 1
     assert df.to_csv() == ",index,--WELL,I,J,K1,LGR\n0,0,name1,2,3,4,1\n"
 
 
@@ -148,17 +147,18 @@ def change_layers_to_int(df_compdat):
     # Change layers from string to integer type
     df_compdat["K1"] = df_compdat["K1"].astype(int)
     df_compdat["K2"] = df_compdat["K2"].astype(int)
+    return df_compdat
 
 
 def test_change_layers_to_int():
-    import numpy
+    import numpy as np
 
     df = create_compdat_dataframe(
-        ["COMPDAT", "--WELL I J K1 K2", "name1 2 3 4 5 /", "name2 6 7 8 9 /", "/"]
+        ["COMPDAT", "--WELL I J K1 K2", "name1 2 3 4 5 /", "name2 6 7 8 9 /", "/"],
     )
-    add_num_lgr(df)
-    change_layers_to_int(df)
-    assert df["K1"].dtypes == numpy.dtype("int64")
+    _lgr, df = add_num_lgr(df)
+    df = change_layers_to_int(df)
+    assert df["K1"].dtypes == np.dtype("int64")
 
 
 def write_lgr_runspec_file(df_compdat, f):
@@ -208,7 +208,7 @@ def write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual):
             + " "
             + str(df_compdat["K1"][df_compdat["LGR"] == i + 1].min())
             + " "
-            + str(df_compdat["K2"][df_compdat["LGR"] == i + 1].max())
+            + str(df_compdat["K2"][df_compdat["LGR"] == i + 1].max()),
         )
         if size == "small":
             f.write(" 21 21 ")
@@ -219,11 +219,11 @@ def write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual):
                 str(
                     df_compdat["K2"][df_compdat["LGR"] == i + 1].max()
                     - df_compdat["K1"][df_compdat["LGR"] == i + 1].min()
-                    + 1
+                    + 1,
                 )
-                + " /\n"
+                + " /\n",
             )
-        elif dual == 1 or dual == 2:
+        elif dual in {1, 2}:
             f.write(
                 str(
                     (
@@ -231,9 +231,9 @@ def write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual):
                         - df_compdat["K1"][df_compdat["LGR"] == i + 1].min()
                         + 1
                     )
-                    * 2
+                    * 2,
                 )
-                + " /\n"
+                + " /\n",
             )
         f.write("\n")
         f.write("NXFIN\n")
@@ -245,12 +245,12 @@ def write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual):
         f.write("HXFIN\n")
         if size == "small":
             f.write(
-                "  2*1  4*1  0.21  0.16 0.08  0.04 0.02 0.04 0.08 0.16 0.21  4*1  2*1 /\n"
+                "  2*1  4*1  0.21  0.16 0.08  0.04 0.02 0.04 0.08 0.16 0.21  4*1  2*1 /\n",
             )
         elif size == "large":
             f.write(
                 "  2*1 4*1 4*1 4*1 4*1 8*1 8*1 0.21 0.16"
-                "  0.08 0.04 0.02 0.04 0.08 0.16 0.21  8*1 8*1 4*1 4*1 4*1 4*1 2*1 /\n"
+                "  0.08 0.04 0.02 0.04 0.08 0.16 0.21  8*1 8*1 4*1 4*1 4*1 4*1 2*1 /\n",
             )
         f.write("\n")
         f.write("NYFIN\n")
@@ -262,12 +262,12 @@ def write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual):
         f.write("HYFIN\n")
         if size == "small":
             f.write(
-                "  2*1  4*1  0.21  0.16 0.08  0.04 0.02 0.04 0.08 0.16 0.21  4*1  2*1 /\n"
+                "  2*1  4*1  0.21  0.16 0.08  0.04 0.02 0.04 0.08 0.16 0.21  4*1  2*1 /\n",
             )
         elif size == "large":
             f.write(
                 "  2*1 4*1 4*1 4*1 4*1 8*1 8*1 0.21 0.16"
-                "  0.08 0.04 0.02 0.04 0.08 0.16 0.21  8*1 8*1 4*1 4*1 4*1 4*1 2*1 /\n"
+                "  0.08 0.04 0.02 0.04 0.08 0.16 0.21  8*1 8*1 4*1 4*1 4*1 4*1 2*1 /\n",
             )
         f.write("\n")
         f.write("ENDFIN\n")
@@ -319,11 +319,9 @@ ENDFIN
 
 def write_welspecl(df_welspecs, df_compdat, index, f):
     f.write("WELSPECL\n")
-    f.write(
-        df_welspecs.columns.values[0] + " " + df_welspecs.columns.values[1] + " LGR "
-    )
-    for i in range(2, len(df_welspecs.columns.values)):
-        f.write(df_welspecs.columns.values[i] + " ")
+    f.write(df_welspecs.columns[0] + " " + df_welspecs.columns[1] + " LGR ")
+    for i in range(2, len(df_welspecs.columns)):
+        f.write(df_welspecs.columns[i] + " ")
     f.write("\n")
     for i in range(len(df_welspecs)):
         f.write(
@@ -340,7 +338,7 @@ def write_welspecl(df_welspecs, df_compdat, index, f):
             + df_welspecs["DREF"].loc[i]
             + " "
             + df_welspecs["PHASE"].loc[i]
-            + " /\n"
+            + " /\n",
         )
     f.write("/\n")
     f.write("\n")
@@ -357,7 +355,7 @@ def test_write_welspecl():
                 "GROUP": ["group"],
                 "DREF": ["dref"],
                 "PHASE": ["phase"],
-            }
+            },
         ),
         pd.DataFrame({"LGR": [3], "K1": [4], "K2": [7]}),
         50,
@@ -376,68 +374,68 @@ well group LGR3 50 50 dref phase /
 
 def write_compdatl(df_compdat, dual, index, f):
     f.write("COMPDATL\n")
-    f.write(df_compdat.columns.values[1] + " LGR ")
-    for i in range(2, len(df_compdat.columns.values) - 1):
-        f.write(df_compdat.columns.values[i] + " ")
+    f.write(df_compdat.columns[1] + " LGR ")
+    for i in range(2, len(df_compdat.columns) - 1):
+        f.write(df_compdat.columns[i] + " ")
     f.write("\n")
     for i in range(len(df_compdat)):
-        k = df_compdat["K1"][
-            df_compdat["LGR"] == df_compdat["LGR"].loc[i]
-        ].min()  # Adjust layer to within LGR
-        if dual == 0 or dual == 2:
+        lgr_val = df_compdat.loc[i, "LGR"]
+        lgr_mask = df_compdat["LGR"] == lgr_val
+        k = df_compdat.loc[lgr_mask, "K1"].min()  # Adjust layer to within LGR
+        if dual in {0, 2}:
             f.write(
-                df_compdat["--WELL"].loc[i]
+                df_compdat.loc[i, "--WELL"]
                 + " LGR"
-                + str(df_compdat["LGR"].loc[i])
+                + str(lgr_val)
                 + " "
                 + str(index)
                 + " "
                 + str(index)
                 + " "
-                + str(df_compdat["K1"].loc[i] - k + 1)
+                + str(df_compdat.loc[i, "K1"] - k + 1)
                 + " "
-                + str(df_compdat["K2"].loc[i] - k + 1)
+                + str(df_compdat.loc[i, "K2"] - k + 1)
                 + " "
-                + df_compdat["OP/SH"].loc[i]
+                + df_compdat.loc[i, "OP/SH"]
                 + " 2* "
-                + df_compdat["WBDIA"].loc[i]
+                + df_compdat.loc[i, "WBDIA"]
                 + " 1* "
-                + df_compdat["SKIN"].loc[i]
+                + df_compdat.loc[i, "SKIN"]
                 + " 1* "
-                + df_compdat["DIR"].loc[i]
-                + " /\n"
+                + df_compdat.loc[i, "DIR"]
+                + " /\n",
             )
     for i in range(len(df_compdat)):
-        k = df_compdat["K1"][
-            df_compdat["LGR"] == df_compdat["LGR"].loc[i]
-        ].min()  # Adjust layer to within LGR
-        if dual == 1 or dual == 2:
+        lgr_val = df_compdat.loc[i, "LGR"]
+        lgr_mask = df_compdat["LGR"] == lgr_val
+        k = df_compdat.loc[lgr_mask, "K1"].min()  # Adjust layer to within LGR
+        if dual in {1, 2}:
             nz = (
-                df_compdat["K2"][df_compdat["LGR"] == df_compdat["LGR"].loc[i]].max()
-                - df_compdat["K1"][df_compdat["LGR"] == df_compdat["LGR"].loc[i]].min()
+                df_compdat.loc[lgr_mask, "K2"].max()
+                - df_compdat.loc[lgr_mask, "K1"].min()
                 + 1
             )
             f.write(
-                df_compdat["--WELL"].loc[i]
+                df_compdat.loc[i, "--WELL"]
                 + " LGR"
-                + str(df_compdat["LGR"].loc[i])
+                + str(lgr_val)
                 + " "
                 + str(index)
                 + " "
                 + str(index)
                 + " "
-                + str(df_compdat["K1"].loc[i] - k + 1 + nz)
+                + str(df_compdat.loc[i, "K1"] - k + 1 + nz)
                 + " "
-                + str(df_compdat["K2"].loc[i] - k + 1 + nz)
+                + str(df_compdat.loc[i, "K2"] - k + 1 + nz)
                 + " "
-                + df_compdat["OP/SH"].loc[i]
+                + df_compdat.loc[i, "OP/SH"]
                 + " 2* "
-                + df_compdat["WBDIA"].loc[i]
+                + df_compdat.loc[i, "WBDIA"]
                 + " 1* "
-                + df_compdat["SKIN"].loc[i]
+                + df_compdat.loc[i, "SKIN"]
                 + " 1* "
-                + df_compdat["DIR"].loc[i]
-                + " /\n"
+                + df_compdat.loc[i, "DIR"]
+                + " /\n",
             )
     f.write("/\n")
 
@@ -458,7 +456,7 @@ def test_write_compdatl():
                 "WBDIA": ["wbdia"],
                 "SKIN": ["skin"],
                 "DIR": ["dir"],
-            }
+            },
         ),
         False,
         50,
@@ -486,95 +484,81 @@ def run(file_well, file_eclipse, file_runspec, file_grid, file_sch, size, file_d
 
     # Dual porosity modelling option
     # 0 = SP, 1 = DP, 2 = DPDK
-    f = open(file_dual)
-    dual = int(f.read(1))
-    f.close()
+    with open(file_dual) as f:
+        dual = int(f.read(1))
 
     # -------------------------------------------------
 
-    f = open(file_well)
-    df_welspecs = create_wellspec_dataframe(f)
-    f.close()
+    with open(file_well) as f:
+        df_welspecs = create_wellspec_dataframe(f)
+        df_compdat = create_compdat_dataframe(f)
 
-    f = open(file_well)
-    df_compdat = create_compdat_dataframe(f)
-    f.close()
-
-    lgr = add_num_lgr(df_compdat)
-    remove_same_layer_completions(df_compdat)
-    change_layers_to_int(df_compdat)
+    lgr, df_compdat = add_num_lgr(df_compdat)
+    df_compdat = remove_same_layer_completions(df_compdat)
+    df_compdat = change_layers_to_int(df_compdat)
 
     # -------------------------------------------------
 
-    f = open(file_runspec, "w")
-    write_lgr_runspec_file(df_compdat, f)
-    f.close()
+    with open(file_runspec, "w") as f:
+        write_lgr_runspec_file(df_compdat, f)
 
     # LGR grid file
-    f = open(file_grid, "w")
-    write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual)
-    f.close()
+    with open(file_grid, "w") as f:
+        write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual)
 
     # LGR schedule file
-    f = open(file_sch, "w")
-
-    f2 = open(file_well)
-
-    flag = False
-    for line in f2:
-        if line.strip():  # Remove empty lines
-            words = line.split()
-            if flag is True:
-                if words[0] == "/":
+    with open(file_sch, "w") as f, open(file_well) as f2:
+        flag = False
+        for line in f2:
+            if line.strip():  # Remove empty lines
+                words = line.split()
+                if flag is True:
+                    if words[0] == "/":
+                        f.write(line)
+                        flag = False
+                    else:
+                        f.write(line)
+                if words[0] == "GRUPTREE":
                     f.write(line)
-                    flag = False
-                else:
-                    f.write(line)
-            if words[0] == "GRUPTREE":
-                f.write(line)
-                flag = True
-    f.write("\n")
+                    flag = True
+        f.write("\n")
 
-    f2.close()
-
-    write_welspecl(df_welspecs, df_compdat, index, f)
-    write_compdatl(df_compdat, dual, index, f)
-    f.close()
+        write_welspecl(df_welspecs, df_compdat, index, f)
+        write_compdatl(df_compdat, dual, index, f)
 
     # -------------------------------------------------
 
     # Update Eclipse .DATA file
-    f = open(file_eclipse)
-    f2 = open(file_eclipse + ".tmp", "w")
-    for line in f:
-        if line.startswith("GRID") and not line.startswith("GRIDFILE"):
-            f2.write("INCLUDE\n")
-            f2.write(" '../include/runspec/" + file_runspec.split("/")[-1] + "' /\n")
-            f2.write("\n")
-        if line.startswith("EDIT"):
-            f2.write("INCLUDE\n")
-            f2.write(" '../include/grid/" + file_grid.split("/")[-1] + "' /\n")
-            f2.write("\n")
-        if ".sch" in line:
-            sch = line.split()[0].split("/")[-1].replace("'", "")
-        f2.write(line)
-    f2.close()
-    f.close()
+    with open(file_eclipse) as f, open(file_eclipse + ".tmp", "w") as f2:
+        for line in f:
+            if line.startswith("GRID") and not line.startswith("GRIDFILE"):
+                f2.write("INCLUDE\n")
+                f2.write(
+                    " '../include/runspec/" + file_runspec.split("/")[-1] + "' /\n"
+                )
+                f2.write("\n")
+            if line.startswith("EDIT"):
+                f2.write("INCLUDE\n")
+                f2.write(" '../include/grid/" + file_grid.split("/")[-1] + "' /\n")
+                f2.write("\n")
+            if ".sch" in line:
+                sch = line.split()[0].split("/")[-1].replace("'", "")
+            f2.write(line)
     os.rename(file_eclipse + ".tmp", file_eclipse)
 
     # Update Eclipse schedule file
     sch2 = file_sch.split("/")
-    dir = file_sch.rsplit("/", 1)[0]
-    f = open(dir + "/" + sch)
-    f2 = open(dir + "/" + sch + ".tmp", "w")
-    for line in f:
-        if "schedule" in line:
-            sch3 = line.split()[0].split("/")[-1].replace("'", "")
-            line = line.replace(sch3, sch2[-1])
-        f2.write(line)
-    f2.close()
-    f.close()
-    os.rename(dir + "/" + sch + ".tmp", dir + "/" + sch)
+    directory = file_sch.rsplit("/", 1)[0]
+    with (
+        open(directory + "/" + sch) as f,
+        open(directory + "/" + sch + ".tmp", "w") as f2,
+    ):
+        for line in f:
+            if "schedule" in line:
+                sch3 = line.split()[0].split("/")[-1].replace("'", "")
+                line = line.replace(sch3, sch2[-1])
+            f2.write(line)
+    os.rename(directory + "/" + sch + ".tmp", dir + "/" + sch)
 
 
 if __name__ == "__main__":
