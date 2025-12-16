@@ -25,7 +25,7 @@ FOPP
 FWPP
 FGPP
 -----------------------------
--- Production and Injection wells         
+-- Production and Injection wells
 -----------------------------
 FMWPR
 FMWIN
@@ -46,7 +46,7 @@ FMCTP
 -----------------------------
 --  Production
 FVPT
-FOPT 
+FOPT
 FOPTH
 FWPT
 FWPTH
@@ -69,7 +69,7 @@ FWCT
 FWCTH
 FGOR
 FGORH
-FGLR 
+FGLR
 FWGR
 -- Pressures
 FPR
@@ -127,13 +127,13 @@ GGPRF
 /
 GGPRS
 /
-GWCT 
+GWCT
 /
-GWCTH 
+GWCTH
 /
 GGOR
 /
-GGORH 
+GGORH
 /
 GWGR
 /
@@ -188,7 +188,7 @@ GWPP
 GMCTP
 /
 -----------------------------
--- Production and Injection wells         
+-- Production and Injection wells
 -----------------------------
 WOPR
 /
@@ -247,7 +247,11 @@ WGITH
 -- Performance
 WBHP
 /
+WBHPH
+/
 WTHP
+/
+WTHPH
 /
 WPI
 /
@@ -266,15 +270,15 @@ WSTAT
 -- Well Gas Lift Injection Rate
 WGLIR
 /
--- Well Oil Gas Lift Ratio (i.e. incremental gradiend                                
--- of the field's production rate with respect to the 
+-- Well Oil Gas Lift Ratio (i.e. incremental gradiend
+-- of the field's production rate with respect to the
 -- addition of another gas lift increment  to that well)
 WOGLR
 /
 --
 --
 -- Tracer quantities
--- Tracer production rate 
+-- Tracer production rate
 WTPRWT1
 /
 WTPRWT2
@@ -310,7 +314,7 @@ WTICWT2
 -- 15  28   1 /
 -- 15  28  10 /
 -- 15  28  13 /
---/ 
+--/
 --
 --
 -- Simulatior performance
