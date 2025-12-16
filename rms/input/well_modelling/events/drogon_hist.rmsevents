@@ -111,6 +111,7 @@ END
 ######################################################
 
 # add bhp lower limit for producers (requires RMS version 14.2.2 or newer)
+# (Flow/Eclipse WELTARG keyword)
 
 '55_33-A-1'
 05.01.2018 WLIMPRES   TYPEW='Production'    ACTION='Target' BHP=50         ON=True
@@ -126,7 +127,9 @@ END
 
 
 
+######################################################
 # Set VFP table numbers
+######################################################
 
 '55_33-A-1'
 05.01.2018 WLIFTTABLE   TABLEID='1'   ON=True
