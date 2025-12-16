@@ -27,5 +27,6 @@ SUMMARY WGOR*:A*     -- Well GOR
 SUMMARY WWIR*:A*     -- Well Water Injcetion Rate
 SUMMARY WWIT*:A*     -- Well Water Injection Total
 SUMMARY WBHP*:A*     -- Well BHP
+SUMMARY WTHP*:A*     -- Well THP
 
 
