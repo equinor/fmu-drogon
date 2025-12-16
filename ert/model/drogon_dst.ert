@@ -21,8 +21,8 @@ DEFINE <SCRATCH>          /scratch/fmu
 DEFINE <CASE_DIR>         01_drogon_dst
 DEFINE <ECLIPSE_NAME>     DROGON_DST
 --
-DEFINE <RMS_NAME>         drogon.rms14.2.2
-DEFINE <RMS_VERSION>      14.2.2
+DEFINE <RMS_NAME>         drogon.rms15.0.1.0
+DEFINE <RMS_VERSION>      15.0.1.0
 DEFINE <RMS_WF_NAME>     MAIN
 --
 DEFINE <RMS_SEED_FILE>    <CONFIG_PATH>/../input/distributions/random.seeds

@@ -21,8 +21,8 @@ DEFINE <SCRATCH>           /scratch/fmu
 DEFINE <CASE_DIR>          drogon_exercise_04a
 DEFINE <ECLIPSE_NAME>      DROGON
 --
-DEFINE <RMS_NAME>          drogon.rms14.2.2
-DEFINE <RMS_VERSION>       14.2.2
+DEFINE <RMS_NAME>          drogon.rms15.0.1.0
+DEFINE <RMS_VERSION>       15.0.1.0
 DEFINE <RMS_WF_NAME1>      MAIN
 --
 DEFINE  <DESIGN_MATRIX>    ../input/distributions/design_matrix_one_by_one_exercise_04a.xlsx
