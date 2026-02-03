@@ -113,14 +113,6 @@ LOAD_WORKFLOW_JOB         ../bin/jobs/WF_DPDT2YML
 LOAD_WORKFLOW             ../bin/workflows/wf_dpdt2yml
 
 
----------------------------------------
--- Workflow that calculate misfit for case selected in gui
--- The output file is located at <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables
-DEFINE <OUTPUTDIR_MISFIT>       <SCRATCH>/<USER>/<CASE_DIR>/share/results/tables
-LOAD_WORKFLOW_JOB               ../bin/jobs/WF_EXPORT_MISFIT
-LOAD_WORKFLOW                   ../bin/workflows/wf_export_misfit
-
-
 -----------------------------------------
 ---- Worklow that creates the case metadata and registers on Sumo (optional)
 DEFINE <SUMO_ENV>       prod
