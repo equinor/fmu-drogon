@@ -23,6 +23,7 @@ T_LIST = ["WTPTWT1", "WTPTWT2"]
 
 EPSILON = 0.000001
 
+
 def get_parser():
     """Construct a parser for command line and for command line help"""
     parser = argparse.ArgumentParser(description=DESCRIPTION)
@@ -66,9 +67,7 @@ def extract_tracer_breakthrough_time(
             for well in wells:
                 tracer_rows = summary_df[tracer + ":" + well] > EPSILON
                 if tracer_rows.any():
-                    tbt = summary_df[summary_df[tracer + ":" + well] > EPSILON].index[
-                        0
-                    ]
+                    tbt = summary_df[summary_df[tracer + ":" + well] > EPSILON].index[0]
                     diff = tbt - summary_df.index.min()
                     file.write(str(int(diff.days)) + "\n")
                     msg = f"Tracer {tracer}, well {well}, difference: {diff.days} days"
@@ -110,7 +109,7 @@ if __name__ == "__main__":
 
 
 def test_breakthrough(tmpdir):
-    """Mock a simple dataframe and test the breatkthrough time extraction"""
+    """Mock a simple dataframe and test the breakthrough time extraction."""
     tmpdir.chdir()
     summary_df = pd.DataFrame(
         columns=["DATE", "WTPTWT2:A-1"],
@@ -118,14 +117,31 @@ def test_breakthrough(tmpdir):
     )
     summary_df["DATE"] = pd.to_datetime(summary_df["DATE"])
     summary_df = summary_df.set_index("DATE")
-    print(summary_df.index.dtype)
-    print(summary_df)
-    print(summary_df.dtypes)
     extract_tracer_breakthrough_time(
         summary_df,
         "foo.txt",
         wells=["A-1"],
         tracers=["WTPTWT2"],
     )
-    print(open("foo.txt").readlines())
-    assert open("foo.txt").readlines() == ["60\n"]
+    with open("foo.txt") as f:
+        assert f.readlines() == ["60\n"]
+
+
+def test_no_breakthrough(tmpdir):
+    """When no breakthrough occurs, max_bt_time should be written."""
+    tmpdir.chdir()
+    summary_df = pd.DataFrame(
+        columns=["DATE", "WTPTWT2:A-1"],
+        data=[["2020-01-01", 0], ["2020-02-01", 0], ["2020-03-01", 0]],
+    )
+    summary_df["DATE"] = pd.to_datetime(summary_df["DATE"])
+    summary_df = summary_df.set_index("DATE")
+    extract_tracer_breakthrough_time(
+        summary_df,
+        "foo.txt",
+        wells=["A-1"],
+        tracers=["WTPTWT2"],
+        max_bt_time=999,
+    )
+    with open("foo.txt") as f:
+        assert f.readlines() == ["999\n"]

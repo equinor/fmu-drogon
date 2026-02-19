@@ -57,7 +57,6 @@ def run_pem(config_file):
     dfs = []
     for date in SEISDATES:
         print(date)
-        date = str(date).replace("-", "")
         df_date = df_static.copy()
 
         for pname in PROPS_DYNAMIC:
@@ -117,7 +116,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run pem with pem config as input")
     parser.add_argument(
         "filename",
-        metavar="Filname for pem config file",
+        metavar="Filename for pem config file",
         type=str,
         nargs="?",
         help="Filename for pem config file",

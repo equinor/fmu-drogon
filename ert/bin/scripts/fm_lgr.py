@@ -13,16 +13,6 @@ import os
 
 import pandas as pd
 
-parser = argparse.ArgumentParser()
-
-parser.add_argument("file_well", help="RMS file with well completions")
-parser.add_argument("file_eclipse", help="Eclipse .DATA file")
-parser.add_argument("file_runspec", help="LGR runspec file")
-parser.add_argument("file_grid", help="LGR grid file")
-parser.add_argument("file_sch", help="LGR schedule file")
-parser.add_argument("size", help="LGR size")
-parser.add_argument("file_dual", help="File with dual porosoty option")
-
 
 def create_wellspec_dataframe(f):
     # Create pandas dataframe with WELSPECS data
@@ -472,6 +462,30 @@ well LGRname 50 50 1 2 1.0 2* wbdia 1* skin 1* dir /
     )
 
 
+def parse_well_file(file_well):
+    """Parse both WELSPECS and COMPDAT from a well completions file."""
+    with open(file_well) as f:
+        df_welspecs = create_wellspec_dataframe(f)
+    with open(file_well) as f:
+        df_compdat = create_compdat_dataframe(f)
+    return df_welspecs, df_compdat
+
+
+def test_parse_well_file(tmp_path):
+    """Regression: both WELSPECS and COMPDAT must be parsed from a well file.
+    A single file open causes the iterator to be consumed after WELSPECS,
+    leaving nothing for COMPDAT."""
+    well_file = tmp_path / "wells.txt"
+    well_file.write_text(
+        "WELSPECS\n--WELL GROUP\nW1 G1 /\n/\n\nCOMPDAT\n--WELL I J\nW1 10 20 /\n/\n"
+    )
+    df_welspecs, df_compdat = parse_well_file(str(well_file))
+    assert df_welspecs is not None, "Failed to parse WELSPECS"
+    assert len(df_welspecs) == 1
+    assert df_compdat is not None, "COMPDAT not parsed — file iterator consumed"
+    assert len(df_compdat) == 1
+
+
 def run(file_well, file_eclipse, file_runspec, file_grid, file_sch, size, file_dual):
     if size == "small":
         index = 11
@@ -489,9 +503,7 @@ def run(file_well, file_eclipse, file_runspec, file_grid, file_sch, size, file_d
 
     # -------------------------------------------------
 
-    with open(file_well) as f:
-        df_welspecs = create_wellspec_dataframe(f)
-        df_compdat = create_compdat_dataframe(f)
+    df_welspecs, df_compdat = parse_well_file(file_well)
 
     lgr, df_compdat = add_num_lgr(df_compdat)
     df_compdat = remove_same_layer_completions(df_compdat)
@@ -558,10 +570,18 @@ def run(file_well, file_eclipse, file_runspec, file_grid, file_sch, size, file_d
                 sch3 = line.split()[0].split("/")[-1].replace("'", "")
                 line = line.replace(sch3, sch2[-1])
             f2.write(line)
-    os.rename(directory + "/" + sch + ".tmp", dir + "/" + sch)
+    os.rename(directory + "/" + sch + ".tmp", directory + "/" + sch)
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file_well", help="RMS file with well completions")
+    parser.add_argument("file_eclipse", help="Eclipse .DATA file")
+    parser.add_argument("file_runspec", help="LGR runspec file")
+    parser.add_argument("file_grid", help="LGR grid file")
+    parser.add_argument("file_sch", help="LGR schedule file")
+    parser.add_argument("size", help="LGR size")
+    parser.add_argument("file_dual", help="File with dual porosity option")
     args = parser.parse_args()
     run(
         args.file_well,
