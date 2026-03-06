@@ -156,9 +156,6 @@ FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CON
 -- Eclipse/Flow
 -----------------------------------------------------
 
--- FORWARD_MODEL INSERT_NOSIM
--- FORWARD_MODEL ECLIPSE100(<VERSION>=2022.2)
-
 FORWARD_MODEL FLOW(<VERSION>=rc45, <OPTS>="--solver-max-time-step-in-days=31.0")
 
 -- Merge hist and pred UNRST files

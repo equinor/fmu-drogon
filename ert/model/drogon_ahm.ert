@@ -178,9 +178,6 @@ FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CON
 
 FORWARD_MODEL ECLCOMPRESS  -- Compress eclipse include files
 
--- FORWARD_MODEL INSERT_NOSIM
--- FORWARD_MODEL ECLIPSE100(<VERSION>=2022.2)
-
 FORWARD_MODEL FLOW(<VERSION>=rc45, <OPTS>="--solver-max-time-step-in-days=31.0")
 
 -- make symlinks with generic name
@@ -190,7 +187,7 @@ FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/<ECLBASE>.UNRST, <LINKNAME>=<RUNPA
 
 
 -----------------------------------------------------
----- Export data for visualisation (webviz,RMS covisualization)
+---- Export data for visualisation (webviz, RMS covisualization)
 ---- Prepare model response data for use in AHM
 -----------------------------------------------------
 
@@ -199,10 +196,10 @@ INCLUDE ../input/config/export_maps.ert      -- simgrid and geogrid maps, for vi
 INCLUDE ../input/config/export_ecl_roff.ert  -- sim model restart and init parameters, for visualization
 
 
-INCLUDE  ../input/config/gen_data_rft_wells.ert -- RFT data used in conditioning/ahm, incl export for visualization
-INCLUDE  ../input/config/gen_data_tracer.ert    -- Tracer data used in conditioning/ahm
-INCLUDE  ../input/config/sim2seis.ert           -- SIM2SEIS, used in conditioning/ahm, incl export for visualization
-INCLUDE  ../input/config/geoseis.ert            -- GEOSEIS, export for visualization
+INCLUDE  ../input/config/rft_settings.ert      -- RFT zonemap and export for visualization
+INCLUDE  ../input/config/gen_data_tracer.ert   -- Tracer data used in conditioning/ahm
+INCLUDE  ../input/config/sim2seis.ert          -- SIM2SEIS, used in conditioning/ahm, incl export for visualization
+INCLUDE  ../input/config/geoseis.ert           -- GEOSEIS, export for visualization
 
 
 ----------------------------------------------------

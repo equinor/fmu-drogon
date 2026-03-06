@@ -1,0 +1,37 @@
+-------------------------
+-- Include ZONEMAP when using RFT_OBSERVATION
+-------------------------
+
+ZONEMAP rms/output/zone/layer_zone_table.txt  -- relative to runpath
+
+-- ZONEMAP is used to validate that the simulated rft values are in same zone as given in RFT_OBSERVATION
+-- ERT doc: https://ert.readthedocs.io/en/latest/reference/configuration/keywords.html#zonemap
+--
+-- Note: in Drogon we create a layer-zone file per realization
+-- This is needed since number of layers can vary per realization
+--     (structural uncertainty + conform gridding in Therys)
+
+
+-------------------------
+-- rft response data to include in ert storage
+-------------------------
+RFT  WELL:R_*  DATE:2018-01-01  PROPERTIES:PRESSURE,SWAT
+RFT  WELL:R_*  DATE:2018-03-01  PROPERTIES:PRESSURE,SWAT
+RFT  WELL:R_*  DATE:2018-07-03  PROPERTIES:PRESSURE,SWAT
+RFT  WELL:R_*  DATE:2018-09-12  PROPERTIES:PRESSURE,SWAT
+RFT  WELL:R_*  DATE:2018-04-28  PROPERTIES:PRESSURE,SWAT
+RFT  WELL:R_*  DATE:2018-11-07  PROPERTIES:PRESSURE,SWAT
+
+
+-------------------------
+-- write eclipse rft to csv file: share/results/tables/rft.csv
+-------------------------
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=rft, <ECLBASE>=<ECLBASE>,  <OUTPUT>=share/results/tables/rft.csv)
+
+
+-------------------------
+-- write ert rft to csv file: share/results/tables/rft_ert.csv
+-- ERT doc: https://ert.readthedocs.io/en/latest/reference/configuration/data_types.html#exporting-rft-data-for-visualization
+-------------------------
+LOAD_WORKFLOW ../../bin/workflows/export_rft_data
+HOOK_WORKFLOW export_rft_data POST_SIMULATION

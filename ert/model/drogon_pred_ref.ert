@@ -115,9 +115,6 @@ FORWARD_MODEL FM_MERGE_PARAMETERS(<PATH_BASE>=<RUNPATH>, <PATH_PREPEND>=<RUNPATH
 -- Eclipse/Flow
 ----------------------------------------------------
 
--- FORWARD_MODEL INSERT_NOSIM
--- FORWARD_MODEL ECLIPSE100(<VERSION>=2022.2)
-
 FORWARD_MODEL FLOW(<VERSION>=rc45, <OPTS>="--solver-max-time-step-in-days=31.0")
 
 -- Merge hist and pred UNRST files (merged file can be deleted after post-processing)
