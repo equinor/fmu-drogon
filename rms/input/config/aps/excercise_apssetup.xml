@@ -1,13 +1,21 @@
 <?xml version="1.0" ?>
-<APSModel version="1.0">
-  <RMSProjectName> drogon.rms14.2.1 </RMSProjectName>
+<APSModel version="1.1">
+  <Preview zoneNumber="1" regionNumber="0" crossSectionType="IJ" crossSectionRelativePos="0.5" scale="1.0" resolution="Normal"/>
+  <RMSProjectName> drogon.rms15.0.1.0 </RMSProjectName>
   <GridModelName> Geogrid_Valysar </GridModelName>
   <ZoneParamName> Zone </ZoneParamName>
   <ResultFaciesParamName> aps_test </ResultFaciesParamName>
-  <PrintInfo> 0 </PrintInfo>
-  <SeedFile> seed.dat </SeedFile>
-  <TransformationType> 0 </TransformationType>
-  <WriteSeeds> no </WriteSeeds>
+  <JobSettings>
+    <FmuSettings>
+      <FmuMode>OFF</FmuMode>
+    </FmuSettings>
+    <RunSettings>
+      <MaxFractionNotNormalised>0.1</MaxFractionNotNormalised>
+      <ToleranceLimitProbability>0.2</ToleranceLimitProbability>
+    </RunSettings>
+    <TransformationSettings>0</TransformationSettings>
+    <LogSetting>0</LogSetting>
+  </JobSettings>
   <MainFaciesTable blockedWell="BW" blockedWellLog="Facies">
     <Facies name="Floodplain">
       <Code> 0 </Code>
@@ -38,19 +46,19 @@
     <Zone number="1">
       <GridLayout>Proportional</GridLayout>
       <UseConstProb> 0 </UseConstProb>
-      <SimBoxThickness> 16.826007877077377 </SimBoxThickness>
+      <SimBoxThickness> 16.824530363082886 </SimBoxThickness>
       <FaciesProbForModel>
         <Facies name="Channel">
-          <ProbCube> apstrend_aps_Channel </ProbCube>
+          <ProbCube> probcube_aps_Channel </ProbCube>
         </Facies>
         <Facies name="Coal">
-          <ProbCube> apstrend_aps_Coal </ProbCube>
+          <ProbCube> probcube_aps_Coal </ProbCube>
         </Facies>
         <Facies name="Crevasse">
-          <ProbCube> apstrend_aps_Crevasse </ProbCube>
+          <ProbCube> probcube_aps_Crevasse </ProbCube>
         </Facies>
         <Facies name="Floodplain">
-          <ProbCube> apstrend_aps_Floodplain </ProbCube>
+          <ProbCube> probcube_aps_Floodplain </ProbCube>
         </Facies>
       </FaciesProbForModel>
       <GaussField name="GRF1">
