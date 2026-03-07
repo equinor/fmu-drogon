@@ -12,7 +12,7 @@
 
 set -e
 
-VERSION="15.1.0.1"
+VERSION="15.0.1.0"
 
 CURRENT="drogon.rms$VERSION"
 GENERIC="drogon_git.rms$VERSION"
