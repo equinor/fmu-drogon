@@ -81,7 +81,7 @@ input:
 
 # Zonation from file on yaml format
 zonation:
-  yamlfile: ../iter-0/rms/output/zone/zonation_ecl_map.yml    # ert will interpret this as relative to <runpath>
+  yamlfile: rms/output/zone/zonation_ecl_map.yml    # ert will interpret this as relative to <runpath>
 
 computesettings:
   zone: Yes  # compute for each zone
