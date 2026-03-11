@@ -12,7 +12,7 @@ input:
 
 # Zonation from file on yaml format
 zonation:
-  yamlfile: ../iter-0/rms/output/zone/zonation_ecl_map.yml
+  yamlfile: rms/output/zone/zonation_ecl_map.yml
 
 computesettings:
   mode: oil  # Choose oil, gas, or both

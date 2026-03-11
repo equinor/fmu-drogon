@@ -141,6 +141,9 @@ FORWARD_MODEL RES2CSV(<SUBCOMMAND>=summary, <ECLBASE>=<ECLBASE>, <OUTPUT>="share
 -- create maps for visualization
 ----------------------------------------------------
 
+-- Create symlink to zonation file to be used with hc thickness job
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../<RESTART_DIR>/rms/output/zone/zonation_ecl_map.yml, <LINKNAME>=<RUNPATH>/rms/output/zone/zonation_ecl_map.yml)
+
 -- Create oil/gas thickness maps from Eclipse prediction. Use the merged UNRST file (root name ECLIPSE)
 FORWARD_MODEL GRID3D_HC_THICKNESS(<ECLROOT>=eclipse/model/ECLIPSE_MERGED, <CONFIG_HCMAP>=<CONFIG_PATH>/../input/config/ecl_hc_thickness_pred.yml)
 
