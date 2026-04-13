@@ -4,7 +4,7 @@
 WF_COPY_PREPROCESSED_DATAIO  <SCRATCH>/<USER>/<CASE_DIR>   <CONFIG_PATH>    ../../share/preprocessed/maps "--verbosity" WARNING
 
 --activate this line for uploading to sumo:
-SUMO_UPLOAD <SCRATCH>/<USER>/<CASE_DIR>   "<SCRATCH>/<USER>/<CASE_DIR>/share/observations/maps/*.gri"  <SUMO_ENV>
+SUMO_UPLOAD <SCRATCH>/<USER>/<CASE_DIR>
 
 
 
