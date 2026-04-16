@@ -115,7 +115,6 @@ LOAD_WORKFLOW             ../bin/workflows/wf_dpdt2yml
 
 -----------------------------------------
 ---- Worklow that creates the case metadata and registers on Sumo (optional)
-DEFINE <SUMO_ENV>       prod
 DEFINE <SUMO_CASEPATH>  <SCRATCH>/<USER>/<CASE_DIR>
 LOAD_WORKFLOW           ../bin/workflows/xhook_create_case_metadata
 

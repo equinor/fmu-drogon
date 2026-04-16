@@ -8,7 +8,6 @@
 
 
 -- Sumo variables
-DEFINE  <SUMO_ENV>       prod
 DEFINE  <SUMO_CASEPATH>  <SCRATCH>/<USER>/<CASE_DIR>
 
 -- Load and run hook workflow for creating case metadata and registering case on Sumo
