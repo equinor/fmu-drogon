@@ -27,6 +27,9 @@ DEFINE <RMS_WF_NAME>       MAIN
 --
 DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
 
+DEFINE <VALYSAR_ERTBOX> <CONFIG_PATH>/../../rms/output/aps/ERTBOX_Valysar.EGRID
+DEFINE <THERYS_ERTBOX> <CONFIG_PATH>/../../rms/output/aps/ERTBOX_Therys.EGRID
+DEFINE <VOLON_ERTBOX> <CONFIG_PATH>/../../rms/output/aps/ERTBOX_Volon.EGRID
 
 -----------------------------------------------------
 -- Observations
@@ -39,7 +42,7 @@ OBS_CONFIG  <OBS_FILE>
 -- preprocess correlated seismic observations in ahm update step
 ANALYSIS_SET_VAR OBSERVATIONS AUTO_SCALE AMP*
 
--- Enable distance-based localization -----
+--- Enable distance-based localization -----
 -- ANALYSIS_SET_VAR  STD_ENKF  DISTANCE_LOCALIZATION True
 
 
@@ -154,8 +157,8 @@ DESIGN_MATRIX  <DESIGN_MATRIX>  DESIGN_SHEET:DesignSheet01  DEFAULT_SHEET:Defaul
 INCLUDE  ../input/config/ahm_surface.ert    -- update horizons
 
 ---- 3d parameters ----
-INCLUDE  ../input/config/ahm_field_aps.ert  -- update aps grid parameters
-
+-- INCLUDE  ../input/config/ahm_field_aps.ert  -- update aps grid parameters
+INCLUDE  ../input/config/ahm_field_aps_ertbox.ert  -- update aps grid parameters and use individual ERTBOX grid per zone
 
 -----------------------------------------------------
 -- Populate template files with their scalar uncertainty parameter values
