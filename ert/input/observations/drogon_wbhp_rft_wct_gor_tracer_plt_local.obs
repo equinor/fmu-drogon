@@ -32,7 +32,7 @@ GENERAL_OBSERVATION  TRACER_OBS { DATA = TRACER_SIM;  RESTART=1; OBS_FILE=./trac
 -- RFT data
 RFT_OBSERVATION rft_obs {
     CSV=./rft/rft_ertobs.csv;
-    PROPERTY=PRESSURE
+    PROPERTY=PRESSURE;
 };
 --
 -- BHP (shut-in) data
