@@ -154,8 +154,7 @@ DESIGN_MATRIX  <DESIGN_MATRIX>  DESIGN_SHEET:DesignSheet01  DEFAULT_SHEET:Defaul
 INCLUDE  ../input/config/ahm_surface.ert    -- update horizons
 
 ---- 3d parameters ----
-INCLUDE  ../input/config/ahm_field_aps.ert  -- update aps grid parameters
-
+INCLUDE  ../input/config/ahm_field_aps.ert  -- update aps grid parameters and use individual ERTBOX grid per zone
 
 -----------------------------------------------------
 -- Populate template files with their scalar uncertainty parameter values
