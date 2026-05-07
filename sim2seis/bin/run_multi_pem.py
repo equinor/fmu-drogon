@@ -14,7 +14,6 @@ import pandas as pd
 import open_petro_elastic as pem
 from open_petro_elastic.__main__ import (
     make_input,
-    load_data_from_csv,
 )
 import fmu.config.utilities as utils
 
@@ -60,9 +59,6 @@ PEM_CONFIG_FILES = [
 ]
 RUN_ID = ""
 
-KEEP_MISSING_ROWS = True
-UNDEF_VALUES = None
-
 
 def get_values_list(subset_number, subset_values):
     values_list = []
@@ -80,11 +76,7 @@ def get_values_list(subset_number, subset_values):
                 int2 = int(numbers[1])
                 values_list.extend(range(int1, int2 + 1))
             except ValueError:
-                print(
-                    "Incorrect values for subset #{}: {}".format(
-                        subset_number + 1, element
-                    )
-                )
+                print(f"Incorrect values for subset #{subset_number + 1}: {element}")
                 print(
                     "It should be an integer or a string of "
                     "type 'a-b' with a,b integers so that a<b"

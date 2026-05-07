@@ -7,68 +7,73 @@ import numpy as np
 import pandas as pd
 import yaml
 
-parser = argparse.ArgumentParser()
-parser.add_argument("dpdt_file_saphir", help="Saphir pressure derivative file")
-parser.add_argument("dpdt_file_yml", help="Pressure derivative yaml file")
-parser.add_argument(
-    "index_list",
-    nargs="+",
-    help="Index list for general observation, None, or the numbers in the list, "
-    "f.ex. 0 10",
-)
-args = parser.parse_args()
-
-dpdt_file_saphir = args.dpdt_file_saphir
-dpdt_file_yml = args.dpdt_file_yml
-index_list = args.index_list
-
-unc = 0.1
-min_unc_value = 0.05
-
-time_name = "dTime"
-dpdt_name = "Pressure derivative"
+UNC = 0.1
+MIN_UNC_VALUE = 0.05
+TIME_NAME = "dTime"
+DPDT_NAME = "Pressure derivative"
 
 
-##############################################
-# Main program
-##############################################
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dpdt_file_saphir", help="Saphir pressure derivative file")
+    parser.add_argument("dpdt_file_yml", help="Pressure derivative yaml file")
+    parser.add_argument(
+        "index_list",
+        nargs="+",
+        help="Index list for general observation, None, or the numbers in the list, "
+        "f.ex. 0 10",
+    )
+    return parser.parse_args()
 
-df = pd.read_csv(dpdt_file_saphir, sep="\t")
-df = df.iloc[1:]
-df.reset_index(inplace=True, drop=True)
-df[time_name].replace("", np.nan, inplace=True)
-df.dropna(subset=[time_name], inplace=True)
-df[dpdt_name].replace(np.nan, 0, inplace=True)
 
-obs_group = {}
-obs_group["key"] = "dpd(supt)_w2"
-obs_group["observations"] = []
+def load_data(filepath: str) -> pd.DataFrame:
+    df = pd.read_csv(filepath, sep="\t").iloc[1:].reset_index(drop=True)
+    df[TIME_NAME] = df[TIME_NAME].replace("", np.nan)
+    df = df.dropna(subset=[TIME_NAME])
+    df[DPDT_NAME] = df[DPDT_NAME].replace(np.nan, 0)
+    return df
 
-obs_values = {}
 
-for i in df.index:
-    calc_unc = float(df[dpdt_name][i]) * 0.1
-    if calc_unc < min_unc_value:
-        calc_unc = min_unc_value
+def create_observations(
+    df: pd.DataFrame, index_list: list[str]
+) -> list[dict[str, float]]:
     if index_list[0] != "None":
-        index_list_int = list(map(int, index_list))
-        index_list_set = set(index_list_int)
-        if i in index_list_set:
-            obs_values["HOURS"] = float(df[time_name][i])
-            obs_values["error"] = calc_unc
-            obs_values["value"] = float(df[dpdt_name][i])
-            obs_values_copy = obs_values.copy()
-            obs_group["observations"].append(obs_values_copy)
-    else:
-        obs_values["HOURS"] = float(df[time_name][i])
-        obs_values["error"] = calc_unc
-        obs_values["value"] = float(df[dpdt_name][i])
-        obs_values_copy = obs_values.copy()
-        obs_group["observations"].append(obs_values_copy)
+        index_list_set = set(map(int, index_list))
+        df = df[df.index.isin(index_list_set)]
+    observations = []
+    for _, row in df.iterrows():
+        calc_unc = max(float(row[DPDT_NAME]) * UNC, MIN_UNC_VALUE)
 
-data = dict(general=[obs_group])
+        observations.append(
+            {
+                "HOURS": float(row[TIME_NAME]),
+                "error": calc_unc,
+                "value": float(row[DPDT_NAME]),
+            }
+        )
 
-with open(dpdt_file_yml, "w") as file:
-    yaml.dump(data, file, default_flow_style=False)
+    return observations
 
-print("Finished creating dpdt obs on yaml format!")
+
+def main() -> None:
+    args = parse_args()
+    df = load_data(args.dpdt_file_saphir)
+    observations = create_observations(df, args.index_list)
+
+    data = {
+        "general": [
+            {
+                "key": "dpd(supt)_w2",
+                "observations": observations,
+            }
+        ]
+    }
+
+    with open(args.dpdt_file_yml, "w") as file:
+        yaml.dump(data, file, default_flow_style=False)
+
+    print("Finished creating dpdt obs on yaml format!")
+
+
+if __name__ == "__main__":
+    main()

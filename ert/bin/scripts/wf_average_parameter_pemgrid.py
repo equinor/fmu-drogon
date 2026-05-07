@@ -57,7 +57,7 @@ def sum_running_stats():
             if not os.path.isfile(pfile):
                 print(
                     f"Real {real}: {pfile} does not exist, "
-                    "skipping to next realization..."
+                    "skipping to next realization...",
                 )
                 continue
 
@@ -77,9 +77,7 @@ def sum_running_stats():
                 pcum = pcum + pavg
 
             print(
-                "Current avg for running mean {} ({}) is {}".format(
-                    propname, real, pcum.mean()
-                )
+                f"Current avg for running mean {propname} ({real}) is {pcum.mean()}",
             )
 
         # store the average pcum which is running average

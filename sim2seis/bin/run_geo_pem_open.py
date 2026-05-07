@@ -27,8 +27,7 @@ RUN_ID = "_geo"
 
 
 def run_pem(pem_config_file):
-    listdates = []
-    listdates.append(INITDATE)
+    listdates = [INITDATE]
 
     for date in listdates:
         print(date)
@@ -84,7 +83,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run pem with pem config as input")
     parser.add_argument(
         "filename",
-        metavar="Filname for pem config file",
+        metavar="Filename for pem config file",
         type=str,
         nargs="?",
         help="Filename for pem config file",
