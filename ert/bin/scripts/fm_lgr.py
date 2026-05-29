@@ -21,7 +21,7 @@ parser.add_argument("file_runspec", help="LGR runspec file")
 parser.add_argument("file_grid", help="LGR grid file")
 parser.add_argument("file_sch", help="LGR schedule file")
 parser.add_argument("size", help="LGR size")
-parser.add_argument("file_dual", help="File with dual porosoty option")
+parser.add_argument("file_dual", help="File with dual porosity option")
 
 
 def create_wellspec_dataframe(f):
@@ -33,14 +33,14 @@ def create_wellspec_dataframe(f):
     for line in f:
         if line.strip():  # Remove empty lines
             words = line.split()
-            if flag2 is True:
+            if flag2:
                 if words[0] == "/":
                     flag2 = False
                 else:
                     words = words[:-1]  # Remove last item in list, /
                     df_welspecs.loc[i] = words
                     i += 1
-            if flag1 is True:
+            if flag1:
                 df_welspecs = pd.DataFrame(columns=words)
                 flag1 = False
                 flag2 = True
@@ -71,14 +71,14 @@ def create_compdat_dataframe(f):
     for line in f:
         if line.strip():  # Remove empty lines
             words = line.split()
-            if flag2 is True and not words[0].startswith("-------------------------"):
+            if flag2 and not words[0].startswith("-------------------------"):
                 if words[0] == "/":
                     flag2 = False
                 else:
                     words = words[:-1]  # Remove last item in list, /
                     df_compdat.loc[i] = words
                     i += 1
-            if flag1 is True:
+            if flag1:
                 df_compdat = pd.DataFrame(columns=words)
                 flag1 = False
                 flag2 = True
@@ -123,15 +123,15 @@ def test_add_num_lgr():
 
 def remove_same_layer_completions(df_compdat):
     # Remove completions if same layer for different LGRs
-    list = []
+    drop_indices = []
     for i in range(len(df_compdat) - 1):
         if (
             df_compdat["K1"].loc[i] == df_compdat["K1"].loc[i + 1]
             and df_compdat["LGR"].loc[i] != df_compdat["LGR"].loc[i + 1]
         ):
-            list.append(i + 1)
-    for i in range(len(list)):
-        df_compdat.drop(list[i], inplace=True)
+            drop_indices.append(i + 1)
+    for i in range(len(drop_indices)):
+        df_compdat.drop(drop_indices[i], inplace=True)
     df_compdat.reset_index(inplace=True)
 
 
@@ -293,7 +293,7 @@ def test_write_lgr_config_file():
         buffer,
         1,
         "small",
-        False,
+        0,
     )
     assert (
         buffer.getvalue()
@@ -466,7 +466,7 @@ def test_write_compdatl():
                 "DIR": ["dir"],
             }
         ),
-        False,
+        0,
         50,
         buffer,
     )
@@ -492,19 +492,16 @@ def run(file_well, file_eclipse, file_runspec, file_grid, file_sch, size, file_d
 
     # Dual porosity modelling option
     # 0 = SP, 1 = DP, 2 = DPDK
-    f = open(file_dual)
-    dual = int(f.read(1))
-    f.close()
+    with open(file_dual) as f:
+        dual = int(f.read(1))
 
     # -------------------------------------------------
 
-    f = open(file_well)
-    df_welspecs = create_wellspec_dataframe(f)
-    f.close()
+    with open(file_well) as f:
+        df_welspecs = create_wellspec_dataframe(f)
 
-    f = open(file_well)
-    df_compdat = create_compdat_dataframe(f)
-    f.close()
+    with open(file_well) as f:
+        df_compdat = create_compdat_dataframe(f)
 
     lgr = add_num_lgr(df_compdat)
     remove_same_layer_completions(df_compdat)
@@ -512,75 +509,67 @@ def run(file_well, file_eclipse, file_runspec, file_grid, file_sch, size, file_d
 
     # -------------------------------------------------
 
-    f = open(file_runspec, "w")
-    write_lgr_runspec_file(df_compdat, f)
-    f.close()
+    with open(file_runspec, "w") as f:
+        write_lgr_runspec_file(df_compdat, f)
 
     # LGR grid file
-    f = open(file_grid, "w")
-    write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual)
-    f.close()
+
+    with open(file_grid, "w") as f:
+        write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual)
 
     # LGR schedule file
-    f = open(file_sch, "w")
-
-    f2 = open(file_well)
-
-    flag = False
-    for line in f2:
-        if line.strip():  # Remove empty lines
-            words = line.split()
-            if flag is True:
-                if words[0] == "/":
+    with open(file_sch, "w") as f, open(file_well) as f2:
+        flag = False
+        for line in f2:
+            if line.strip():
+                words = line.split()
+                if flag:
+                    if words[0] == "/":
+                        f.write(line)
+                        flag = False
+                    else:
+                        f.write(line)
+                if words[0] == "GRUPTREE":
                     f.write(line)
-                    flag = False
-                else:
-                    f.write(line)
-            if words[0] == "GRUPTREE":
-                f.write(line)
-                flag = True
-    f.write("\n")
-
-    f2.close()
-
-    write_welspecl(df_welspecs, df_compdat, index, f)
-    write_compdatl(df_compdat, dual, index, f)
-    f.close()
+                    flag = True
+        f.write("\n")
+        write_welspecl(df_welspecs, df_compdat, index, f)
+        write_compdatl(df_compdat, dual, index, f)
 
     # -------------------------------------------------
 
     # Update Eclipse .DATA file
-    f = open(file_eclipse)
-    f2 = open(file_eclipse + ".tmp", "w")
-    for line in f:
-        if line.startswith("GRID") and not line.startswith("GRIDFILE"):
-            f2.write("INCLUDE\n")
-            f2.write(" '../include/runspec/" + file_runspec.split("/")[-1] + "' /\n")
-            f2.write("\n")
-        if line.startswith("EDIT"):
-            f2.write("INCLUDE\n")
-            f2.write(" '../include/grid/" + file_grid.split("/")[-1] + "' /\n")
-            f2.write("\n")
-        if ".sch" in line:
-            sch = line.split()[0].split("/")[-1].replace("'", "")
-        f2.write(line)
-    f2.close()
-    f.close()
+    sch = None
+    with open(file_eclipse) as f, open(file_eclipse + ".tmp", "w") as f2:
+        for line in f:
+            if line.startswith("GRID") and not line.startswith("GRIDFILE"):
+                f2.write("INCLUDE\n")
+                f2.write(
+                    " '../include/runspec/" + file_runspec.split("/")[-1] + "' /\n"
+                )
+                f2.write("\n")
+            if line.startswith("EDIT"):
+                f2.write("INCLUDE\n")
+                f2.write(" '../include/grid/" + file_grid.split("/")[-1] + "' /\n")
+                f2.write("\n")
+            if ".sch" in line:
+                sch = line.split()[0].split("/")[-1].replace("'", "")
+            f2.write(line)
     os.rename(file_eclipse + ".tmp", file_eclipse)
 
     # Update Eclipse schedule file
     sch2 = file_sch.split("/")
-    dir = file_sch.rsplit("/", 1)[0]
-    f = open(dir + "/" + sch)
-    f2 = open(dir + "/" + sch + ".tmp", "w")
-    for line in f:
-        if "schedule" in line:
-            sch3 = line.split()[0].split("/")[-1].replace("'", "")
-            line = line.replace(sch3, sch2[-1])
-        f2.write(line)
-    f2.close()
-    f.close()
-    os.rename(dir + "/" + sch + ".tmp", dir + "/" + sch)
+    directory = file_sch.rsplit("/", 1)[0]
+    with (
+        open(directory + "/" + sch) as f,
+        open(directory + "/" + sch + ".tmp", "w") as f2,
+    ):
+        for line in f:
+            if "schedule" in line:
+                sch3 = line.split()[0].split("/")[-1].replace("'", "")
+                line = line.replace(sch3, sch2[-1])
+            f2.write(line)
+    os.rename(directory + "/" + sch + ".tmp", directory + "/" + sch)
 
 
 if __name__ == "__main__":
