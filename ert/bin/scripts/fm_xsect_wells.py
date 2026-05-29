@@ -6,16 +6,16 @@
 # alifb June 2024
 
 import argparse
+import os
 import pathlib
 import re
-import os
-import xtgeo
 
+import xtgeo
 import xtgeoviz.plot as plot
 
-DESCRIPTION = """
-Create a png file with cross section of well path and surfaces and optional grid properties
-Input argument is RUNPATH.
+DESCRIPTION = """ Create a png file with cross section of well path and surfaces and
+optional grid properties. Input argument is RUNPATH.
+
 Hardcoded:
 Location (relative to RUNPATH) and name of data (surfaces, wells and polygons).
 Data must be located in share/results/ wells, maps and polygons folders.
@@ -46,7 +46,8 @@ POLY = "share/results/polygons/toptherys--gl_faultlines_extract_postprocess.pol"
 
 GRID = "share/results/grids/eclgrid.roff"
 
-# Tuple of property name, file path (ROFF file) and plot range (ignore to use auto range)
+# Tuple of property name, file path (ROFF file) and plot range
+# (ignore to use auto range)
 GRID_PROPS = [
     ("SOIL_20200701", "share/results/grids/eclgrid--soil--20200701.roff", [0, 1]),
     ("SGAS_20200701", "share/results/grids/eclgrid--sgas--20200701.roff", [0, 1]),

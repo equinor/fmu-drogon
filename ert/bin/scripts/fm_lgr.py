@@ -139,7 +139,7 @@ def test_remove_same_layer_completions():
     df = create_compdat_dataframe(
         ["COMPDAT", "--WELL I J K1", "name1 2 3 4 /", "name2 4 5 4 /", "/"]
     )
-    lgr = add_num_lgr(df)
+    add_num_lgr(df)
     remove_same_layer_completions(df)
     assert df.to_csv() == ",index,--WELL,I,J,K1,LGR\n0,0,name1,2,3,4,1\n"
 
@@ -245,12 +245,13 @@ def write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual):
         f.write("HXFIN\n")
         if size == "small":
             f.write(
-                "  2*1  4*1  0.21  0.16 0.08  0.04 0.02 0.04 0.08 0.16 0.21  4*1  2*1 /\n"
+                "  2*1  4*1  0.21  0.16 0.08  0.04 0.02 0.04"
+                " 0.08 0.16 0.21  4*1  2*1 /\n"
             )
         elif size == "large":
             f.write(
                 "  2*1 4*1 4*1 4*1 4*1 8*1 8*1 0.21 0.16"
-                "  0.08 0.04 0.02 0.04 0.08 0.16 0.21  8*1 8*1 4*1 4*1 4*1 4*1 2*1 /\n"
+                " 0.08 0.04 0.02 0.04 0.08 0.16 0.21  8*1 8*1 4*1 4*1 4*1 4*1 2*1 /\n"
             )
         f.write("\n")
         f.write("NYFIN\n")
@@ -262,12 +263,13 @@ def write_lgr_config_file(lgr, df_compdat, f, ncells, size, dual):
         f.write("HYFIN\n")
         if size == "small":
             f.write(
-                "  2*1  4*1  0.21  0.16 0.08  0.04 0.02 0.04 0.08 0.16 0.21  4*1  2*1 /\n"
+                "  2*1  4*1  0.21  0.16 0.08  0.04 0.02 0.04"
+                " 0.08 0.16 0.21  4*1  2*1 /\n"
             )
         elif size == "large":
             f.write(
                 "  2*1 4*1 4*1 4*1 4*1 8*1 8*1 0.21 0.16"
-                "  0.08 0.04 0.02 0.04 0.08 0.16 0.21  8*1 8*1 4*1 4*1 4*1 4*1 2*1 /\n"
+                " 0.08 0.04 0.02 0.04 0.08 0.16 0.21  8*1 8*1 4*1 4*1 4*1 4*1 2*1 /\n"
             )
         f.write("\n")
         f.write("ENDFIN\n")
@@ -320,11 +322,13 @@ ENDFIN
 def write_welspecl(df_welspecs, df_compdat, index, f):
     f.write("WELSPECL\n")
     f.write(
-        df_welspecs.columns.values[0] + " " + df_welspecs.columns.values[1] + " LGR "
+        df_welspecs.columns.values[0]
+        + " "
+        + df_welspecs.columns.values[1]
+        + " LGR "
+        + " ".join(df_welspecs.columns.values[2:])
+        + "\n"
     )
-    for i in range(2, len(df_welspecs.columns.values)):
-        f.write(df_welspecs.columns.values[i] + " ")
-    f.write("\n")
     for i in range(len(df_welspecs)):
         f.write(
             df_welspecs["--WELL"].loc[i]
@@ -366,7 +370,7 @@ def test_write_welspecl():
     assert (
         buffer.getvalue()
         == """WELSPECL
---WELL GROUP LGR DREF PHASE 
+--WELL GROUP LGR DREF PHASE
 well group LGR3 50 50 dref phase /
 /
 
@@ -376,10 +380,12 @@ well group LGR3 50 50 dref phase /
 
 def write_compdatl(df_compdat, dual, index, f):
     f.write("COMPDATL\n")
-    f.write(df_compdat.columns.values[1] + " LGR ")
-    for i in range(2, len(df_compdat.columns.values) - 1):
-        f.write(df_compdat.columns.values[i] + " ")
-    f.write("\n")
+    f.write(
+        df_compdat.columns.values[1]
+        + " LGR "
+        + " ".join(df_compdat.columns.values[2:-1])
+        + "\n"
+    )
     for i in range(len(df_compdat)):
         k = df_compdat["K1"][
             df_compdat["LGR"] == df_compdat["LGR"].loc[i]
@@ -467,7 +473,7 @@ def test_write_compdatl():
     assert (
         buffer.getvalue()
         == """COMPDATL
---WELL LGR LGR K1 K2 OP/SH WBDIA SKIN 
+--WELL LGR LGR K1 K2 OP/SH WBDIA SKIN
 well LGRname 50 50 1 2 1.0 2* wbdia 1* skin 1* dir /
 /
 """

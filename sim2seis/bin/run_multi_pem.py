@@ -10,14 +10,12 @@ Updated 2024 to reduce runtime.
 import time
 from os import getenv, remove
 
-import pandas as pd
+import fmu.config.utilities as utils
 import open_petro_elastic as pem
+import pandas as pd
 from open_petro_elastic.__main__ import (
     make_input,
-    load_data_from_csv,
 )
-import fmu.config.utilities as utils
-
 
 # Read environment variable
 SIM2SEIS_PRED = getenv("FLOWSIM_IS_PREDICTION")

@@ -1,11 +1,12 @@
 name: test
 
 on:
- push:
-   branches:
-     - main
-   tags: "*"
- pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,19 +20,22 @@ jobs:
       matrix:
         python-version: ['3.11', '3.13']
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: test-requirements.txt
 
       - name: Install test-requirements
-        run: |
-          pip install -r test-requirements.txt
+        run: pip install -r test-requirements.txt
 
       - name: Run unit tests
         run: |
-            pytest ert/bin/scripts/fm_lgr.py ert/bin/scripts/fm_tracer_breakthrough.py # currently the only scripts with unit tests
+          pytest ert/bin/scripts/fm_lgr.py ert/bin/scripts/fm_tracer_breakthrough.py
 
       - name: Ruff format
-        run: |
-            ruff format --check
+        run: ruff format --check
+
+      - name: Ruff check
+        run: ruff check .

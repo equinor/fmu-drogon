@@ -16,7 +16,7 @@ push it, as the full size of it will stack up each time. This has the downside t
 latest commit(s) may have inconsistencies. For tagged versions however, RMS should
 always be at par with all other files.
 
-Git LSF is used for storing the large binary files, so ensure you have it installed
+Git LFS is used for storing the large binary files, so ensure you have it installed
 before cloning/pushing/pulling (one time install locally per user):
 
 ``` shell
@@ -25,25 +25,25 @@ git lfs install
 
 ## Note
 
-Since RMS is not fully integrated (we upload a zipped and archived version), PR's
+Since RMS is not fully integrated (we upload a zipped and archived version), PRs
 involving RMS should be clarified with admins upfront, otherwise they are likely to be
 rejected.
 
 
-Even if one do not have access to fully restore the project, cloning it could still be a
-useful way of accessing model files, scripts, workflows, etc.
+Even if one does not have access to fully restore the project, cloning it could still be
+a useful way of accessing model files, scripts, workflows, etc.
 
 
 ## License
 
-This work is dual-licensed under CC-BY-4.0 and GPL-3.0 (or any later version). Please
+This work is dual-licensed under CC-BY-SA-4.0 and GPL-3.0 (or any later version). Please
 see the files LICENSE-CCBYSA and LICENSE-GPLV3 for full details.
 
-Data and text files in this work is licensed under a
+Data and text files in this work are licensed under the
 [Creative Commons Attribution-ShareAlike 4.0 International License][cc-by-sa].
 
-Code (mostly python) in this work is licensed under a
-[GNU General Public Version 3 Liense][gpl-v3].
+Code (mostly Python) in this work is licensed under the
+[GNU General Public License Version 3][gpl-v3].
 
 
 [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
