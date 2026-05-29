@@ -1,7 +1,7 @@
--- Create ensemble metadata
+-- Create ensemble/case metadata
 
---                       ert_caseroot                 ert_configpath    ert_casename
-WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>  <CONFIG_PATH>     <CASE_DIR>
+--                       casepath
+WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>
 
 -- This workflow is intended to be run as a HOOK workflow.
 -- This workflow job is shipped with Komodo
