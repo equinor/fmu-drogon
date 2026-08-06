@@ -11,7 +11,7 @@ import pathlib
 import re
 
 import xtgeo
-import xtgeoviz.plot as plot
+from xtgeoviz import plot
 
 DESCRIPTION = """ Create a png file with cross section of well path and surfaces and
 optional grid properties. Input argument is RUNPATH.

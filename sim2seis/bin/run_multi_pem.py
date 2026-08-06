@@ -78,11 +78,7 @@ def get_values_list(subset_number, subset_values):
                 int2 = int(numbers[1])
                 values_list.extend(range(int1, int2 + 1))
             except ValueError:
-                print(
-                    "Incorrect values for subset #{}: {}".format(
-                        subset_number + 1, element
-                    )
-                )
+                print(f"Incorrect values for subset #{subset_number + 1}: {element}")
                 print(
                     "It should be an integer or a string of "
                     "type 'a-b' with a,b integers so that a<b"
@@ -134,7 +130,7 @@ def run_pem(pem_configs):
 
             # Define inputs
             config_file = subset["pem_config"]
-            with open(config_file, "r") as f:
+            with open(config_file) as f:
                 pem_input = make_input(f, subset_data_file)
 
             # Compute PEM results

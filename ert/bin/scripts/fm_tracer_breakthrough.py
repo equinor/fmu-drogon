@@ -16,7 +16,7 @@ The well and tracer list *must* be aligned with the observation file
 (same wells&tracers, and in same order, looping over wells first.)
 """
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 W_LIST = ["A1", "A2", "A3", "A4"]
 T_LIST = ["WTPTWT1", "WTPTWT2"]
@@ -55,32 +55,31 @@ def extract_tracer_breakthrough_time(
 
     pathlib.Path(output).parent.mkdir(parents=True, exist_ok=True)
 
-    file = open(output, "w")
-    for tracer in tracers:
-        for well in wells:
-            tracer_rows = summary_df[tracer + ":" + well] > 0.000001
-            if tracer_rows.any():
-                tbt = summary_df[summary_df[tracer + ":" + well] > 0.000001].index[0]
-                diff = tbt - summary_df.index.min()
-                file.write(str(int(diff.days)) + "\n")
-                msg = "Tracer {}, well {}, difference: {} days".format(
-                    tracer, well, diff.days
-                )
-                logger.info(msg)
-                if diff.days > max_bt_time:
+    with open(output, "w") as file:
+        for tracer in tracers:
+            for well in wells:
+                tracer_rows = summary_df[tracer + ":" + well] > 0.000001
+                if tracer_rows.any():
+                    tbt = summary_df[summary_df[tracer + ":" + well] > 0.000001].index[
+                        0
+                    ]
+                    diff = tbt - summary_df.index.min()
+                    file.write(str(int(diff.days)) + "\n")
+                    msg = f"Tracer {tracer}, well {well}, difference: {diff.days} days"
+                    logger.info(msg)
+                    if diff.days > max_bt_time:
+                        msg = (
+                            f"Breakthrough time {diff.days} is larger than the value "
+                            f"used when there is no breakthrough ({max_bt_time})"
+                        )
+                        logger.error(msg)
+                else:
                     msg = (
-                        "Breakthrough time {} is larger than the value "
-                        "used when there is no breakthrough ({})"
-                    ).format(diff.days, max_bt_time)
-                    logger.error(msg)
-            else:
-                msg = "No breakthrough for tracer {} in well {}, using {} days".format(
-                    tracer, well, max_bt_time
-                )
-                logger.warning(msg)
-                file.write("{}\n".format(max_bt_time))
-
-    file.close()
+                        f"No breakthrough for tracer {tracer} in well {well}, "
+                        f"using {max_bt_time} days"
+                    )
+                    logger.warning(msg)
+                    file.write(f"{max_bt_time}\n")
 
 
 def main():
@@ -122,5 +121,7 @@ def test_breakthrough(tmpdir):
     extract_tracer_breakthrough_time(
         summary_df, "foo.txt", wells=["A-1"], tracers=["WTPTWT2"]
     )
-    print(open("foo.txt").readlines())
-    assert open("foo.txt").readlines() == ["60\n"]
+    with open("foo.txt") as f:
+        lines = f.readlines()
+    print(lines)
+    assert lines == ["60\n"]
