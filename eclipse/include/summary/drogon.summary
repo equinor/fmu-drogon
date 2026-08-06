@@ -272,7 +272,7 @@ WGLIR
 /
 -- Well Oil Gas Lift Ratio (i.e. incremental gradient
 -- of the field's production rate with respect to the
--- addition of another gas lift increment  to that well)
+-- addition of another gas lift increment to that well)
 WOGLR
 /
 --
