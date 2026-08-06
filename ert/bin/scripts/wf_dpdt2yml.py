@@ -48,8 +48,7 @@ obs_values = {}
 
 for i in df.index:
     calc_unc = float(df[dpdt_name][i]) * 0.1
-    if calc_unc < min_unc_value:
-        calc_unc = min_unc_value
+    calc_unc = max(calc_unc, min_unc_value)
     if index_list[0] != "None":
         index_list_int = list(map(int, index_list))
         index_list_set = set(index_list_int)
@@ -66,7 +65,7 @@ for i in df.index:
         obs_values_copy = obs_values.copy()
         obs_group["observations"].append(obs_values_copy)
 
-data = dict(general=[obs_group])
+data = {"general": [obs_group]}
 
 with open(dpdt_file_yml, "w") as file:
     yaml.dump(data, file, default_flow_style=False)

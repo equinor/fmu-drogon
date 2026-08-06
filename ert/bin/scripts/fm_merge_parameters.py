@@ -74,8 +74,7 @@ def load_txt(fullpath, prefix=""):
 def save_txt(fullpath, parameters):
     """Save parameters dictionary into text file"""
     with open(fullpath, "w") as file_handle:
-        for key in parameters:
-            file_handle.write(f"{key} {parameters[key]}\n")
+        file_handle.writelines(f"{key} {parameters[key]}\n" for key in parameters)
 
 
 def create_parser():

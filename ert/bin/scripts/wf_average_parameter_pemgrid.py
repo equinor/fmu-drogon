@@ -76,11 +76,7 @@ def sum_running_stats():
                 pcum = pcum * (nnum - 1) / nnum
                 pcum = pcum + pavg
 
-            print(
-                "Current avg for running mean {} ({}) is {}".format(
-                    propname, real, pcum.mean()
-                )
-            )
+            print(f"Current avg for running mean {propname} ({real}) is {pcum.mean()}")
 
         # store the average pcum which is running average
         param.values = pcum
