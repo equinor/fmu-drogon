@@ -1,3 +1,7 @@
+![test](https://github.com/equinor/fmu-drogon/actions/workflows/test.yml/badge.svg)
+![git-lfs](https://img.shields.io/badge/git--lfs-required-orange.svg)
+![release](https://img.shields.io/github/v/release/equinor/fmu-drogon)
+
 # Drogon FMU model
 
 Drogon is a synthetic reservoir model developed and maintained by Equinor. It includes a
