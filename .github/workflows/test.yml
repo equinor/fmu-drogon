@@ -1,6 +1,8 @@
 name: test
 
 on:
+  schedule:
+    - cron: '0 1 * * 1'  # Every Monday at 01:00 UTC
   push:
     branches:
       - main
@@ -30,12 +32,15 @@ jobs:
       - name: Install test-requirements
         run: pip install -r test-requirements.txt
 
-      - name: Run unit tests
-        run: |
-          pytest ert/bin/scripts/fm_lgr.py ert/bin/scripts/fm_tracer_breakthrough.py
-
       - name: Ruff format
+        if: success() || failure()
         run: ruff format --check
 
       - name: Ruff check
+        if: success() || failure()
         run: ruff check .
+
+      - name: Run unit tests
+        if: success() || failure()
+        run: |
+          pytest ert/bin/scripts/fm_lgr.py ert/bin/scripts/fm_tracer_breakthrough.py
