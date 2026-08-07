@@ -42,7 +42,7 @@ FGLIR
 -----------------------------
 FMCTP
 -----------------------------
---     Cummulatives        --
+--     Cumulatives        --
 -----------------------------
 --  Production
 FVPT
@@ -206,7 +206,7 @@ WLPR
 /
 WLPRH
 /
--- Production Cummulatives
+-- Production Cumulatives
 WOPT
 /
 WWPT
@@ -270,9 +270,9 @@ WSTAT
 -- Well Gas Lift Injection Rate
 WGLIR
 /
--- Well Oil Gas Lift Ratio (i.e. incremental gradiend
+-- Well Oil Gas Lift Ratio (i.e. incremental gradient
 -- of the field's production rate with respect to the
--- addition of another gas lift increment  to that well)
+-- addition of another gas lift increment to that well)
 WOGLR
 /
 --
@@ -317,7 +317,7 @@ WTICWT2
 --/
 --
 --
--- Simulatior performance
+-- Simulator performance
 TCPU
 TCPUDAY
 

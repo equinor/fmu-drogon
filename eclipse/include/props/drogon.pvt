@@ -1,4 +1,4 @@
--- rnyb, Mar 20 - 2 pvt tables to be able to model segmet with gas cap
+-- rnyb, Mar 20 - 2 pvt tables to be able to model segment with gas cap
 -- 	     	  table1: no gas cap, table 2: gas cap
 
 ROCKOPTS                              
