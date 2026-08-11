@@ -5,7 +5,6 @@ title: Drogon
 
 # Eclipse input
 input:
-  fmu_global_config: fmuconfig/output/global_variables.yml
 #  eclroot: eclipse/model/ECLIPSE     # ert will interpret this as relative to <runpath>
 #  grid: $eclroot.EGRID
 
