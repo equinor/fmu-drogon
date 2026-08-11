@@ -4,9 +4,7 @@
 
 title: Drogon
 
-# dates are fetched from global_variables.yml file
 input:
-  fmu_global_config: fmuconfig/output/global_variables.yml
   dates:     !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DATES
   diffdates: !include_from   fmuconfig/output/global_variables_pred.yml::global.dates.ECLIPSE_PRED_DIFFDATES
 
