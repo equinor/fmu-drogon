@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "stratigraphy": [
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "MSL",
+      "source_uuid": null,
+      "target_id": "MSL",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "unmappable",
+      "source_id": "MSL",
+      "source_uuid": null,
+      "target_id": null,
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Seabase",
+      "source_uuid": null,
+      "target_id": "Seabase",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "unmappable",
+      "source_id": "Seabase",
+      "source_uuid": null,
+      "target_id": null,
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "TopVolantis",
+      "source_uuid": null,
+      "target_id": "TopVolantis",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "TopVolantis",
+      "source_uuid": null,
+      "target_id": "VOLANTIS GP. Top",
+      "target_uuid": "1629c229-0a2b-4f0a-94f7-dc01b171cb1c"
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "TopTherys",
+      "source_uuid": null,
+      "target_id": "TopTherys",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "TopTherys",
+      "source_uuid": null,
+      "target_id": "Therys Fm. Top",
+      "target_uuid": "0240dc8e-659a-4925-b569-6f1570ba6770"
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "TopVolon",
+      "source_uuid": null,
+      "target_id": "TopVolon",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "TopVolon",
+      "source_uuid": null,
+      "target_id": "Volon Fm. Top",
+      "target_uuid": "8aeab228-6b92-4875-8b13-2b68a3108c8d"
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "BaseVolantis",
+      "source_uuid": null,
+      "target_id": "BaseVolantis",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "BaseVolantis",
+      "source_uuid": null,
+      "target_id": "VOLANTIS GP. Base",
+      "target_uuid": "3c36a234-91e3-4bc5-8642-f32b910c5c6c"
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "BaseVelmodel",
+      "source_uuid": null,
+      "target_id": "BaseVelmodel",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "unmappable",
+      "source_id": "BaseVelmodel",
+      "source_uuid": null,
+      "target_id": null,
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Above",
+      "source_uuid": null,
+      "target_id": "Above",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "unmappable",
+      "source_id": "Above",
+      "source_uuid": null,
+      "target_id": null,
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Valysar",
+      "source_uuid": null,
+      "target_id": "Valysar",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Valysar",
+      "source_uuid": null,
+      "target_id": "Valysar Fm.",
+      "target_uuid": "a9cdeb70-af4f-4e86-a209-4eb124ac096a"
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "TopVolantis_BaseVolantis",
+      "source_uuid": null,
+      "target_id": "TopVolantis_BaseVolantis",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "TopVolantis_BaseVolantis",
+      "source_uuid": null,
+      "target_id": "VOLANTIS GP.",
+      "target_uuid": "08d5f9e0-56bc-4956-b0f3-68f2a3047ef9"
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Therys",
+      "source_uuid": null,
+      "target_id": "Therys",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Therys",
+      "source_uuid": null,
+      "target_id": "Therys Fm.",
+      "target_uuid": "a21c5998-9506-44d8-b29d-208c817e3a0b"
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Volon",
+      "source_uuid": null,
+      "target_id": "Volon",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Volon",
+      "source_uuid": null,
+      "target_id": "Volon Fm.",
+      "target_uuid": "a6d740be-ef58-4569-9fad-2daf17aa214c"
+    },
+    {
+      "source_system": "rms",
+      "target_system": "rms",
+      "mapping_type": "stratigraphy",
+      "relation_type": "primary",
+      "source_id": "Below",
+      "source_uuid": null,
+      "target_id": "Below",
+      "target_uuid": null
+    },
+    {
+      "source_system": "rms",
+      "target_system": "smda",
+      "mapping_type": "stratigraphy",
+      "relation_type": "unmappable",
+      "source_id": "Below",
+      "source_uuid": null,
+      "target_id": null,
+      "target_uuid": null
+    }
+  ],
+  "wellbore": []
+}

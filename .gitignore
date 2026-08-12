@@ -63,3 +63,6 @@ drogon*backup*
 /sim2seis/input/pem/
 /sim2seis/input/seismic_forward/
 /sim2seis/input/4d_attribute_maps
+
+/.fmu/cache/
+/.fmu/logs/

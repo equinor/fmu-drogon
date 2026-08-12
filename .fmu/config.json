@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "version": "1.0.0",
+  "created_at": "2026-08-04T07:18:03.378834Z",
+  "created_by": "rnyb",
+  "last_modified_at": "2026-08-05T06:58:24.635602Z",
+  "last_modified_by": "rnyb",
+  "masterdata": {
+    "smda": {
+      "coordinate_system": {
+        "identifier": "ST_WGS84_UTM37N_P32637",
+        "uuid": "ad214d85-dac7-19da-e053-c918a4889309"
+      },
+      "country": [
+        {
+          "identifier": "Norway",
+          "uuid": "ad214d85-8a1d-19da-e053-c918a4889309"
+        }
+      ],
+      "discovery": [
+        {
+          "short_identifier": "DROGON",
+          "uuid": "ad214d85-8a1d-19da-e053-c918a4889309"
+        }
+      ],
+      "field": [
+        {
+          "identifier": "DROGON",
+          "uuid": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "stratigraphic_column": {
+        "identifier": "DROGON_HAS_NO_STRATCOLUMN",
+        "uuid": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  "model": {
+    "description": [
+      "Drogon dev project"
+    ],
+    "name": "ff",
+    "revision": "dev"
+  },
+  "access": {
+    "asset": {
+      "name": "Drogon"
+    },
+    "classification": "internal"
+  },
+  "cache_max_revisions": 5,
+  "rms": {
+    "path": "/project/fmu/tutorial/drogon/resmod/ff/dev/rms/model/drogon.rms15.0.1.0",
+    "version": "15.0.1.0",
+    "coordinate_system": null,
+    "zones": [
+      {
+        "name": "Above",
+        "top_horizon_name": "MSL",
+        "base_horizon_name": "TopVolantis",
+        "stratigraphic_column_name": [
+          "Column",
+          "Column_1"
+        ]
+      },
+      {
+        "name": "Valysar",
+        "top_horizon_name": "TopVolantis",
+        "base_horizon_name": "TopTherys",
+        "stratigraphic_column_name": [
+          "Column"
+        ]
+      },
+      {
+        "name": "TopVolantis_BaseVolantis",
+        "top_horizon_name": "TopVolantis",
+        "base_horizon_name": "BaseVolantis",
+        "stratigraphic_column_name": [
+          "Column_1"
+        ]
+      },
+      {
+        "name": "Therys",
+        "top_horizon_name": "TopTherys",
+        "base_horizon_name": "TopVolon",
+        "stratigraphic_column_name": [
+          "Column"
+        ]
+      },
+      {
+        "name": "Volon",
+        "top_horizon_name": "TopVolon",
+        "base_horizon_name": "BaseVolantis",
+        "stratigraphic_column_name": [
+          "Column"
+        ]
+      },
+      {
+        "name": "Below",
+        "top_horizon_name": "BaseVolantis",
+        "base_horizon_name": "BaseVelmodel",
+        "stratigraphic_column_name": [
+          "Column",
+          "Column_1"
+        ]
+      }
+    ],
+    "horizons": [
+      {
+        "name": "MSL",
+        "type": "interpreted"
+      },
+      {
+        "name": "Seabase",
+        "type": "interpreted"
+      },
+      {
+        "name": "TopVolantis",
+        "type": "interpreted"
+      },
+      {
+        "name": "TopTherys",
+        "type": "interpreted"
+      },
+      {
+        "name": "TopVolon",
+        "type": "interpreted"
+      },
+      {
+        "name": "BaseVolantis",
+        "type": "interpreted"
+      },
+      {
+        "name": "BaseVelmodel",
+        "type": "interpreted"
+      }
+    ],
+    "wells": null
+  },
+  "validation": {
+    "masterdata_smda": {
+      "last_validated_at": "2026-08-04T07:29:18.115555Z",
+      "last_validated_by": "rnyb"
+    },
+    "rms_project": null
+  }
+}
