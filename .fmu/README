@@ -1,0 +1,9 @@
+This directory contains static configuration data for your FMU project.
+
+You should *not* manually modify files within this directory. Doing so may
+result in erroneous behavior or erroneous data in your FMU project.
+
+Changes to data stored within this directory must happen through the FMU
+Settings application.
+
+Run `fmu settings` to do this.

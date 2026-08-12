@@ -36,16 +36,3 @@ global:
 rms:
   horizons: !include _rms_horizons.yml
   zones: !include _rms_zones.yml
-
-
-#========================================================================================
-# The model, masterdata and visuals sections, to be used for SUMO metadata.
-#========================================================================================
-
-model:
-  name: ff
-  revision: *revision
-
-masterdata: !include _masterdata.yml
-access: !include _access.yml
-stratigraphy: !include _stratigraphy.yml
