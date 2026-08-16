@@ -92,6 +92,7 @@ INCLUDE  ../input/config/install_custom_jobs.ert
 -----------------------------------------------------
 
 HOOK_WORKFLOW   echo_config_file   PRE_SIMULATION  -- Write ert config file run information to scratch
+HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio
 
 
 -----------------------------------------------------
