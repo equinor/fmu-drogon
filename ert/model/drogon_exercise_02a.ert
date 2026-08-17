@@ -52,19 +52,16 @@ NUM_REALIZATIONS    5       -- Set number of realizations to run
 -------------------------------------------------------
 --Install custom jobs and workflows
 -------------------------------------------------------
-
 INCLUDE  ../input/config/install_custom_jobs.ert
 
+-- Hook workflows
+HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio
 
 -----------------------------------------------------
 -- Forward Models
 -----------------------------------------------------
 
------------------------------------------------------
--- make folder structure
------------------------------------------------------
-
-INCLUDE  ../input/config/make_folders.ert
+INCLUDE  ../input/config/make_folders.ert  -- make folder structure
 
 -----------------------------------------------------
 ---- copy rms folders/files
