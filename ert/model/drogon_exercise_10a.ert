@@ -164,11 +164,8 @@ FORWARD_MODEL FLOW(<VERSION>=rc45, <OPTS>="--solver-max-time-step-in-days=31.0")
 
 
 -----------------------------------------------------
----- Export data for visualisation (webviz, RMS covisualization)
----- Prepare model response data for use in AHM
------------------------------------------------------
-
-INCLUDE  ../input/config/rft_settings.ert      -- RFT zonemap and export for visualization
+-- write eclipse rft to csv file
+FORWARD_MODEL RES2CSV(<SUBCOMMAND>=rft, <ECLBASE>=<ECLBASE>,  <OUTPUT>=share/results/tables/rft.csv)
 
 ----------------------------------------------------
 -- ERT plotting
