@@ -18,7 +18,7 @@
 
 DEFINE <USER>              $USER
 DEFINE <SCRATCH>           /scratch/fmu
-DEFINE <CASE_DIR>          01_drogon_ahm
+DEFINE <CASE_DIR>          drogon_exercise_11a
 DEFINE <ECLIPSE_NAME>      DROGON
 --
 DEFINE <RMS_NAME>          drogon.rms15.0.1.0
@@ -32,7 +32,7 @@ DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
 -- Observations
 -----------------------------------------------------
 
-DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_rft_wct_gor_tracer_4d_plt.obs
+DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_rft_wct_gor_tracer_4d_plt_local.obs
 OBS_CONFIG  <OBS_FILE>
 
 
@@ -40,13 +40,11 @@ OBS_CONFIG  <OBS_FILE>
 ANALYSIS_SET_VAR OBSERVATIONS AUTO_SCALE AMP*
 
 -- This control how parameters are updated during history matching for each parameter type
--- ANALYSIS_SET_VAR PARAMETERS FIELD DISTANCE
--- ANALYSIS_SET_VAR PARAMETERS GEN_KW ADAPTIVE
--- ANALYSIS_SET_VAR PARAMETERS SURFACE DISTANCE
+ANALYSIS_SET_VAR PARAMETERS FIELD DISTANCE
+ANALYSIS_SET_VAR PARAMETERS GEN_KW ADAPTIVE
+ANALYSIS_SET_VAR PARAMETERS SURFACE DISTANCE
 
-ANALYSIS_SET_VAR PARAMETERS FIELD   ADAPTIVE
-ANALYSIS_SET_VAR PARAMETERS GEN_KW  ADAPTIVE
-ANALYSIS_SET_VAR PARAMETERS SURFACE ADAPTIVE
+
 
 -----------------------------------------------------
 -- Runpath folder

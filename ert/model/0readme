@@ -16,7 +16,7 @@ Used in "FMU Assisted History Matching" course
 ------------------
 
     drogon_exercise_10a.ert
-
+    drogon_exercise_11a.ert        Here localization is activated (both scalars, surface, field)
 -----------------
 Alternative cases with active "switches", used for analysis in courses
 -----------------
