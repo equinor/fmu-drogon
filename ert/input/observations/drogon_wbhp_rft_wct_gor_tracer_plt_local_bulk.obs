@@ -2,44 +2,44 @@ SUMMARY {
   VALUES = summary_observations.csv;
   WELL A1 {
     LOCALIZATION {
-      EAST=462588.52;
-      NORTH=5934080.96;
-      RADIUS=1000.0;
+      EAST = 462588.52;
+      NORTH = 5934080.96;
+      RADIUS = 1000.0;
     };
   };
   WELL A2 {
     LOCALIZATION {
-      EAST=460994.9;
-      NORTH=5933813.29;
-      RADIUS=1000.0;
+      EAST = 460994.9;
+      NORTH = 5933813.29;
+      RADIUS = 1000.0;
     };
   };
   WELL A3 {
     LOCALIZATION {
-      EAST=462753.44;
-      NORTH=5932869.64;
-      RADIUS=1000.0;
+      EAST = 462753.44;
+      NORTH = 5932869.64;
+      RADIUS = 1000.0;
     };
   };
   WELL A4 {
     LOCALIZATION {
-      EAST=464160.0;
-      NORTH=5932177.0;
-      RADIUS=1600.0;
+      EAST = 464160.0;
+      NORTH = 5932177.0;
+      RADIUS = 1600.0;
     };
   };
   WELL A5 {
     LOCALIZATION {
-      EAST=461519.21;
-      NORTH=5935692.65;
-      RADIUS=1000.0;
+      EAST = 461519.21;
+      NORTH = 5935692.65;
+      RADIUS = 1000.0;
     };
   };
   WELL A6 {
     LOCALIZATION {
-      EAST=461292.74;
-      NORTH=5931883.26;
-      RADIUS=1000.0;
+      EAST = 461292.74;
+      NORTH = 5931883.26;
+      RADIUS = 1000.0;
     };
   };
 };
@@ -51,9 +51,9 @@ GENERAL_OBSERVATION  TRACER_OBS { DATA = TRACER_SIM;  RESTART=1; OBS_FILE=./trac
 -- RFT data
 RFT_OBSERVATION rft_obs {
     CSV=./rft/rft_ertobs.csv;
-    PROPERTY=PRESSURE;
+    PROPERTY = PRESSURE;
     LOCALIZATION {
-    		 RADIUS = 2500.0 ;
+    	RADIUS = 2500.0 ;
     };
 };
 
