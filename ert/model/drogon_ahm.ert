@@ -39,11 +39,8 @@ OBS_CONFIG  <OBS_FILE>
 -- preprocess correlated seismic observations in ahm update step
 ANALYSIS_SET_VAR OBSERVATIONS AUTO_SCALE AMP*
 
--- This control how parameters are updated during history matching for each parameter type
--- ANALYSIS_SET_VAR PARAMETERS FIELD DISTANCE
--- ANALYSIS_SET_VAR PARAMETERS GEN_KW ADAPTIVE
--- ANALYSIS_SET_VAR PARAMETERS SURFACE DISTANCE
-
+-- This controls how parameters are updated during history matching for each parameter type
+-- For distance-based localization examples, see drogon_exercise_11a.ert
 ANALYSIS_SET_VAR PARAMETERS FIELD   ADAPTIVE
 ANALYSIS_SET_VAR PARAMETERS GEN_KW  ADAPTIVE
 ANALYSIS_SET_VAR PARAMETERS SURFACE ADAPTIVE
