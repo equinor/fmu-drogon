@@ -9,11 +9,10 @@
 --           Seismic data is not included here since the observation format is not yet ready for localization.
 
 -- Seismic data
---  Seismic  4d data is only used to update scalar parameters when running with distance-based localization per today.
---  Per 1.september 2026 the 4D observation format is not ready, so the GENERAL_OBSERVATION keyword is used,
+--  Per 1.september 2026 the 4D observation format is not ready, and we are not using GENERAL_OBSERVATION keyword,
 --  but this must be replaced with the correct one when it is available
-GENERAL_OBSERVATION  AMP_2020_2018_TOP  { DATA = AMP_2020_2018_TOP ;  RESTART=1; OBS_FILE=./seismic/topvolantis_amplitude_mean_20200701_20180101_1.txt; };
-GENERAL_OBSERVATION  AMP_2020_2018_BASE { DATA = AMP_2020_2018_BASE ; RESTART=1; OBS_FILE=./seismic/basevolantis_amplitude_mean_20200701_20180101_1.txt; };
+-- GENERAL_OBSERVATION  AMP_2020_2018_TOP  { DATA = AMP_2020_2018_TOP ;  RESTART=1; OBS_FILE=./seismic/topvolantis_amplitude_mean_20200701_20180101_1.txt; };
+-- GENERAL_OBSERVATION  AMP_2020_2018_BASE { DATA = AMP_2020_2018_BASE ; RESTART=1; OBS_FILE=./seismic/basevolantis_amplitude_mean_20200701_20180101_1.txt; };
 --
 -- PLT data
 SUMMARY_OBSERVATION   A3_WOPR_VALYSAR_01_08_2019 {VALUE = 266;   ERROR = 100; ERROR_MODE = ABS; DATE = 2019-08-01; KEY = WOPRL__1:A3; LOCALIZATION { EAST = 462753.44; NORTH = 5932869.64; RADIUS = 1000.0;}; };
@@ -30,14 +29,16 @@ SUMMARY_OBSERVATION   A6_WWIR_THERYS_01_08_2019  {VALUE = 3107;  ERROR = 200; ER
 SUMMARY_OBSERVATION   A6_WWIR_VOLON_01_08_2019   {VALUE = 3729;  ERROR = 200; ERROR_MODE = ABS; DATE = 2019-08-01; KEY = WWIRL__3:A6; LOCALIZATION { EAST = 461292.74; NORTH = 5931883.26; RADIUS = 1000.0;}; };
 --
 -- Tracer data
-GENERAL_OBSERVATION  TRACER_OBS { DATA = TRACER_SIM;  RESTART=1; OBS_FILE=./tracer/drogon_tracer.obs; };
+--  Per 1.september 2026 the Tracer observation format is not ready, and we are not using GENERAL_OBSERVATION keyword,
+--  but this must be replaced with the correct one when it is available
+-- GENERAL_OBSERVATION  TRACER_OBS { DATA = TRACER_SIM;  RESTART=1; OBS_FILE=./tracer/drogon_tracer.obs; };
 --
 -- RFT data
 RFT_OBSERVATION rft_obs {
     CSV=./rft/rft_ertobs.csv;
     PROPERTY=PRESSURE;
     LOCALIZATION {
-        RADIUS = 2500.0;
+        RADIUS = 2000.0;
     };
 };
 --
