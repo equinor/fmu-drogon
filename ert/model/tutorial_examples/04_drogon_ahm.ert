@@ -36,8 +36,17 @@ DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
 DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_rft_wct_gor_tracer_plt.obs
 OBS_CONFIG  <OBS_FILE>
 
+----------------------------------------------------
+-- Localization Set up
+----------------------------------------------------
+-- This control how parameters are updated during history matching for each parameter type
+ANALYSIS_SET_VAR PARAMETERS FIELD ADAPTIVE
+ANALYSIS_SET_VAR PARAMETERS GEN_KW ADAPTIVE
+ANALYSIS_SET_VAR PARAMETERS SURFACE ADAPTIVE
 
+-- For Adaptive Localization, the correlation threshold should be selected according to the ensemble size. When specifying the threshold in the ERT configuration file, users should ensure that the chosen value is consistent with the number of realizations. A threshold of 0.3 corresponds to the default value used for an ensemble of 100 realizations.
 
+-- ANALYSIS_SET_VAR STD_ENKF LOCALIZATION_CORRELATION_THRESHOLD 0.3
 -----------------------------------------------------
 -- Runpath folder
 -----------------------------------------------------

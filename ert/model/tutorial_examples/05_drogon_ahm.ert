@@ -38,6 +38,12 @@ OBS_CONFIG  <OBS_FILE>
 -- preprocess correlated seismic observations in ahm update step
 ANALYSIS_SET_VAR OBSERVATIONS AUTO_SCALE AMP*
 
+-----------------------------------------------------------
+--Localization settings
+-----------------------------------------------------------
+ANALYSIS_SET_VAR PARAMETERS FIELD GLOBAL
+ANALYSIS_SET_VAR PARAMETERS GEN_KW GLOBAL
+ANALYSIS_SET_VAR PARAMETERS SURFACE GLOBAL
 
 -----------------------------------------------------
 -- Runpath folder
