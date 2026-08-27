@@ -2,7 +2,6 @@
 --
 -- ERT CONFIGURATION FILE   ----   DROGON RESERVOIR MODEL
 --                                 "Assisted History Match set-up"
---				   "case where input probability to APS is wihtout seismic"
 -- Documentation:
 --
 -- References:
@@ -19,7 +18,7 @@
 
 DEFINE <USER>              $USER
 DEFINE <SCRATCH>           /scratch/fmu
-DEFINE <CASE_DIR>          02_drogon_ahm  --switch_aps_noseis
+DEFINE <CASE_DIR>          drogon_exercise_12a
 DEFINE <ECLIPSE_NAME>      DROGON
 --
 DEFINE <RMS_NAME>          drogon.rms15.0.1.0
@@ -33,7 +32,7 @@ DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
 -- Observations
 -----------------------------------------------------
 
-DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_rft_wct_gor_tracer_4d_plt.obs
+DEFINE      <OBS_FILE>  ../input/observations/drogon_wbhp_rft_wct_gor_tracer_4d_plt_local.obs
 OBS_CONFIG  <OBS_FILE>
 
 
@@ -44,10 +43,10 @@ ANALYSIS_SET_VAR OBSERVATIONS AUTO_SCALE AMP*
 --Localization settings
 -----------------------------------------------------------
 
-ANALYSIS_SET_VAR PARAMETERS FIELD ADAPTIVE
+-- This control how parameters are updated during history matching for each parameter type
+ANALYSIS_SET_VAR PARAMETERS FIELD DISTANCE
 ANALYSIS_SET_VAR PARAMETERS GEN_KW ADAPTIVE
-ANALYSIS_SET_VAR PARAMETERS SURFACE ADAPTIVE
-
+ANALYSIS_SET_VAR PARAMETERS SURFACE DISTANCE
 
 -- For Adaptive Localization, the correlation threshold should be selected according to the ensemble size. When specifying the threshold in the ERT configuration file, users should ensure that the chosen value is consistent with the number of realizations. A threshold of 0.3 corresponds to the default value used for an ensemble of 100 realizations.
 
@@ -130,16 +129,16 @@ INCLUDE  ../input/config/make_folders.ert  -- Make general folder structure
 FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../rms/input/well_modelling, <TO>=<RUNPATH>/rms/input)
 
 --Copy seed file to the rms/model folder --> forces rms to use seed values from the file (target file must be named "random.seeds")
-FORWARD_MODEL COPY_FILE(<FROM>=<RMS_SEED_FILE>,  <TO>=rms/model/random.seeds)
+FORWARD_MODEL COPY_FILE(<FROM>=<RMS_SEED_FILE>,  <TO>=<RUNPATH>/rms/model/random.seeds)
 
 
 -----------------------------------------------------
 ---- Copy eclipse folders/files
 -----------------------------------------------------
 
-FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/props/drogon.pvt,       <TO>=eclipse/include/props/drogon.pvt)
-FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/solution/drogon.rxvd,   <TO>=eclipse/include/solution/drogon.rxvd)
-FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/summary/drogon.summary, <TO>=eclipse/include/summary/drogon.summary)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/props/drogon.pvt,       <TO>=<RUNPATH>/eclipse/include/props/drogon.pvt)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/solution/drogon.rxvd,   <TO>=<RUNPATH>/eclipse/include/solution/drogon.rxvd)
+FORWARD_MODEL COPY_FILE(<FROM>=<CONFIG_PATH>/../../eclipse/include/summary/drogon.summary, <TO>=<RUNPATH>/eclipse/include/summary/drogon.summary)
 FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../eclipse/include/schedule/vfp,      <TO>=<RUNPATH>/eclipse/include/schedule)
 
 
@@ -150,7 +149,7 @@ FORWARD_MODEL COPY_DIRECTORY(<FROM>=<CONFIG_PATH>/../../eclipse/include/schedule
 ---- Scalar parameters ----
 
 -- Draw values from ERT distributions (values are saved to parameters.txt file in runpath)
-GEN_KW  SWITCHES  ../input/distributions/global_variables_switch_aps_noseis.dist
+GEN_KW  SWITCHES  ../input/distributions/global_variables_switches.dist
 GEN_KW  GLOBVAR   ../input/distributions/global_variables.dist
 GEN_KW  MULTREGT  ../input/distributions/multregt.dist
 GEN_KW  RATE      ../input/distributions/rate_scaling.dist
@@ -164,16 +163,16 @@ DESIGN_MATRIX  <DESIGN_MATRIX>  DESIGN_SHEET:DesignSheet01  DEFAULT_SHEET:Defaul
 INCLUDE  ../input/config/ahm_surface.ert    -- update horizons
 
 ---- 3d parameters ----
-INCLUDE  ../input/config/ahm_field_aps.ert  -- update aps grid parameters
-
+INCLUDE  ../input/config/ahm_field_aps.ert  -- update aps grid parameters and use individual ERTBOX grid per zone
 
 -----------------------------------------------------
 -- Populate template files with their scalar uncertainty parameter values
 -----------------------------------------------------
 
-RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl  <RUNPATH>/fmuconfig/output/global_variables.yml
-RUN_TEMPLATE  <CONFIG_PATH>/../../ert/input/templates/multregt.tmpl           <RUNPATH>/eclipse/include/grid/drogon.multregt
-RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl      <RUNPATH>/fmuconfig/output/rate_scaling.yml
+--                          INPUT FILE                                                       OUTPUT FILE
+RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/global_variables.yml.tmpl    <RUNPATH>/fmuconfig/output/global_variables.yml
+RUN_TEMPLATE  <CONFIG_PATH>/../../ert/input/templates/multregt.tmpl             <RUNPATH>/eclipse/include/grid/drogon.multregt
+RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl        <RUNPATH>/fmuconfig/output/rate_scaling.yml
 
 -- RUN_TEMPLATE uses parameter values from GEN_KW and DESIGN_MATRIX. It does not work with DESIGN2PARAMS.
 
