@@ -57,9 +57,18 @@ LOAD_WORKFLOW ../../bin/workflows/wf_fmuobs
 
 
 -----------------------------------------
----- Worklow for creating case/ensemble metadata (dataio)
+---- Worklow for creating case/ensemble metadata
 LOAD_WORKFLOW       ../../bin/workflows/xhook_create_case_metadata
+LOAD_WORKFLOW       ../../bin/workflows/xhook_create_case_metadata_no_sumo
 
+-----------------------------------------
+---- Worklow for copying preprocessed seismic observation maps to scratch
+LOAD_WORKFLOW   ../../bin/workflows/xhook_copy_preprocessed_dataio
+LOAD_WORKFLOW   ../../bin/workflows/xhook_copy_preprocessed_dataio_no_sumo
+
+-----------------------------------------
+-- Workflow for copying seismic obs data that do not have metadata yet
+LOAD_WORKFLOW  ../../bin/workflows/copy_seisobs
 
 -----------------------------------------
 ----workflow that creates swatinit qc file for webviz for a selected realization

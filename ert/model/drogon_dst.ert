@@ -23,7 +23,7 @@ DEFINE <ECLIPSE_NAME>     DROGON_DST
 --
 DEFINE <RMS_NAME>         drogon.rms15.0.1.0
 DEFINE <RMS_VERSION>      15.0.1.0
-DEFINE <RMS_WF_NAME>     MAIN
+DEFINE <RMS_WF_NAME>      MAIN
 --
 DEFINE <RMS_SEED_FILE>    <CONFIG_PATH>/../input/distributions/random.seeds
 --
@@ -114,7 +114,7 @@ LOAD_WORKFLOW             ../bin/workflows/wf_dpdt2yml
 
 
 -----------------------------------------
----- Worklow that creates the case metadata and registers on Sumo (optional)
+---- Worklow that creates the case metadata and registers on Sumo
 DEFINE <SUMO_CASEPATH>  <SCRATCH>/<USER>/<CASE_DIR>
 LOAD_WORKFLOW           ../bin/workflows/xhook_create_case_metadata
 
@@ -125,7 +125,7 @@ LOAD_WORKFLOW           ../bin/workflows/xhook_create_case_metadata
 HOOK_WORKFLOW   run_fmuconfig  PRE_EXPERIMENT  -- Create global_variables.yml and global_variables.yml.tmpl files
 HOOK_WORKFLOW   wf_fmuobs_dst  PRE_EXPERIMENT  -- Generate yaml version of ERT observations for use with Webviz
 HOOK_WORKFLOW   wf_dpdt2yml    PRE_EXPERIMENT  -- Generate yaml version of dpdt observations for use with Webviz
-HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio and register on Sumo (optional)
+HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio and register on Sumo
 
 
 -----------------------------------------------------
@@ -222,3 +222,7 @@ SUMMARY WOPR:*
 SUMMARY WWPR:*
 SUMMARY WGPR:*
 SUMMARY WBHP:*
+
+-----------------------------------------------------
+FORWARD_MODEL SIM2SUMO
+FORWARD_MODEL SUMO_UPLOAD

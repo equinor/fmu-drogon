@@ -55,7 +55,7 @@ NUM_REALIZATIONS    5       -- Set number of realizations to run
 INCLUDE  ../input/config/install_custom_jobs.ert
 
 -- Hook workflows
-HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio
+HOOK_WORKFLOW   xhook_create_case_metadata_no_sumo  PRE_SIMULATION  -- Create case metadata using dataio
 
 -----------------------------------------------------
 -- Forward Models

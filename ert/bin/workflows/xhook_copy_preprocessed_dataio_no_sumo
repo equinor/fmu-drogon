@@ -3,7 +3,5 @@
 ---------------------------  ert_caseroot                  ert_configpath   inpath
 WF_COPY_PREPROCESSED_DATAIO  <SCRATCH>/<USER>/<CASE_DIR>   <CONFIG_PATH>    ../../share/preprocessed/maps  "--verbosity" WARNING
 
-SUMO_UPLOAD  <SCRATCH>/<USER>/<CASE_DIR>  -- upload data copied with WF_COPY_PREPROCESSED_DATAIO
-
 
 -- Doc: https://fmu-docs.equinor.com/docs/ert/reference/workflows/added_workflow_jobs.html#WF_COPY_PREPROCESSED_DATAIO

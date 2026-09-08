@@ -25,6 +25,7 @@ DEFINE <RESTART_REPORT>   82
 -- Used by fmu-dataio to set value: fmu\iteration\restart_from
 SETENV RESTART_FROM_PATH  ../<RESTART_DIR>/
 
+DEFINE <SUMO_CASEPATH>     <SCRATCH>/<USER>/<CASE_DIR>
 
 -----------------------------------------------------
 -- Runpath folder
@@ -165,3 +166,8 @@ INCLUDE  ../input/config/ert_summary_plotting_pred.ert  -- summary vectors
 ----------------------------------------------------------------------
 
 -- FORWARD_MODEL DELETE_FILE(<FILES>=eclipse/model/ECLIPSE_MERGED.UNRST)  -- delete the merged UNRST file
+
+
+----------------------------------------------------
+FORWARD_MODEL SIM2SUMO
+FORWARD_MODEL SUMO_UPLOAD
