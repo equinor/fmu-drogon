@@ -152,7 +152,7 @@ RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl      <R
 -- Run Main workflow
 FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CONFIG_PATH>/../../rms/model/<RMS_NAME>, <RMS_WORKFLOW>=<RMS_WF_NAME>, <RMS_TARGET_FILE>=RMS_TARGET_MAIN)
 
-FORWARD_MODEL SUMO_UPLOAD
+FORWARD_MODEL SUMO_UPLOAD  -- Store data produced (so far) to Sumo
 
 -----------------------------------------------------
 ---- Eclipse/Flow
@@ -190,5 +190,4 @@ INCLUDE  ../input/config/ert_summary_plotting.ert -- ERT plotting
 
 
 -----------------------------------------------------
-FORWARD_MODEL SIM2SUMO
 FORWARD_MODEL SUMO_UPLOAD
