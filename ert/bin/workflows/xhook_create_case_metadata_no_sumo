@@ -1,4 +1,4 @@
--- Create ensemble/case metadata
+-- Create case metadata
 
 --                       casepath
 WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>

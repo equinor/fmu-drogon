@@ -57,7 +57,7 @@ LOAD_WORKFLOW ../../bin/workflows/wf_fmuobs
 
 
 -----------------------------------------
----- Worklow for creating case/ensemble metadata
+---- Worklow for creating case metadata
 LOAD_WORKFLOW       ../../bin/workflows/xhook_create_case_metadata
 LOAD_WORKFLOW       ../../bin/workflows/xhook_create_case_metadata_no_sumo
 
