@@ -28,6 +28,7 @@ DEFINE <RMS_WF_NAME>     MAIN
 DEFINE <DESIGN_MATRIX>   ../input/distributions/design_matrix_one_by_one.xlsx
 DEFINE <DESIGN_SHEET>    DesignSheet01     -- name of sheet in xlsx with the matrix to be parsed
 
+DEFINE <SUMO_CASEPATH>     <SCRATCH>/<USER>/<CASE_DIR>
 
 -----------------------------------------------------
 -- Observations
@@ -99,7 +100,7 @@ HOOK_WORKFLOW   echo_config_file   PRE_SIMULATION  -- Write ert config file run 
 HOOK_WORKFLOW   run_fmuconfig      PRE_EXPERIMENT  -- Update "global_variables.yml" and "global_variables.yml.tmpl" files
 HOOK_WORKFLOW   run_fmuconfig_rate PRE_EXPERIMENT  -- Update "rate_scaling.yml" and "rate_scaling.yml.tmpl" files
 HOOK_WORKFLOW   wf_fmuobs          PRE_EXPERIMENT  -- Create yaml version of ERT observations for use with Webviz
-HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio
+HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio and register case on Sumo
 
 
 -----------------------------------------------------
@@ -151,6 +152,7 @@ RUN_TEMPLATE  <CONFIG_PATH>/../../fmuconfig/output/rate_scaling.yml.tmpl      <R
 -- Run Main workflow
 FORWARD_MODEL RMS(<IENS>=<IENS>, <RMS_VERSION>=<RMS_VERSION>, <RMS_PROJECT>=<CONFIG_PATH>/../../rms/model/<RMS_NAME>, <RMS_WORKFLOW>=<RMS_WF_NAME>, <RMS_TARGET_FILE>=RMS_TARGET_MAIN)
 
+FORWARD_MODEL SUMO_UPLOAD  -- Store data produced (so far) to Sumo
 
 -----------------------------------------------------
 ---- Eclipse/Flow
@@ -164,6 +166,7 @@ FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/<ECLBASE>.EGRID, <LINKNAME>=<RUNPA
 FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/<ECLBASE>.INIT,  <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE.INIT)
 FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/<ECLBASE>.UNRST, <LINKNAME>=<RUNPATH>/eclipse/model/ECLIPSE.UNRST)
 
+FORWARD_MODEL SIM2SUMO
 
 -----------------------------------------------------
 ---- Export data for visualisation (webviz, RMS covisualization)
@@ -187,5 +190,4 @@ INCLUDE  ../input/config/ert_summary_plotting.ert -- ERT plotting
 
 
 -----------------------------------------------------
--- SUMO (experimental)
--- INCLUDE  ../input/config/case_metadata_and_preprocessed_data_sumo.ert
+FORWARD_MODEL SUMO_UPLOAD

@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------
 
 -- Copy seismic obs data with metadata (dataio processed maps)
-HOOK_WORKFLOW  xhook_copy_preprocessed_dataio  PRE_SIMULATION
+HOOK_WORKFLOW  xhook_copy_preprocessed_dataio_no_sumo  PRE_SIMULATION
 
 -- Copy seismic obs data that do not have metadata yet
 HOOK_WORKFLOW  copy_seisobs PRE_EXPERIMENT

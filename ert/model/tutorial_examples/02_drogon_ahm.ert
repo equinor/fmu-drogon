@@ -113,7 +113,7 @@ HOOK_WORKFLOW   echo_config_file   PRE_SIMULATION  -- Write ert config file run 
 HOOK_WORKFLOW   run_fmuconfig      PRE_EXPERIMENT  -- Update "global_variables.yml" and "global_variables.yml.tmpl" files
 HOOK_WORKFLOW   run_fmuconfig_rate PRE_EXPERIMENT  -- Update "rate_scaling.yml" and "rate_scaling.yml.tmpl" files
 HOOK_WORKFLOW   wf_fmuobs          PRE_EXPERIMENT  -- Create yaml version of ERT observations for use with Webviz
-HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio
+HOOK_WORKFLOW   xhook_create_case_metadata_no_sumo  PRE_SIMULATION  -- Create case metadata using dataio
 
 
 -----------------------------------------------------
@@ -210,7 +210,7 @@ INCLUDE ../input/config/export_ecl_roff.ert  -- sim model restart and init param
 
 INCLUDE  ../input/config/rft_settings.ert      -- RFT zonemap and export for visualization
 INCLUDE  ../input/config/gen_data_tracer.ert   -- Tracer data used in conditioning/ahm
-INCLUDE  ../input/config/sim2seis.ert          -- SIM2SEIS, used in conditioning/ahm, incl export for visualization
+INCLUDE  ../input/config/sim2seis_no_sumo.ert  -- SIM2SEIS, used in conditioning/ahm, incl export for visualization
 INCLUDE  ../input/config/geoseis.ert           -- GEOSEIS, export for visualization
 
 
@@ -218,8 +218,3 @@ INCLUDE  ../input/config/geoseis.ert           -- GEOSEIS, export for visualizat
 -- ERT plotting
 -----------------------------------------------------
 INCLUDE  ../input/config/ert_summary_plotting.ert
-
-
------------------------------------------------------
--- SUMO (experimental)
--- INCLUDE  ../input/config/case_metadata_and_preprocessed_data_sumo.ert
