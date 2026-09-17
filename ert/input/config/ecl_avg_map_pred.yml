@@ -85,9 +85,9 @@ zonation:
 computesettings:
   zone: Yes  # compute for each zone
   all: Yes   # compute for all combined
-  mask_zeros: Yes  # output maps will be set to undef where zero
+  mask_zeros: No  # Yes = output maps will be set to undef where zero
   tuning:
-    zone_avg: Yes   # yes = faster method ( 'ij' averaging vs 'xy' averaging )
+    zone_avg: Yes   # Yes = faster method ( 'ij' averaging vs 'xy' averaging )
     # coarsen: 2
   # truncate_le: 0.001  # truncate away values less than a given threshold from the result maps
 
