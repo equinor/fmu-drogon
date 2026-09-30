@@ -6,9 +6,6 @@
 -- forward models
 -------------------------------------------------------
 
--- write simulated tracer break through times
-INSTALL_JOB  TRACER_BREAKTHROUGH           ../../bin/jobs/FM_TRACER_BREAKTHROUGH
-
 -- Make xsections of wells (png file)
 INSTALL_JOB  XSECT_WELLS                   ../../bin/jobs/FM_XSECT_WELLS
 

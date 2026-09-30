@@ -1,6 +1,0 @@
-STDERR    tracer_breakthrough.stderr
-STDOUT    tracer_breakthrough.stdout
-
-EXECUTABLE  ../scripts/fm_tracer_breakthrough.py
-
-ARGLIST       <ECLROOT>  <OUTPUT>
