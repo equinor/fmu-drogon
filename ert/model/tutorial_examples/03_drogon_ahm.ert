@@ -210,7 +210,6 @@ INCLUDE ../input/config/export_ecl_roff.ert  -- sim model restart and init param
 
 
 INCLUDE  ../input/config/rft_settings.ert      -- RFT zonemap and export for visualization
-INCLUDE  ../input/config/gen_data_tracer.ert   -- Tracer data used in conditioning/ahm
 INCLUDE  ../input/config/sim2seis_no_sumo.ert  -- SIM2SEIS, used in conditioning/ahm, incl export for visualization
 INCLUDE  ../input/config/geoseis.ert           -- GEOSEIS, export for visualization
 
