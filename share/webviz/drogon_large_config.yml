@@ -200,7 +200,7 @@ layout:
                   wellfolder: *wellfolder
                   wellsuffix: .rmswell
                   zonelog: Zone
-                  well_downsample_interval: 100
+                  well_downsample_interval: 4
                   initial_settings:
                     intersection_data:
                       surface_names:
