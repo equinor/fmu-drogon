@@ -1,10 +1,10 @@
 -- Create case metadata and register on Sumo
 
---                       casepath                     sumo_flag
-WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>  "--sumo"
+--                       sumo_flag
+WF_CREATE_CASE_METADATA  "--sumo"
 
 -- "--sumo" flag: In addition to registering the case on Sumo it also uploads ERT parameters and observations.
-
+-- Uses <SUMO_CASEPATH> defined in the ERT model file as casepath
 
 -- This workflow is intended to be run as a HOOK workflow.
 -- WF_CREATE_CASE_METADATA workflow is shipped with Komodo:
