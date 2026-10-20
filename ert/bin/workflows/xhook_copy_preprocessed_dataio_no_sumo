@@ -1,7 +1,7 @@
 -- Copy preprocessed data
 
----------------------------  ert_caseroot                  ert_configpath   inpath
-WF_COPY_PREPROCESSED_DATAIO  <SCRATCH>/<USER>/<CASE_DIR>   <CONFIG_PATH>    ../../share/preprocessed/maps  "--verbosity" WARNING
+---------------------------  ert_caseroot                 inpath (relative to ert config)
+WF_COPY_PREPROCESSED_DATAIO  <SCRATCH>/<USER>/<CASE_DIR>  ../../share/preprocessed/maps   "--verbosity" WARNING
 
 
 -- Doc: https://fmu-docs.equinor.com/docs/ert/reference/workflows/added_workflow_jobs.html#WF_COPY_PREPROCESSED_DATAIO
