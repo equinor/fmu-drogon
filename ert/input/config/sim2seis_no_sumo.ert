@@ -1,12 +1,9 @@
 -------------------------------------------------------------------------
----- Workflows for copying seismic observations to case folder on scratch
+---- Workflow for copying seismic observations to case folder on scratch
 -------------------------------------------------------------------------
 
--- Copy seismic obs data with metadata (dataio processed maps)
-HOOK_WORKFLOW  xhook_copy_preprocessed_dataio_no_sumo  PRE_SIMULATION
-
--- Copy seismic obs data that do not have metadata yet
-HOOK_WORKFLOW  copy_seisobs PRE_EXPERIMENT
+-- Copy seismic obs data
+HOOK_WORKFLOW  copy_seisobs_no_sumo  PRE_EXPERIMENT
 
 
 -------------------------------------------------------------------------
@@ -14,8 +11,8 @@ HOOK_WORKFLOW  copy_seisobs PRE_EXPERIMENT
 -------------------------------------------------------------------------
 
 FORWARD_MODEL MAKE_DIRECTORY(<DIRECTORY> = <RUNPATH>/share/observations)
-FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../../share/observations/maps,    <LINKNAME>=<RUNPATH>/share/observations/maps)
-FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../../share/observations/tables,  <LINKNAME>=<RUNPATH>/share/observations/tables)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../../share/observations/maps,   <LINKNAME>=<RUNPATH>/share/observations/maps)
+FORWARD_MODEL MAKE_SYMLINK(<TARGET>=<RUNPATH>/../../share/observations/tables, <LINKNAME>=<RUNPATH>/share/observations/tables)
 
 
 -------------------------------------------------------------------------
