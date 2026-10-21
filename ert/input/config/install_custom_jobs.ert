@@ -50,22 +50,22 @@ LOAD_WORKFLOW	    ../../bin/workflows/run_fmuconfig_rate
 -- the output yaml file can be used with webviz
 -- The OBS_CONFIG file name must be defined with the user variable <OBS_FILE>
 -- doc: https://equinor.github.io/subscript/scripts/fmuobs.html
-LOAD_WORKFLOW ../../bin/workflows/wf_fmuobs
+LOAD_WORKFLOW  ../../bin/workflows/wf_fmuobs
 
 
 -----------------------------------------
 ---- Worklow for creating case metadata
-LOAD_WORKFLOW       ../../bin/workflows/xhook_create_case_metadata
-LOAD_WORKFLOW       ../../bin/workflows/xhook_create_case_metadata_no_sumo
+LOAD_WORKFLOW   ../../bin/workflows/xhook_create_case_metadata
+LOAD_WORKFLOW   ../../bin/workflows/xhook_create_case_metadata_no_sumo
 
 -----------------------------------------
 ---- Worklow for copying preprocessed seismic observation maps to scratch
 LOAD_WORKFLOW   ../../bin/workflows/xhook_copy_preprocessed_dataio
-LOAD_WORKFLOW   ../../bin/workflows/xhook_copy_preprocessed_dataio_no_sumo
 
 -----------------------------------------
 -- Workflow for copying seismic obs data that do not have metadata yet
 LOAD_WORKFLOW  ../../bin/workflows/copy_seisobs
+LOAD_WORKFLOW  ../../bin/workflows/copy_seisobs_no_sumo
 
 -----------------------------------------
 ----workflow that creates swatinit qc file for webviz for a selected realization
