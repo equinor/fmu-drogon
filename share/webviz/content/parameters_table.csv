@@ -17,5 +17,5 @@ Surface,TopTherys.irap,"(ERT keyword ""SURFACE"")",RMS
 Surface,TopVolon.irap,…,RMS
 Surface,BaseVolantis.irap,…,RMS
 Facies,"aps_Valysar_GRF1.roff, aps_Valysar_GRF2.roff, aps_Valysar_GRF3.roff ",Gaussian Random Fields (3d paramters) used with APS facies model ,RMS
-Facies,"aps_Therys_GRF1, aps_Therys_GRF2, aps_Therys_GRF3 ","(ERT keyword ""FIELD"")",RMS
-Facies,"aps_Volon_GRF1, aps_Volon_GRF2, aps_Volon_GRF3",…,RMS
+Facies,"aps_Therys_GRF1, aps_Therys_GRF3 ","(ERT keyword ""FIELD"")",RMS
+Facies,"aps_Volon_GRF1, aps_Volon_GRF3",…,RMS
