@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Restores the project from the tar.gz file after a git update or clone
 # Run the script from rms/model folder
@@ -21,9 +21,9 @@ DTIME=$(date +%Y-%m-%d:%H:%M)
 
 read -p "Current drogon project shall be: <$CURRENT>. Is this correct? (yes/no) " answer
 
-if [ $answer == "no" ]; then
+if [ "$answer" == "no" ]; then
     echo "Please edit this script and update VERSION or CURRENT variable."
-    exit
+    exit 1
 else
     echo "You did not answer 'no'; will continue in 5 seconds...(hence CTRL-C if PANIC)"
     sleep 5
@@ -31,7 +31,27 @@ fi
 
 if [[ $(pwd) == *"drogon/resmod/ff/dev"* ]]; then
     echo "--Exiting-- Restore in drogon/resmod/ff/dev folder is blocked."
-    exit
+    exit 1
+fi
+
+if [ -z "${KOMODO_RELEASE:-}" ]; then
+    echo "Komodo is not enabled. STOP!"
+    exit 1
+fi
+
+if [ ! -r "$ZIPPED" ]; then
+    echo "No zipped file $ZIPPED found. STOP!"
+    exit 1
+fi
+
+
+if [ -r "$CURRENT/.master" ]; then
+    if [ "$CURRENT/.master" -nt "$ZIPPED" ]; then
+        echo "The current project $CURRENT is newer than $ZIPPED. STOP!"
+        exit 1
+    else
+        echo "OK, the $ZIPPED is newer than $CURRENT"
+    fi
 fi
 
 if [ -d "$CURRENT" ]; then
@@ -41,73 +61,68 @@ if [ -d "$CURRENT" ]; then
     BACKUPNAME="/tmp/${CURRENT}.backup_restore.${DTIME}"
 
     echo "Copy project from $CURRENT to backup: $BACKUPNAME ..."
-    /bin/cp -rp $CURRENT $BACKUPNAME
-    sleep 2  # just to secure that copy is settled...
+    /bin/cp -rp "$CURRENT" "$BACKUPNAME"
 else
     echo "No existing project $CURRENT, will continue without any attempt for backup..."
 fi
 
 
-export "PROJECT_GIT_RESTORE"=1  # applied in RMS to detect restore mode for APS grid
+export PROJECT_GIT_RESTORE=1  # applied in RMS to detect restore mode for APS grid
 
-if [ -r "$CURRENT/.master" ]; then
-     if [ -r $ZIPPED ]; then
-         if [ "$CURRENT/.master" -nt $ZIPPED ]; then
-             echo "The current project $CURRENT is newer than $ZIPPED. STOP!"
-             exit
-         else
-             echo "OK, the $ZIPPED is newer than $CURRENT"
-         fi
-     fi
+
+if [ -e "$GENERIC" ]; then
+    echo "Removing stale $GENERIC from an earlier run..."
+    /bin/rm -rf "${GENERIC:?}"
 fi
 
-if [ -r "$ZIPPED" ]; then
-    echo "Uncompress $ZIPPED..."
-    tar xzf $ZIPPED
-else
-    echo "No zipped file $ZIPPED found. STOP!"
-    exit
-fi
+echo "Uncompress $ZIPPED..."
+tar xzf "$ZIPPED"
 
 if [ -d "$GENERIC" ]; then
 
-    if [ -z "$KOMODO_RELEASE" ]; then
-        echo "Komodo is not enabled. STOP!"
-        exit 1
+    # temp fix for RMS15.0 bug - remove problematic file before restoring
+    BAD_FILE="$GENERIC/gridmodels/simgrid/connections/realisation"
+    if [ -e "$BAD_FILE" ]; then
+        echo "Applying workaround for RMS 15.0 bug: removing $BAD_FILE"
+        rm -f "$BAD_FILE"
     fi
 
     RESTORELOG="/tmp/drogon_git_restore_${DTIME}.log"
 
     echo "Next run the workflow in RMS that restores data..."
-    echo
-    echo "**** This may take some time, so take a coffee or work with P@E! :-P ****"
-    echo "**** If you take CTRL-C, processes may still run in the background! ****"
-    echo "**** CHECK THIS AFTERWARDS! $RESTORELOG ****"
+    echo "---- This may take some time ..."
+    echo "---- If you take CTRL-C, processes may still run in the background!"
+    echo "---- CHECK THIS AFTERWARDS! $RESTORELOG"
     echo
 
-    sleep 3
     set +e  # eclrun.bash can trigger exit on string comparisons
-    source /prog/res/ecl/script/eclrun.bash #!/bin/sh -> /bin/bash
+    source /prog/res/ecl/script/eclrun.bash
     set -e
-    runrms --version $VERSION  $GENERIC --batch $GIT_WF_RMS > $RESTORELOG 2>&1
+
+    if ! runrms --version "$VERSION" "$GENERIC" --batch "$GIT_WF_RMS" > "$RESTORELOG" 2>&1; then
+        echo "RMS restore FAILED. See $RESTORELOG. Existing $CURRENT is untouched. STOP!"
+        exit 1
+    fi
+
     echo "RMS restore is now finished!"
 else
-    echo "No $GENERIC present. STOP!"
-    exit
+    echo "$GENERIC not found after extracting $ZIPPED. STOP!"
+    exit 1
 fi
 
 if [ -d "$CURRENT" ]; then
-    echo "The backup copy is present, will now make a new $CURRENT..."
-
-    /bin/rm -rf $CURRENT
+    echo "Replacing existing $CURRENT (backup: ${BACKUPNAME:-none})..."
+    if ! /bin/rm -rf "${CURRENT:?}"; then
+        echo "Could not remove $CURRENT completely. Is the project open in RMS?"
+        echo "Close RMS, then run: rm -rf $CURRENT; mv $GENERIC $CURRENT"
+        exit 1
+    fi
     echo "Removed the original project... (if you need backup, check /tmp folder)"
 fi
-/bin/mv $GENERIC $CURRENT
 
-# Auto-remove some files if not in dev folder
-if ! [[ $(pwd) == *"dev"* ]]; then
-    /bin/rm -rf $ZIPPED  # delete tarball after successful restore
-    /bin/rm -f *.log   # delete log files after successful restore
-fi
+/bin/mv "$GENERIC" "$CURRENT"
 
-echo "That is all, project $CURRENT is now restored and ready!"
+/bin/rm -f "${ZIPPED:?}"  # delete tarball after successful restore
+/bin/rm -f ./*.log        # delete RMS log files after successful restore
+
+echo "Done, project $CURRENT is now restored and ready! (backup: ${BACKUPNAME:-none})"
