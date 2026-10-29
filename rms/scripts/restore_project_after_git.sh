@@ -17,17 +17,20 @@ GENERIC="drogon_git.rms$VERSION"
 GIT_WF_RMS="restore_data_after_git_clone"
 ZIPPED="drogon.tar.gz"
 
-DTIME=$(date +%Y-%m-%d:%H:%M)
+DTIME=$(date +%Y-%m-%d_%H_%M)
 
-read -p "Current drogon project shall be: <$CURRENT>. Is this correct? (yes/no) " answer
+read -r -p "Current drogon project shall be: <$CURRENT>. Is this correct? (yes/no) " answer
 
-if [ "$answer" == "no" ]; then
-    echo "Please edit this script and update VERSION or CURRENT variable."
-    exit 1
-else
-    echo "You did not answer 'no'; will continue in 5 seconds...(hence CTRL-C if PANIC)"
-    sleep 5
-fi
+case "$answer" in
+    yes|YES|y|Y)
+        echo "Continuing in 5 seconds... (CTRL-C if PANIC)"
+        sleep 5
+        ;;
+    *)
+        echo "Aborting. Please edit this script and update the VERSION variable."
+        exit 1
+        ;;
+esac
 
 if [[ $(pwd) == *"drogon/resmod/ff/dev"* ]]; then
     echo "--Exiting-- Restore in drogon/resmod/ff/dev folder is blocked."
