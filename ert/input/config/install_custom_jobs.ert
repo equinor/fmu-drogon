@@ -52,12 +52,6 @@ LOAD_WORKFLOW	    ../../bin/workflows/run_fmuconfig_rate
 -- doc: https://equinor.github.io/subscript/scripts/fmuobs.html
 LOAD_WORKFLOW  ../../bin/workflows/wf_fmuobs
 
-
------------------------------------------
----- Worklow for creating case metadata
-LOAD_WORKFLOW   ../../bin/workflows/xhook_create_case_metadata
-LOAD_WORKFLOW   ../../bin/workflows/xhook_create_case_metadata_no_sumo
-
 -----------------------------------------
 ---- Worklow for copying preprocessed seismic observation maps to scratch
 LOAD_WORKFLOW   ../../bin/workflows/xhook_copy_preprocessed_dataio
