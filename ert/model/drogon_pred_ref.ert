@@ -25,7 +25,7 @@ DEFINE <RESTART_REPORT>   82
 -- Used by fmu-dataio to set value: fmu\iteration\restart_from
 SETENV RESTART_FROM_PATH  ../<RESTART_DIR>/
 
-DEFINE <SUMO_CASEPATH>     <SCRATCH>/<USER>/<CASE_DIR>
+DEFINE <CASE>             <CASE_DIR>
 
 -----------------------------------------------------
 -- Runpath folder

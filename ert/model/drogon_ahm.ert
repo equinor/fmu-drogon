@@ -27,7 +27,7 @@ DEFINE <RMS_WF_NAME>       MAIN
 --
 DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
 
-DEFINE <SUMO_CASEPATH>     <SCRATCH>/<USER>/<CASE_DIR>
+DEFINE <CASE>             <CASE_DIR>
 ECOSYSTEM  FMU  -- Register case on Sumo and insert SIM2SUMO/SUMO_UPLOAD forward model steps
 
 -----------------------------------------------------
