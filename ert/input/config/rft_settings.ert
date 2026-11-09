@@ -30,8 +30,7 @@ FORWARD_MODEL RES2CSV(<SUBCOMMAND>=rft, <ECLBASE>=<ECLBASE>,  <OUTPUT>=share/res
 
 
 -------------------------
--- write ert rft to csv file: share/results/tables/rft_ert.csv
+-- write ert rft to csv file 'share/results/tables/rft_ert.csv'
 -- ERT doc: https://ert.readthedocs.io/en/latest/reference/configuration/data_types.html#exporting-rft-data-for-visualization
 -------------------------
-LOAD_WORKFLOW ../../bin/workflows/export_rft_data
-HOOK_WORKFLOW export_rft_data POST_SIMULATION
+HOOK_WORKFLOW_JOB  export_rft_data  EXPORT_RFT  POST_SIMULATION
