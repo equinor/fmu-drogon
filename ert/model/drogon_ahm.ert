@@ -16,9 +16,9 @@
 -- Internal variables
 -----------------------------------------------------
 
-DEFINE <USER>              $USER
-DEFINE <SCRATCH>           /scratch/fmu
-DEFINE <CASE_DIR>          01_drogon_ahm
+SCRATCH /scratch/fmu
+CASE 01_drogon_ahm
+DEFINE <CASE_DIR> <CASE>
 DEFINE <ECLIPSE_NAME>      DROGON
 --
 DEFINE <RMS_NAME>          drogon.rms15.0.1.0
@@ -27,7 +27,6 @@ DEFINE <RMS_WF_NAME>       MAIN
 --
 DEFINE <RMS_SEED_FILE>     <CONFIG_PATH>/../input/distributions/random.seeds
 
-DEFINE <CASE>             <CASE_DIR>
 ECOSYSTEM  FMU  -- Register case on Sumo and insert SIM2SUMO/SUMO_UPLOAD forward model steps
 
 -----------------------------------------------------
@@ -52,7 +51,6 @@ ANALYSIS_SET_VAR PARAMETERS SURFACE ADAPTIVE
 -----------------------------------------------------
 
 -- Runpath folder from where all realizations are run
-RUNPATH  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/iter-<ITER>/
 
 
 -----------------------------------------------------
