@@ -18,7 +18,7 @@
 
 DEFINE <USER>              $USER
 DEFINE <SCRATCH>           /scratch/fmu
-DEFINE <CASE_DIR>          drogon_exercise_10a
+DEFINE <CASE>          drogon_exercise_10a
 DEFINE <ECLIPSE_NAME>      DROGON
 --
 DEFINE <RMS_NAME>          drogon.rms15.0.1.0
@@ -43,7 +43,7 @@ OBS_CONFIG  <OBS_FILE>
 -----------------------------------------------------
 
 -- Runpath folder from where all realizations are run
-RUNPATH  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/iter-<ITER>/
+RUNPATH  <SCRATCH>/<USER>/<CASE>/realization-<IENS>/iter-<ITER>/
 
 
 -----------------------------------------------------
@@ -61,9 +61,9 @@ RUN_TEMPLATE  <TEMPLATE_DATA_FILE>  <ECLBASE>.DATA  -- Copy template DATA file t
 -- ert storage settings
 -----------------------------------------------------
 
-ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
-UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
-RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+ENSPATH          ../output/<CASE>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE>/runpath_file  -- List of runpaths
 
 RANDOM_SEED  123456  -- ERT seed value
 

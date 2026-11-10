@@ -12,7 +12,6 @@
 
 SCRATCH /scratch/fmu
 CASE 01_drogon_ahm
-DEFINE <CASE_DIR> <CASE>
 DEFINE <ECLIPSE_NAME>     DROGON
 --
 DEFINE <PRED_DIR_NAME>    pred_ref     -- name of the prediction folder (runpath)
@@ -31,7 +30,7 @@ SETENV RESTART_FROM_PATH  ../<RESTART_DIR>/
 -----------------------------------------------------
 
 -- Runpath from where all realizations are run
-RUNPATH	  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/<PRED_DIR_NAME>
+RUNPATH	  <SCRATCH>/<USER>/<CASE>/realization-<IENS>/<PRED_DIR_NAME>
 
 
 -----------------------------------------------------
@@ -50,9 +49,9 @@ RUN_TEMPLATE  <TEMPLATE_DATA_FILE>  <ECLBASE>.DATA
 -- ert storage settings
 -----------------------------------------------------
 
-ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
-UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
-RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+ENSPATH          ../output/<CASE>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE>/runpath_file  -- List of runpaths
 
 RANDOM_SEED  123456  -- ERT seed value
 

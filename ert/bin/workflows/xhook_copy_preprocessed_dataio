@@ -3,7 +3,7 @@
 ---------------------------   inpath (relative to ert config)
 WF_COPY_PREPROCESSED_DATAIO   ../../share/preprocessed/maps    "--verbosity" WARNING
 
-SUMO_UPLOAD  <SCRATCH>/<USER>/<CASE_DIR>  -- upload data copied with WF_COPY_PREPROCESSED_DATAIO
+SUMO_UPLOAD  <SCRATCH>/<USER>/<CASE>  -- upload data copied with WF_COPY_PREPROCESSED_DATAIO
 
 
 -- WF_COPY_PREPROCESSED_DATAIO uses <SUMO_CASEPATH> defined in the ERT model file as casepath

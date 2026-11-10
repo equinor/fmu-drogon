@@ -97,7 +97,7 @@ LOAD_WORKFLOW     ../../bin/workflows/wf_aggregate_parameters_iter3
 -- DEFINE <ITERDIR>    iter-0
 -- DEFINE <FIRSTREAL>  0
 -- DEFINE <LASTREAL>   99
--- DEFINE <OUTFOLDER>  <SCRATCH>/<USER>/<CASE_DIR>/realization-0/<ITERDIR>/share/results/grids
+-- DEFINE <OUTFOLDER>  <SCRATCH>/<USER>/<CASE>/realization-0/<ITERDIR>/share/results/grids
 -- LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_AVG_PARAM_GEO
 -- LOAD_WORKFLOW       ../../bin/workflows/wf_avg_param_geo
 -- LOAD_WORKFLOW_JOB   ../../bin/jobs/WF_AVG_PARAM_PEM
