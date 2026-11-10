@@ -16,8 +16,7 @@
 -- Internal variables
 -----------------------------------------------------
 
-DEFINE <USER>              $USER
-DEFINE <SCRATCH>           /scratch/fmu
+SCRATCH           /scratch/fmu
 CASE          drogon_exercise_11a
 DEFINE <ECLIPSE_NAME>      DROGON
 --

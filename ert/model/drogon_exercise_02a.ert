@@ -16,8 +16,7 @@
 -- Internal variables
 -----------------------------------------------------
 
-DEFINE <USER>              $USER
-DEFINE <SCRATCH>           /scratch/fmu
+SCRATCH           /scratch/fmu
 CASE          drogon_exercise_02a
 --
 DEFINE <RMS_NAME>          drogon.rms15.0.1.0
