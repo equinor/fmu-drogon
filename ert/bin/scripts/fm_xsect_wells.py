@@ -6,7 +6,6 @@
 # alifb June 2024
 
 import argparse
-import os
 import pathlib
 import re
 
@@ -18,8 +17,8 @@ optional grid properties. Input argument is RUNPATH.
 
 Hardcoded:
 Location (relative to RUNPATH) and name of data (surfaces, wells and polygons).
-Data must be located in share/results/ wells, maps and polygons folders.
-Name of output files (written to share/results/images folder which must exist)
+Data must be located in share/results/ wells, maps, polygons and grids folders.
+Name of output files (written to share/results/images folder, created if missing)
 Optional input:
 List of well names (will then overwrite hardcoded list)
 """
@@ -46,6 +45,8 @@ POLY = "share/results/polygons/toptherys--gl_faultlines_extract_postprocess.pol"
 
 GRID = "share/results/grids/eclgrid.roff"
 
+IMAGE_FOLDER = "share/results/images"
+
 # Tuple of property name, file path (ROFF file) and plot range
 # (ignore to use auto range)
 GRID_PROPS = [
@@ -58,6 +59,8 @@ GRID_PROPS = [
 
 # -----------------------------------------------------
 def calculate_optimum_zrange(well, zonelog, z_extension=100):
+    if zonelog not in well.dataframe.columns:
+        return DEFAULT_DEPTH_INTERVAL
     df = well.dataframe.dropna(subset=[zonelog])
     if df.empty:
         return DEFAULT_DEPTH_INTERVAL
@@ -82,32 +85,35 @@ def get_parser():
     return parser
 
 
-def get_surfaces():
+def get_surfaces(runpath):
     surfaces = []
     for ino, horiz in enumerate(HORIZ):
-        path = pathlib.Path(HORIZ_FOLDER) / horiz
+        path = runpath / HORIZ_FOLDER / horiz
         s = xtgeo.surface_from_file(path)
         s.name = HNAMES[ino]
         surfaces.append(s)
     return surfaces
 
 
-def get_wells(well_list):
+def get_wells(runpath, well_list):
     wells = []
     for well in well_list:
-        path = pathlib.Path(WELL_FOLDER) / well
+        path = runpath / WELL_FOLDER / well
         w = xtgeo.well_from_file(path)
         wells.append(w)
     return wells
 
 
 def get_realization(runpath):
-    r = re.search(r"(?<=realization-)\d+", runpath)
-    return r.group(0)
+    r = re.search(r"(?<=realization-)\d+", str(runpath))
+    return r.group(0) if r else "unknown"
 
 
-def create_plot(surfs, wells, real, grid, prop=None, prop_range=None):
-    field = xtgeo.polygons_from_file(POLY)
+def create_plot(
+    surfs, wells, real, grid, polygons, runpath, prop=None, prop_range=None
+):
+    image_folder = runpath / IMAGE_FOLDER
+    image_folder.mkdir(parents=True, exist_ok=True)
     for well in wells:
         min_depth, max_depth = calculate_optimum_zrange(well, "zonelog")
         myplot = plot.XSection(
@@ -118,7 +124,7 @@ def create_plot(surfs, wells, real, grid, prop=None, prop_range=None):
             sampling=10,
             nextend=2,
             zonelogshift=0,
-            outline=field,
+            outline=polygons,
             # colormap="xtgeo",
             grid=grid,
             gridproperty=prop,
@@ -141,7 +147,9 @@ def create_plot(surfs, wells, real, grid, prop=None, prop_range=None):
             if prop_range:
                 vmin, vmax = prop_range
             else:
-                vmin, vmax = (None, None)
+                # Use the full property range, so that the sampled -999 undefined
+                # value in a section does not stretch the colour scale
+                vmin, vmax = prop.values.min(), prop.values.max()
             myplot.plot_grid3d(
                 vmin=vmin,
                 vmax=vmax,
@@ -151,7 +159,7 @@ def create_plot(surfs, wells, real, grid, prop=None, prop_range=None):
                 interpolation="nearest",
             )
 
-            out = f"share/results/images/{well.name}_{prop.name}_xsection.png"
+            out = image_folder / f"{well.name}_{prop.name}_xsection.png"
         else:
             myplot.plot_surfaces(
                 fill=True,
@@ -160,7 +168,7 @@ def create_plot(surfs, wells, real, grid, prop=None, prop_range=None):
                 legend=True,
                 colormap="random40",
             )
-            out = f"share/results/images/{well.name}_xsection.png"
+            out = image_folder / f"{well.name}_xsection.png"
 
         myplot.has_legend = False
         myplot.plot_well(
@@ -179,39 +187,34 @@ def create_plot(surfs, wells, real, grid, prop=None, prop_range=None):
         myplot.savefig(out)
 
 
-if __name__ == "__main__":
+def main():
     """Parse command line options and start calculation"""
     parser = get_parser()
     args = parser.parse_args()
 
-    runpath = os.path.join(os.getcwd(), args.runpath)
-    well_list = args.wells
+    runpath = pathlib.Path(args.runpath)
 
-    # Insert runpath so that it can be run from any other folder
-    HORIZ_FOLDER = os.path.join(runpath, HORIZ_FOLDER)
-
-    WELL_FOLDER = os.path.join(runpath, WELL_FOLDER)
-
-    POLY = os.path.join(runpath, POLY)
-
-    wells = get_wells(well_list)
-    surfs = get_surfaces()
+    wells = get_wells(runpath, args.wells)
+    surfs = get_surfaces(runpath)
     real = get_realization(runpath)
-    grd = xtgeo.grid_from_file(pathlib.Path(os.path.join(runpath, GRID)))
+    grd = xtgeo.grid_from_file(runpath / GRID)
+    polygons = xtgeo.polygons_from_file(runpath / POLY)
 
-    create_plot(surfs, wells, real, grd)
+    create_plot(surfs, wells, real, grd, polygons, runpath)
     for name, path, *plot_range in GRID_PROPS:
         if len(plot_range) == 0:
             plot_range = None
         else:
             plot_range = plot_range[0]
         prop = xtgeo.gridproperty_from_file(
-            pathlib.Path(
-                os.path.join(runpath, path),
-                grid=grd,
-                name=name,
-            )
+            runpath / path,
+            grid=grd,
+            name=name,
         )
-        create_plot(surfs, wells, real, grd, prop, plot_range)
+        create_plot(surfs, wells, real, grd, polygons, runpath, prop, plot_range)
 
     print("Done")
+
+
+if __name__ == "__main__":
+    main()
