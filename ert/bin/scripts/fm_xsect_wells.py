@@ -206,11 +206,9 @@ if __name__ == "__main__":
         else:
             plot_range = plot_range[0]
         prop = xtgeo.gridproperty_from_file(
-            pathlib.Path(
-                os.path.join(runpath, path),
-                grid=grd,
-                name=name,
-            )
+            pathlib.Path(runpath) / path,
+            grid=grd,
+            name=name,
         )
         create_plot(surfs, wells, real, grd, prop, plot_range)
 
