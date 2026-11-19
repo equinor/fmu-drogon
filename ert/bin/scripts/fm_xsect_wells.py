@@ -147,7 +147,9 @@ def create_plot(
             if prop_range:
                 vmin, vmax = prop_range
             else:
-                vmin, vmax = (None, None)
+                # Use the full property range, so that the sampled -999 undefined
+                # value in a section does not stretch the colour scale
+                vmin, vmax = prop.values.min(), prop.values.max()
             myplot.plot_grid3d(
                 vmin=vmin,
                 vmax=vmax,
