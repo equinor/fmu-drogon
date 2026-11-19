@@ -182,7 +182,7 @@ def create_plot(surfs, wells, real, grid, runpath, prop=None, prop_range=None):
         myplot.savefig(out)
 
 
-if __name__ == "__main__":
+def main():
     """Parse command line options and start calculation"""
     parser = get_parser()
     args = parser.parse_args()
@@ -208,3 +208,7 @@ if __name__ == "__main__":
         create_plot(surfs, wells, real, grd, runpath, prop, plot_range)
 
     print("Done")
+
+
+if __name__ == "__main__":
+    main()
