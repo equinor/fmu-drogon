@@ -59,6 +59,8 @@ GRID_PROPS = [
 
 # -----------------------------------------------------
 def calculate_optimum_zrange(well, zonelog, z_extension=100):
+    if zonelog not in well.dataframe.columns:
+        return DEFAULT_DEPTH_INTERVAL
     df = well.dataframe.dropna(subset=[zonelog])
     if df.empty:
         return DEFAULT_DEPTH_INTERVAL
