@@ -109,8 +109,9 @@ def get_realization(runpath):
     return r.group(0) if r else "unknown"
 
 
-def create_plot(surfs, wells, real, grid, runpath, prop=None, prop_range=None):
-    field = xtgeo.polygons_from_file(runpath / POLY)
+def create_plot(
+    surfs, wells, real, grid, polygons, runpath, prop=None, prop_range=None
+):
     image_folder = runpath / IMAGE_FOLDER
     image_folder.mkdir(parents=True, exist_ok=True)
     for well in wells:
@@ -123,7 +124,7 @@ def create_plot(surfs, wells, real, grid, runpath, prop=None, prop_range=None):
             sampling=10,
             nextend=2,
             zonelogshift=0,
-            outline=field,
+            outline=polygons,
             # colormap="xtgeo",
             grid=grid,
             gridproperty=prop,
@@ -195,8 +196,9 @@ def main():
     surfs = get_surfaces(runpath)
     real = get_realization(runpath)
     grd = xtgeo.grid_from_file(runpath / GRID)
+    polygons = xtgeo.polygons_from_file(runpath / POLY)
 
-    create_plot(surfs, wells, real, grd, runpath)
+    create_plot(surfs, wells, real, grd, polygons, runpath)
     for name, path, *plot_range in GRID_PROPS:
         if len(plot_range) == 0:
             plot_range = None
@@ -207,7 +209,7 @@ def main():
             grid=grd,
             name=name,
         )
-        create_plot(surfs, wells, real, grd, runpath, prop, plot_range)
+        create_plot(surfs, wells, real, grd, polygons, runpath, prop, plot_range)
 
     print("Done")
 
