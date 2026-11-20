@@ -16,9 +16,8 @@
 -- Internal variables
 -----------------------------------------------------
 
-DEFINE <USER>             $USER
-DEFINE <SCRATCH>          /scratch/fmu
-DEFINE <CASE_DIR>         01_drogon_dst
+SCRATCH /scratch/fmu
+CASE 01_drogon_dst
 DEFINE <ECLIPSE_NAME>     DROGON_DST
 --
 DEFINE <RMS_NAME>         drogon.rms15.0.1.0
@@ -29,6 +28,7 @@ DEFINE <RMS_SEED_FILE>    <CONFIG_PATH>/../input/distributions/random.seeds
 --
 DEFINE <DST_WELL>         55_33-1
 DEFINE <BUILD_UP>         2
+ECOSYSTEM  FMU  -- Register case on Sumo and insert SIM2SUMO/SUMO_UPLOAD forward model steps
 
 
 -----------------------------------------------------
@@ -43,7 +43,6 @@ OBS_CONFIG  <OBS_FILE>
 -----------------------------------------------------
 
 -- Runpath folder from where all realizations are run
-RUNPATH  <SCRATCH>/<USER>/<CASE_DIR>/realization-<IENS>/iter-<ITER>/
 
 
 -----------------------------------------------------
@@ -61,9 +60,9 @@ RUN_TEMPLATE  <TEMPLATE_DATA_FILE>  <ECLBASE>.DATA  -- Copy template DATA file t
 -- ert storage settings
 -----------------------------------------------------
 
-ENSPATH          ../output/<CASE_DIR>/storage       -- Storage of internal ert data
-UPDATE_LOG_PATH  ../output/<CASE_DIR>/update_log    -- Info of active and inactive data points
-RUNPATH_FILE     ../output/<CASE_DIR>/runpath_file  -- List of runpaths
+ENSPATH          ../output/<CASE>/storage       -- Storage of internal ert data
+UPDATE_LOG_PATH  ../output/<CASE>/update_log    -- Info of active and inactive data points
+RUNPATH_FILE     ../output/<CASE>/runpath_file  -- List of runpaths
 
 RANDOM_SEED  123456  -- ERT seed value
 
@@ -114,9 +113,6 @@ LOAD_WORKFLOW             ../bin/workflows/wf_dpdt2yml
 
 
 -----------------------------------------
----- Worklow that creates the case metadata and registers on Sumo
-DEFINE <SUMO_CASEPATH>  <SCRATCH>/<USER>/<CASE_DIR>
-LOAD_WORKFLOW           ../bin/workflows/xhook_create_case_metadata
 
 
 -----------------------------------------------------
@@ -125,7 +121,6 @@ LOAD_WORKFLOW           ../bin/workflows/xhook_create_case_metadata
 HOOK_WORKFLOW   run_fmuconfig  PRE_EXPERIMENT  -- Create global_variables.yml and global_variables.yml.tmpl files
 HOOK_WORKFLOW   wf_fmuobs_dst  PRE_EXPERIMENT  -- Generate yaml version of ERT observations for use with Webviz
 HOOK_WORKFLOW   wf_dpdt2yml    PRE_EXPERIMENT  -- Generate yaml version of dpdt observations for use with Webviz
-HOOK_WORKFLOW   xhook_create_case_metadata  PRE_SIMULATION  -- Create case metadata using dataio and register on Sumo
 
 
 -----------------------------------------------------
@@ -222,7 +217,3 @@ SUMMARY WOPR:*
 SUMMARY WWPR:*
 SUMMARY WGPR:*
 SUMMARY WBHP:*
-
------------------------------------------------------
-FORWARD_MODEL SIM2SUMO
-FORWARD_MODEL SUMO_UPLOAD

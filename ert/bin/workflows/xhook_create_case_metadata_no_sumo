@@ -1,7 +1,7 @@
 -- Create case metadata
 
 --                       casepath
-WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE_DIR>
+WF_CREATE_CASE_METADATA  <SCRATCH>/<USER>/<CASE>
 
 
 -- This workflow is intended to be run as a HOOK workflow.
