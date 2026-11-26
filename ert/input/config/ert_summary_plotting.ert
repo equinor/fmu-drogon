@@ -6,12 +6,12 @@ SUMMARY FWPR*        -- Field Water Production Rate
 SUMMARY FGPR*        -- Field Gas Production Rate
 SUMMARY FOPT*        -- Field Oil Production Total
 SUMMARY FWPT*        -- Field Water Production Total
-SUMMARY FGPT*        -- Field Gas Production Toral
+SUMMARY FGPT*        -- Field Gas Production Total
 SUMMARY FWCT*        -- Field WCT
 SUMMARY FGOR*        -- Field GOR
-SUMMARY FWIR*        -- Field Water Injcetion Rate
+SUMMARY FWIR*        -- Field Water Injection Rate
 SUMMARY FWIT*        -- Field Water Injection Total
-SUMMARY FPR          -- Field PRessure
+SUMMARY FPR          -- Field Pressure
 SUMMARY FOIP         -- Field Oil In Place
 SUMMARY RPR:*        -- Region Pressure
 SUMMARY ROIP:*       -- Region Oil In Place
@@ -21,10 +21,10 @@ SUMMARY WWPR*:A*     -- Well Water Production Rate
 SUMMARY WGPR*:A*     -- Well Gas Production Rate
 SUMMARY WOPT*:A*     -- Well Oil Production Total
 SUMMARY WWPT*:A*     -- Well Water Production Total
-SUMMARY WGPT*:A*     -- Well Gas Production Toral
+SUMMARY WGPT*:A*     -- Well Gas Production Total
 SUMMARY WWCT*:A*     -- Well WCT
 SUMMARY WGOR*:A*     -- Well GOR
-SUMMARY WWIR*:A*     -- Well Water Injcetion Rate
+SUMMARY WWIR*:A*     -- Well Water Injection Rate
 SUMMARY WWIT*:A*     -- Well Water Injection Total
 SUMMARY WBHP*:A*     -- Well BHP
 SUMMARY WTHP*:A*     -- Well THP
